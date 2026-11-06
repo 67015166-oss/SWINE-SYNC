@@ -1,13 +1,56 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+# โฟลเดอร์ build ที่ตั้งชื่อต่อท้าย เช่น dist-before-host-fix — ของชั่วคราวที่ไม่ควรเข้า git
+# และถ้าปล่อยไว้ oxlint จะไล่สแกนไฟล์ที่ minify แล้วจนได้ warning เป็นพันข้อ (T1.223)
+dist-*/
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ตัวแปรสภาพแวดล้อมของหลังบ้าน — มี token/รหัสผ่านจริง ห้าม commit
+.env
+.env.*
+!.env.example
+
+# ไฟล์ล็อกที่ Word สร้างตอนเปิดเอกสารค้างไว้ — ขยะ ไม่ใช่เอกสารจริง
+~$*
+
+# เดิมกันไฟล์ .docx ทั้งหมดไว้เพราะสร้างใหม่ได้ แต่ผู้ใช้สั่งให้เก็บเข้า git
+# เพราะเป็นตัวส่งงานให้พี่เลี้ยง หายแล้วต้องไล่สร้างใหม่ทั้งชุด
+
+# ใบรับรอง https ที่ออกเอง — กุญแจส่วนตัวห้ามขึ้น git เด็ดขาด (สร้างใหม่ด้วย sh ops/make-cert.sh)
+ops/certs/
+SWINE-SYNC-dashboard.zip
+
+# ชุดไฟล์ส่งต่อให้คนอื่น (สร้างใหม่ได้เสมอด้วย git archive) — ไฟล์ 33 MB ไม่ควรถ่วง git
+# หมายเหตุ: swine-sync-backend-handoff.zip ถูกติดตามไว้ก่อนแล้ว บรรทัดนี้ไม่มีผลกับมัน
+/swine-sync-*.zip
+# โฟลเดอร์ที่หลุดมาตอนแตกไฟล์ตรวจสอบ
+/swine-sync/
+
+# ไฟล์ใหญ่ที่สร้างใหม่ได้ ไม่ต้องเก็บในประวัติ (19 ต.ค. 2569)
+exports/
+weather/backup/
+
 # ★ เอกสารส่วนตัวของผู้เขียน ห้ามขึ้นรีโปนี้
 00-เล่าให้ฟัง.md
 เล่าให้ฟังก่อนส่งมอบ.docx
-
-# ★ ไฟล์ความลับ — ไม่ควรมีในรีโปเอกสารอยู่แล้ว กันไว้อีกชั้น
-.env
-.env.*
-*.pem
-*.key
-id_rsa*
-
-# ขยะของระบบปฏิบัติการ
-.DS_Store

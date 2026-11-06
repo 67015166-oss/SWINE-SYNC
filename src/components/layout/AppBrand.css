@@ -1,0 +1,102 @@
+/* ขีดสามขีด + โลโก้ บนแถบบน (components/layout/AppBrand.jsx)
+   สีทุกค่ามาจาก tokens.css — ห้ามเขียน hex ตรง ๆ ในไฟล์นี้ */
+
+.brand-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* ปุ่มขีดสามขีด — ขนาดเท่าปุ่มอื่นบนแถบบน (38px) จะได้อยู่แนวเดียวกันพอดี */
+.brand-burger {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--ink-primary);
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.brand-burger:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.brand-burger:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.brand-burger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* กางอยู่ = ปุ่มติดสีแบรนด์ ไม่ได้บอกด้วยรูปกากบาทอย่างเดียว */
+.brand-burger.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  color: var(--ink-primary);
+}
+
+.brand-link:hover {
+  color: var(--accent-strong);
+}
+
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  min-width: 0;
+}
+
+.brand-text b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.brand-text span {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--ink-muted);
+}
+
+/* แถบบนของหน้าโรงเรือนมีชื่อโรงเรือนกับเส้นทางหน้าอยู่แล้ว — เหลือแค่โลโก้กับปุ่ม */
+.brand-head.is-compact .brand-text span {
+  display: none;
+}
+
+/* จอแคบ — เหลือปุ่มกับตรารูปหมู ตัวหนังสือกินที่มากเกินไป
+   (กดตราแล้วยังกลับหน้าภาพรวมได้เหมือนเดิม) */
+@media (max-width: 720px) {
+  .brand-text {
+    display: none;
+  }
+}

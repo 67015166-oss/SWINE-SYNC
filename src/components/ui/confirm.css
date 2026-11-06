@@ -1,0 +1,54 @@
+/* ป๊อบอัพยืนยันก่อนลบ (components/ui/ConfirmModal.jsx) */
+
+.cf-message {
+  font-size: var(--text-base);
+  line-height: 1.7;
+  color: var(--ink-primary);
+}
+
+/* บรรทัด "กู้คืนได้" — พื้นเขียวอ่อน เพราะเป็นข่าวดีที่ช่วยให้กล้ากด ไม่ใช่คำเตือน */
+.cf-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--green-tint);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--green-strong);
+}
+
+.cf-note svg {
+  flex-shrink: 0;
+}
+
+.cf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+/* ปุ่มลบ — แดงเต็มใบ ต่างจากปุ่มหลักสีทองอย่างชัดเจน จะได้ไม่กดสลับกัน */
+.cf-danger {
+  border-color: var(--status-critical);
+  background: var(--status-critical);
+  color: var(--ink-inverse);
+}
+
+.cf-danger:hover {
+  background: var(--status-critical-text);
+}
+
+.cf-danger:focus-visible {
+  outline: 2px solid var(--status-critical-text);
+  outline-offset: 3px;
+}
+
+@media (max-width: 599px) {
+  .cf-actions .modal-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

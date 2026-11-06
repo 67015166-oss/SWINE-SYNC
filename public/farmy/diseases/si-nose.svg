@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการที่จมูก</title><desc id="dsc">ภาพวาดหัวสุกรมองจากด้านหน้า มีน้ำมูกใสไหลจากรูจมูกทั้งสองข้าง</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="200" cy="140" rx="104" ry="92" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M112 66 q-26 -46 6 -50 q30 -4 38 34 z" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M288 66 q26 -46 -6 -50 q-30 -4 -38 34 z" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="160" cy="104" rx="11" ry="13" fill="#6f4f47"/>
+  <ellipse cx="240" cy="104" rx="11" ry="13" fill="#6f4f47"/>
+  <ellipse cx="200" cy="172" rx="62" ry="44" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="178" cy="166" rx="10" ry="14" fill="#6f4f47"/>
+  <ellipse cx="222" cy="166" rx="10" ry="14" fill="#6f4f47"/>
+  <path d="M176 182 q-4 28 -10 40" fill="none" stroke="#bcd9ef" stroke-width="8" stroke-linecap="round"/>
+  <path d="M224 182 q4 28 10 40" fill="none" stroke="#bcd9ef" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="164" cy="228" r="6" fill="#bcd9ef"/>
+  <circle cx="236" cy="230" r="5" fill="#bcd9ef"/>
+  <path d="M160 202 q40 14 80 0" fill="none" stroke="#bcd9ef" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+  <path d="M176 210 L92 240" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="176" cy="210" r="3" fill="#c0392b"/><text x="8" y="245" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">น้ำมูกใสไหลจากจมูก</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">น้ำมูกใสไหลจากจมูก</text>
+</svg>

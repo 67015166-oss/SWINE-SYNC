@@ -1,0 +1,5 @@
+# ไม่ต้องส่งของพวกนี้เข้า build context — มีเป็นร้อยเมกะไบต์และไม่ได้ใช้ตอน build
+# (เคยทำให้ build ล้มกลางทางด้วย "short read: unexpected EOF")
+exports/
+models/
+notebooks/

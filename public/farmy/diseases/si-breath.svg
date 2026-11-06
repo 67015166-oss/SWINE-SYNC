@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการทางเดินหายใจ</title><desc id="dsc">ภาพวาดสุกรหายใจหอบ ท้องกระเพื่อมแรง อ้าปากหายใจและไอ</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="196" cy="246" rx="150" ry="16" fill="#e6dcd4"/>
+  <ellipse cx="170" cy="176" rx="104" ry="54" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M96 150 q28 -16 56 0 M104 196 q28 16 56 0" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round" opacity=".75"/>
+  <ellipse cx="286" cy="152" rx="46" ry="40" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M262 112 q-18 -32 10 -36 q26 -2 22 28 z" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="328" cy="164" rx="17" ry="14" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="323" cy="164" rx="2.6" ry="3.6" fill="#6f4f47"/><ellipse cx="333" cy="164" rx="2.6" ry="3.6" fill="#6f4f47"/>
+  <path d="M300 186 q22 6 34 -2 q-4 18 -20 18 q-14 0 -14 -16 z" fill="#8e4a48" stroke="#9b7268" stroke-width="2"/>
+  <path d="M292 140 q12 4 20 0" fill="none" stroke="#9b7268" stroke-width="3" stroke-linecap="round"/>
+  <path d="M96 208 q10 22 32 18 M162 212 q12 20 34 14" fill="none" stroke="#9b7268" stroke-width="9" stroke-linecap="round"/>
+  <path d="M60 148 q-16 12 -8 28" fill="none" stroke="#9b7268" stroke-width="6" stroke-linecap="round"/>
+  <g stroke="#c0392b" stroke-width="3" stroke-linecap="round" fill="none" opacity=".8">
+    <path d="M352 196 q16 6 26 0"/><path d="M356 212 q18 8 30 0"/>
+  </g>
+  <path d="M128 172 L62 108" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="128" cy="172" r="3" fill="#c0392b"/><text x="10" y="113" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">หายใจหอบ ท้องกระเพื่อมแรง</text>
+  <path d="M312 196 L356 238" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="312" cy="196" r="3" fill="#c0392b"/><text x="350" y="243" text-anchor="end" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">อ้าปากหายใจ ไอ</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">หายใจหอบ อ้าปากหายใจ</text>
+</svg>

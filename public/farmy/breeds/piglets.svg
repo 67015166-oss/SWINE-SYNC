@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 230" width="360" height="230" role="img" aria-labelledby="t d">
+  <title id="t">ลูกผสมที่ได้</title><desc id="d">ภาพวาดลูกสุกรลูกผสมสามตัวยืนรวมกัน</desc>
+  <rect width="360" height="230" fill="#f7f3ef"/>
+  <ellipse cx="180" cy="186" rx="140" ry="13" fill="#e6dcd4"/>
+    <g>
+      <path d="M63.76 156.12 q-3 12 0 19 M82.36 157.98 q-2 12 1 19
+               M108.4 157.98 q2 12 -1 19 M125.75999999999999 156.12 q3 12 0 19"
+            stroke="#8a6a60" stroke-width="4.3" stroke-linecap="round" fill="none"/>
+      <ellipse cx="92.28" cy="142.48" rx="36" ry="17" fill="#f3d3c8" stroke="#8a6a60" stroke-width="1.5"/>
+      <path d="M58.8 135.04 q-11 -4 -8 -11 q3 -7 10 -3"
+            fill="none" stroke="#8a6a60" stroke-width="1.7" stroke-linecap="round"/>
+      <ellipse cx="127.0" cy="136.28" rx="17" ry="15" fill="#f3d3c8" stroke="#8a6a60" stroke-width="1.5"/>
+      <path d="M119.56 124.5 q-5 -21 10 -21 q14 0 11 20 z" fill="#e0b6a8" stroke="#8a6a60" stroke-width="1.4"/>
+      <ellipse cx="142.5" cy="140.62" rx="7" ry="6" fill="#e0b6a8" stroke="#8a6a60" stroke-width="1.4"/>
+      <ellipse cx="140.64" cy="140.62" rx="1.1" ry="1.5" fill="#6f4f47"/>
+      <ellipse cx="144.98" cy="140.62" rx="1.1" ry="1.5" fill="#6f4f47"/>
+      <circle cx="131.96" cy="131.32" r="1.7" fill="#6f4f47"/>
+    </g>
+    <g>
+      <path d="M217.76 156.12 q-3 12 0 19 M236.36 157.98 q-2 12 1 19
+               M262.4 157.98 q2 12 -1 19 M279.76 156.12 q3 12 0 19"
+            stroke="#8a6a60" stroke-width="4.3" stroke-linecap="round" fill="none"/>
+      <ellipse cx="246.28" cy="142.48" rx="36" ry="17" fill="#f6dbd2" stroke="#8a6a60" stroke-width="1.5"/>
+      <path d="M212.8 135.04 q-11 -4 -8 -11 q3 -7 10 -3"
+            fill="none" stroke="#8a6a60" stroke-width="1.7" stroke-linecap="round"/>
+      <ellipse cx="281.0" cy="136.28" rx="17" ry="15" fill="#f6dbd2" stroke="#8a6a60" stroke-width="1.5"/>
+      <path d="M273.56 124.5 q-5 -21 10 -21 q14 0 11 20 z" fill="#e4c0b3" stroke="#8a6a60" stroke-width="1.4"/>
+      <ellipse cx="296.5" cy="140.62" rx="7" ry="6" fill="#e4c0b3" stroke="#8a6a60" stroke-width="1.4"/>
+      <ellipse cx="294.64" cy="140.62" rx="1.1" ry="1.5" fill="#6f4f47"/>
+      <ellipse cx="298.98" cy="140.62" rx="1.1" ry="1.5" fill="#6f4f47"/>
+      <circle cx="285.96" cy="131.32" r="1.7" fill="#6f4f47"/>
+    </g>
+    <g>
+      <path d="M133.44 138.28 q-3 12 0 19 M156.84 140.62 q-2 12 1 19
+               M189.6 140.62 q2 12 -1 19 M211.44 138.28 q3 12 0 19"
+            stroke="#8a6a60" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+      <ellipse cx="169.32" cy="121.12" rx="45" ry="21" fill="#f8ded6" stroke="#8a6a60" stroke-width="1.9"/>
+      <path d="M127.19999999999999 111.76 q-11 -4 -8 -11 q3 -7 10 -3"
+            fill="none" stroke="#8a6a60" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse cx="213.0" cy="113.32" rx="22" ry="19" fill="#f8ded6" stroke="#8a6a60" stroke-width="1.9"/>
+      <path d="M203.64 98.5 q-5 -21 10 -21 q14 0 11 20 z" fill="#e6c4b8" stroke="#8a6a60" stroke-width="1.7"/>
+      <ellipse cx="232.5" cy="118.78" rx="9" ry="7" fill="#e6c4b8" stroke="#8a6a60" stroke-width="1.7"/>
+      <ellipse cx="230.16" cy="118.78" rx="1.4" ry="1.9" fill="#6f4f47"/>
+      <ellipse cx="235.62" cy="118.78" rx="1.4" ry="1.9" fill="#6f4f47"/>
+      <circle cx="219.24" cy="107.08" r="2.2" fill="#6f4f47"/>
+    </g>
+  <text x="180" y="212" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="15" font-weight="600" fill="#5b4a44">ลูกผสมที่ได้</text>
+  <text x="180" y="226" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="11.5" fill="#8a7a72">รวมข้อดีของพ่อและแม่</text>
+</svg>

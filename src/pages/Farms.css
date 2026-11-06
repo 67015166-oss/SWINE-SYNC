@@ -1,0 +1,420 @@
+/* หน้า "ฟาร์มของฉัน" (/dashboard/farms)
+   หัวเรื่อง + แถบสรุป → การ์ดฟาร์มเรียงเป็นกริด
+   สี/ขนาด/ระยะทั้งหมดมาจาก tokens.css */
+
+.farms-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  /* เว้นระยะก่อนถึงรายการฟาร์มเอง — เดิมอาศัยระยะของแถบเลย์เอาต์ที่เคยคั่นอยู่ตรงนี้
+     พอแถบย้ายไปอยู่ในปุ่มเฟือง หัวหน้าจะไปติดการ์ดรายการพอดีถ้าไม่ใส่ */
+  margin-bottom: var(--space-6);
+}
+
+.farms-head-main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  /* ยอมให้หดได้ (คำอธิบายใต้ชื่อหน้าตกบรรทัดแทน) เพื่อให้ตัวเลขสรุปกับปุ่มจัดเลย์เอาต์
+     อยู่บรรทัดเดียวกับชื่อหน้าได้ครบ — ถ้าไม่ยอมหด ปุ่มจะถูกดันไปขึ้นบรรทัดใหม่ */
+  flex: 1 1 0;
+  /* แต่ห้ามหดจนชื่อหน้าแตกคำละบรรทัด — จอ 375px เคยเหลือกว้าง 75px เป็น 4 บรรทัด
+     (T1.241) เพราะปุ่มกับตัวเลขสรุปแย่งแถวเดียวกัน พื้นที่ไม่ถึงค่านี้เมื่อไร
+     ปุ่มกับตัวเลขจะตกไปบรรทัดถัดไปแทน (จอกว้างที่ยังพอวางแถวเดียวได้หน้าตาเหมือนเดิม) */
+  min-width: min(100%, 22rem);
+}
+
+.farms-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.farms-subtitle {
+  margin-top: var(--space-2);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ---------- กริดการ์ดฟาร์ม ---------- */
+.farm-card-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  /* auto-fill ไม่ใช่ auto-fit — กรองจนเหลือฟาร์มเดียวแล้วการ์ดต้องขนาดเดิม
+     (เหตุผลเดียวกับ .barn-card-grid ใน FarmBarns.css — การ์ดสองหน้านี้ต้องหน้าตาเหมือนกัน) */
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: var(--space-5);
+}
+
+.farm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.farm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-float);
+}
+
+/* ฟาร์มออฟไลน์ = ข้อมูลไม่อัปเดต → ลดสีภาพให้เห็นชัดว่าไม่ใช่ข้อมูลสด
+   (ยังมีป้ายสถานะพร้อมไอคอนกำกับเสมอ ไม่ได้สื่อด้วยสีอย่างเดียว) */
+.farm-card.is-offline .farm-card-photo {
+  filter: grayscale(0.85);
+  opacity: 0.75;
+}
+
+/* หัวการ์ดเป็น **สองแถวซ้อนกัน** (5 พ.ย. 2569): ป้ายสถานะ+ปุ่มอยู่แถวบน · ชื่อฟาร์มแถวล่าง
+   ★ เดิมวางแถวเดียว ป้ายชิดซ้าย ชื่อชิดขวา — พอการ์ดแคบลง ชื่อเหลือที่ไม่ถึงครึ่ง
+     "ฟาร์มกำแพงเพชร" จึงแตกเป็นสองบรรทัดชิดขวา และบรรทัดที่ตั้งถูกตัดเป็น "กำแพ…"
+     ทั้งที่การ์ดยังว่างอีกครึ่งใบ (ผู้ใช้ทักว่าไม่สมส่วน)
+   ➜ ให้ชื่อได้ความกว้างเต็มใบ ชื่อฟาร์มทั่วไปจึงจบในบรรทัดเดียวและที่ตั้งไม่ถูกตัด
+   กลุ่มปุ่มยังไม่หดและไม่ตกแถว เพราะ .farm-card-tools เป็น nowrap + flex-shrink: 0 */
+.farm-card-top {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5) var(--space-3);
+  /* ความสูงคงที่ = ระยะขอบ 16+12 + แถวป้าย 32 + ช่องไฟ 8 + ชื่อ 2 บรรทัด (32×2)
+     + ช่องไฟ 4 + ที่ตั้ง 1 บรรทัด (24)
+     ตายตัวไว้เพื่อให้ **ทุกการ์ดสูงเท่ากัน** ไม่ว่าชื่อฟาร์มจะยาวสั้นต่างกันแค่ไหน
+     ถ้าไม่ล็อก รูป/ตัวเลข/ปุ่มท้ายการ์ดของแต่ละใบจะอยู่คนละระดับทันทีที่จอแคบลง */
+  min-height: 156px;
+}
+
+/* ชื่อฟาร์ม — ยาวได้สูงสุด 2 บรรทัด เกินกว่านั้นตัดด้วย …
+   (คู่กับ min-height ด้านบน: จำกัดบนแล้วจองที่ไว้เท่ากัน = สูงเท่ากันทุกใบ) */
+.farm-card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.farm-card-name {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  /* ★ ชิดซ้ายให้ตรงแนวกับป้ายสถานะด้านบนและตัวเลขด้านล่าง — ทั้งใบอ่านเป็นแนวเดียว */
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  min-width: 0;
+  text-align: left;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ที่ตั้ง — บรรทัดเดียวเสมอ (ยาวเกินก็ตัด) เพื่อให้หัวการ์ดสูงคงที่ */
+.farm-card-place {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.farm-card-place svg {
+  flex-shrink: 0;
+}
+
+.farm-card-place > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.farm-card-photo {
+  position: relative;
+  height: 178px;
+  margin: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--bg-tint), var(--scene-sky-bottom));
+}
+
+/* ภาพฟาร์มลอยขึ้น-ลงเบา ๆ เหมือนการ์ดโรงเรือน (คนละ keyframes กันเพราะระยะต่างกัน) */
+.farm-float {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: farm-float 6s ease-in-out infinite;
+}
+
+.farm-card:nth-child(2n) .farm-float {
+  animation-delay: -2s;
+}
+
+.farm-card:nth-child(3n) .farm-float {
+  animation-delay: -3.7s;
+}
+
+.farm-card-scene {
+  width: 100%;
+  height: 100%;
+  /* ภาพจริงเป็น <img> จึงต้องคุมสัดส่วนไว้ ไม่ให้ยืดตามกล่อง */
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgb(var(--shadow-rgb) / 0.14));
+}
+
+.farm-card:hover .farm-card-scene {
+  filter: drop-shadow(0 16px 20px rgb(var(--shadow-rgb) / 0.18));
+}
+
+/* เงาบนพื้นที่หด-ขยายตามจังหวะการลอย */
+.farm-float-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  width: 52%;
+  height: 12px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(var(--shadow-rgb) / 0.2),
+    rgb(var(--shadow-rgb) / 0) 70%
+  );
+  animation: farm-float-shadow 6s ease-in-out infinite;
+}
+
+.farm-card:nth-child(2n) .farm-float-shadow {
+  animation-delay: -2s;
+}
+
+.farm-card:nth-child(3n) .farm-float-shadow {
+  animation-delay: -3.7s;
+}
+
+/* ฟาร์มออฟไลน์ = ไม่มีข้อมูลสด จึงไม่ขยับ (ยังมีป้ายสถานะกำกับเสมอ) */
+.farm-card.is-offline .farm-float,
+.farm-card.is-offline .farm-float-shadow {
+  animation: none;
+}
+
+@keyframes farm-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes farm-float-shadow {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.88);
+    opacity: 0.55;
+  }
+}
+
+/* ผู้ใช้ที่ตั้งค่าลดการเคลื่อนไหวต้องไม่เห็นภาพขยับ */
+@media (prefers-reduced-motion: reduce) {
+  .farm-float,
+  .farm-float-shadow {
+    animation: none;
+  }
+}
+
+/* ป้ายประเภทสุกรในการ์ด — ป้ายที่ตรงกับตัวกรองที่เลือกอยู่จะเป็นสีทอง */
+/* ป้ายประเภทสุกร — แถวเดียวเสมอ ถ้าป้ายเยอะจนไม่พอให้เลื่อนแนวนอนในแถบตัวเอง
+   (เดิมตัดบรรทัด ทำให้การ์ดที่มี 3 ป้ายสูงกว่าเพื่อน 42px ตอนจอแคบ) */
+.farm-card-tags {
+  list-style: none;
+  padding: var(--space-3) var(--space-5) 0;
+  /* ★ จองความสูงไว้เท่ากันทุกใบ แม้ฟาร์มที่ยังไม่ได้ระบุประเภทสุกร (แถวนี้ว่าง)
+     ไม่งั้นแถวตัวเลขของการ์ดที่อยู่ข้างกันจะอยู่คนละระดับ เห็นชัดมากตอนวางเทียบกัน
+     คิดจาก token ชุดเดียวกับชิป จึงขยับตามขนาดตัวอักษรที่ผู้ใช้ตั้งไว้ */
+  min-height: calc(
+    var(--space-3) + var(--text-sm) * 1.5 + var(--space-1) * 2 + 2px
+  );
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.farm-card-tags::-webkit-scrollbar {
+  display: none;
+}
+
+.farm-card-tag {
+  flex-shrink: 0;
+}
+
+.farm-card-tag {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.farm-card-tag.is-active {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* ---------- ตัวเลขในการ์ด ---------- */
+/* 2×2 แทนที่จะเป็น 4 ช่องเรียงเดียว — แต่ละช่องกว้างพอให้ป้ายและตัวเลขอยู่ครบ ไม่ถูกตัด */
+.farm-card-figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-4);
+  padding: var(--space-4) var(--space-5);
+}
+
+.farm-card-figures > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-left: var(--space-2);
+  border-left: 1px solid var(--border);
+  min-width: 0;
+}
+
+.farm-card-figures > div:nth-child(odd) {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.farm-card-figures dt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.farm-card-figures dt svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.farm-card-figures dd {
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.farm-card-figures dd b {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ตัวเลขยาว (เช่น 15,600 ตัว) ต้องไม่ดันคอลัมน์อื่น */
+.farm-card-figures dd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- ปุ่มท้ายการ์ด ---------- */
+.farm-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--border);
+  background: var(--bg-tint);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.farm-card-link:hover {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* กดที่ไหนก็ได้ในการ์ดแล้วเข้าหน้าโรงเรือน — ยืดลิงก์เดิมให้คลุมทั้งใบ
+   (ไม่ได้ซ้อน <a> ในการ์ด จึงยังอ่านออกด้วยคีย์บอร์ดและ screen reader เหมือนเดิม) */
+.farm-card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.farm-card:hover .farm-card-link {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.farm-card:has(.farm-card-link:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 899px) {
+  .farms-head-main {
+    gap: var(--space-3);
+  }
+
+  .farms-title {
+    font-size: var(--text-xl);
+  }
+}
+
+/* ปุ่มแก้ไข/ลบ/ปรับจำนวน ต้องลอยเหนือแผ่นลิงก์ที่คลุมทั้งใบ
+   ไม่งั้นคลิกจริงจะไปโดนลิงก์แล้วเปลี่ยนหน้าแทนที่จะเปิดป๊อบอัพ
+   (บั๊กนี้ไม่โผล่ตอนทดสอบด้วย element.click() เพราะสคริปต์ยิงตรงเข้าปุ่มโดยไม่ผ่านการชนของจริง) */
+.farm-card .rc-del,
+.farm-card .rc-edit,
+.farm-card .rc-btns,
+.farm-card .aj-open,
+.farm-card .aj-net,
+.farm-card .farm-card-tools {
+  position: relative;
+  z-index: 1;
+}
+
+/* มุมซ้ายบนของการ์ดเป็น **สองแถวซ้อนกัน**: ป้ายสถานะบน · ปุ่มแก้ไข/ลบล่าง
+   (ก่อนหน้านี้อยู่แถวเดียวกันหมด ผู้ใช้ขอให้ปุ่มลงมาอยู่ใต้สถานะ)
+   ทั้งก้อนไม่หด ถ้าที่ไม่พอให้ชื่อฟาร์มตัดคำในกล่องของตัวเองแทน */
+.farm-card-tools {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+/* ป้ายสถานะ + ที่มาของข้อมูล อยู่แถวเดียวกันเสมอ ห้ามแยกบรรทัด */
+.farm-card-badges {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+

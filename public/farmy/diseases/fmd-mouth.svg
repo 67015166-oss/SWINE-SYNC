@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการในช่องปาก</title><desc id="dsc">ภาพวาดหัวสุกรด้านข้างอ้าปาก แสดงตุ่มน้ำและแผลบนลิ้น พร้อมน้ำลายไหล</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="200" cy="86" rx="92" ry="48" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="172" cy="78" rx="12" ry="16" fill="#6f4f47"/>
+  <ellipse cx="228" cy="78" rx="12" ry="16" fill="#6f4f47"/>
+  <path d="M108 118 q92 34 184 0 q0 86 -92 92 q-92 -6 -92 -92 z" fill="#7d3f3e" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M126 132 q74 26 148 0 q-4 62 -74 66 q-70 -4 -74 -66 z" fill="#c76f6c"/>
+  <path d="M150 146 q50 16 100 0 q-6 40 -50 44 q-44 -4 -50 -44 z" fill="#e2908b"/>
+  <circle cx="168" cy="152" r="8" fill="#ffe9b0" stroke="#c0392b" stroke-width="2.5"/><circle cx="166" cy="150" r="2" fill="#fff" opacity=".75"/><circle cx="232" cy="152" r="8" fill="#ffe9b0" stroke="#c0392b" stroke-width="2.5"/><circle cx="230" cy="150" r="2" fill="#fff" opacity=".75"/>
+  <ellipse cx="200" cy="176" rx="11" ry="7" fill="#c0392b"/><ellipse cx="200" cy="176" rx="6" ry="3" fill="#8e2a20"/><ellipse cx="146" cy="168" rx="8" ry="6" fill="#c0392b"/><ellipse cx="146" cy="168" rx="4" ry="3" fill="#8e2a20"/>
+  <path d="M164 214 q-4 26 -14 36" fill="none" stroke="#9fd8ff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M212 216 q4 24 14 32" fill="none" stroke="#9fd8ff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M168 152 L96 132" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="168" cy="152" r="3" fill="#c0392b"/><text x="90" y="137" text-anchor="end" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">ตุ่มน้ำใส</text>
+  <path d="M200 176 L288 196" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="200" cy="176" r="3" fill="#c0392b"/><text x="294" y="201" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">แผลบนลิ้น</text>
+  <path d="M226 232 L300 252" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="226" cy="232" r="3" fill="#c0392b"/><text x="306" y="257" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">น้ำลายไหล</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">ในปาก ลิ้น และน้ำลายไหล</text>
+</svg>

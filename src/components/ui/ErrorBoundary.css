@@ -1,0 +1,116 @@
+/**
+ * หน้าที่โผล่แทนจอขาวเมื่อ render พัง (ดู ErrorBoundary.jsx)
+ *
+ * อยู่นอก AppLayout จึงไม่มีเมนู/หัวหน้ามาช่วยจัดหน้า — วางกลางจอเองทั้งใบ
+ * และต้องพึ่งพาแค่ tokens.css เท่านั้น เพราะตอนที่หน้านี้โผล่ ส่วนอื่นของแอปพังไปแล้ว
+ */
+
+.eb-wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background: var(--bg-page);
+}
+
+.eb-card {
+  width: min(100%, 560px);
+  padding: var(--space-7);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.eb-icon {
+  display: inline-grid;
+  place-items: center;
+  width: var(--icon-chip);
+  height: var(--icon-chip);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.eb-title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-xl);
+  color: var(--ink-primary);
+}
+
+.eb-text {
+  margin: 0 0 var(--space-6);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  color: var(--ink-secondary);
+}
+
+.eb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: center;
+}
+
+.eb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-raised);
+}
+
+.eb-btn:hover {
+  box-shadow: var(--shadow-raised-hover);
+}
+
+.eb-btn:active {
+  box-shadow: var(--shadow-raised-press);
+}
+
+.eb-btn.is-main {
+  border-color: transparent;
+  background: var(--accent-gradient);
+  color: rgb(var(--scrim-rgb));
+  box-shadow: var(--shadow-raised-gold);
+}
+
+.eb-btn.is-main:active {
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+.eb-more {
+  margin-top: var(--space-6);
+  text-align: left;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.eb-more summary {
+  cursor: pointer;
+  padding: var(--space-2) 0;
+}
+
+.eb-pre {
+  max-height: 240px;
+  margin: var(--space-2) 0 0;
+  padding: var(--space-4);
+  overflow: auto;
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  color: var(--ink-secondary);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

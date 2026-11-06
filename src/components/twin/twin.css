@@ -1,0 +1,405 @@
+/* ผังแบบจำลองโรงเรือน — สีทุกค่ามาจาก tokens.css เท่านั้น (SVG ใช้ fill/stroke เป็น var ได้ตรง ๆ) */
+
+.tw-plan {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tw-svg {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+}
+
+/* ---------- นอกเล้า + ป้ายค่า ---------- */
+.tw-outside {
+  fill: var(--bg-tint);
+  stroke: var(--border);
+}
+
+.tw-chip rect,
+.tw-probe-box {
+  fill: var(--bg-surface);
+  stroke: var(--border-strong);
+}
+
+.tw-chip-label {
+  fill: var(--ink-secondary);
+  font-size: var(--text-xs);
+}
+
+.tw-chip-value {
+  fill: var(--ink-primary);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+/* ต้องเป็น --ink-secondary ไม่ใช่ --ink-muted — ข้อความนี้วางบน `.tw-shell` ที่ระบายด้วย
+   สีพื้นสถานะ (--status-*-bg) ซึ่งเป็นคู่ที่แย่สุดในแอป วัดแล้ว muted ตก 18/20 โหมด
+   และแม้ขยับ muted ให้เข้มขึ้นแล้ว (T1.319) ก็ยังตกอีก 6 โหมด · secondary ผ่านทั้ง 20 (5.47–10.61) */
+.tw-note {
+  fill: var(--ink-secondary);
+  font-size: var(--text-xs);
+}
+
+/* ---------- ตัวอาคาร ----------
+   พื้นทั้งผืนใช้สีของ "ค่าที่วัดได้จุดเดียว" — ไม่ไล่เฉด เพราะไม่มีข้อมูลให้ไล่ */
+.tw-shell {
+  stroke: var(--border-strong);
+  stroke-width: 2;
+  fill: var(--status-offline-bg);
+}
+
+.tw-shell.is-good { fill: var(--status-good-bg); }
+.tw-shell.is-warning { fill: var(--status-warning-bg); }
+.tw-shell.is-serious { fill: var(--status-serious-bg); }
+.tw-shell.is-critical { fill: var(--status-critical-bg); }
+.tw-shell.is-offline { fill: var(--status-offline-bg); }
+
+.tw-inlet {
+  fill: var(--series-1);
+  opacity: 0.55;
+}
+
+.tw-pen {
+  fill: var(--bg-surface);
+  opacity: 0.55;
+  stroke: var(--border);
+}
+
+.tw-flow {
+  stroke: var(--ink-muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 7 7;
+  opacity: 0.75;
+}
+
+.tw-arrow-head {
+  fill: var(--ink-muted);
+}
+
+/* ---------- พัดลม (โครงสร้างของอาคาร ไม่ได้บอกว่าหมุนอยู่) ---------- */
+.tw-fan circle {
+  fill: var(--bg-surface);
+  stroke: var(--border-strong);
+}
+
+.tw-fan-blade {
+  fill: var(--accent-tint);
+  stroke: var(--accent);
+  stroke-width: 1.2;
+}
+
+.tw-fan-hub {
+  fill: var(--accent);
+  stroke: none;
+}
+
+/* ---------- จุดวัดจริง ---------- */
+.tw-probe-stem {
+  stroke: var(--ink-muted);
+  stroke-width: 1.5;
+}
+
+.tw-probe-dot {
+  fill: var(--status-offline);
+  stroke: var(--bg-surface);
+  stroke-width: 3;
+}
+
+.tw-probe.is-good .tw-probe-dot { fill: var(--status-good); }
+.tw-probe.is-warning .tw-probe-dot { fill: var(--status-warning); }
+.tw-probe.is-serious .tw-probe-dot { fill: var(--status-serious); }
+.tw-probe.is-critical .tw-probe-dot { fill: var(--status-critical); }
+
+/* ---------- ป้ายจำนวนเหตุที่ยังไม่ปิด ---------- */
+.tw-flag circle {
+  fill: var(--status-critical);
+  stroke: var(--bg-surface);
+  stroke-width: 2;
+}
+
+.tw-flag-text {
+  fill: var(--ink-inverse);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+/* ค่านอกเล้าที่ค้าง — ตัวหนังสือจางลง บอกว่าไม่ใช่ค่าที่เชื่อได้ */
+.tw-chip-value.is-stuck {
+  fill: var(--status-offline-text);
+  font-size: var(--text-sm);
+}
+
+/* ---------- กล่องแบบจำลองที่คิดได้ (T1.261) ---------- */
+.tm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tm-now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-7);
+}
+
+.tm-now-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.tm-now-cell span {
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tm-now-cell b {
+  color: var(--ink-primary);
+  font-size: var(--text-2xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.tm-now-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  max-width: 460px;
+}
+
+.tm-hint,
+.tm-note {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tm-waiting {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-base);
+}
+
+.tm-traits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--space-3);
+}
+
+.tm-traits li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-sunken);
+  border-radius: var(--radius-md);
+}
+
+.tm-traits span {
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tm-traits b {
+  color: var(--ink-primary);
+  font-size: var(--text-xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.tm-traits b.tm-muted {
+  color: var(--ink-muted);
+  font-size: var(--text-lg);
+}
+
+.tm-trust {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.tm-trust p {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tm-trust p svg {
+  flex: none;
+  margin-top: 3px;
+  color: var(--accent);
+}
+
+/* ---------- กล่องแบบจำลองที่ทดลองได้ (T1.262) ---------- */
+.tl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tl-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tl-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.tl-mode:hover:not(:disabled) {
+  background: var(--bg-tint);
+}
+
+.tl-mode.is-on {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.tl-mode:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tl-mode:focus-visible,
+.tl-reset:focus-visible,
+.tl-slider input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tl-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-4) var(--space-6);
+}
+
+.tl-slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.tl-slider-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tl-slider-head b {
+  color: var(--ink-primary);
+  font-size: var(--text-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.tl-slider input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.tl-slider-scale {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+}
+
+.tl-reset {
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.tl-reset:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tl-sums {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tl-sum {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tl-sum:last-child {
+  border-bottom: 0;
+}
+
+/* ตัวอย่างเส้นหน้าชื่อ — เส้นประบอก "แบบจำลอง" ได้โดยไม่ต้องพึ่งสีอย่างเดียว */
+.tl-sum-key {
+  width: 22px;
+  height: 0;
+  border-top: 3px solid var(--line);
+}
+
+.tl-sum-key.is-dashed {
+  border-top-style: dashed;
+}
+
+.tl-sum-name {
+  color: var(--ink-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.tl-sum-peak {
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.tl-sum-close {
+  flex-basis: 100%;
+  padding-inline-start: calc(22px + var(--space-3));
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+}

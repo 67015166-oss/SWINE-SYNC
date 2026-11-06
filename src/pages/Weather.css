@@ -1,0 +1,1160 @@
+/* หน้า "สภาพอากาศ" (/dashboard/weather)
+   สี/ขนาด/ระยะทั้งหมดมาจาก tokens.css — ห้ามเขียน hex ตรง ๆ ในไฟล์นี้
+
+   ภาษาภาพชุดเดียวกับแผ่นค่าในหน้าสภาพแวดล้อม (.ev-m) โดยตั้งใจ —
+   ค่าที่วัดได้ควรหน้าตาเหมือนกันทุกหน้า คนดูจะได้ไม่ต้องเรียนรู้สองแบบ
+   แต่ใช้คลาสของตัวเอง (wx-) ไม่ได้ไปยืมคลาสอีกหน้ามาใช้ เพราะสองหน้าต้องแก้แยกกันได้ */
+
+/* ---------- ปุ่ม "สภาพอากาศในเล้า" บนหัวหน้า ----------
+   ผู้ใช้สั่งให้มีปุ่มนี้ (9 ก.ย. 2569) — เป็นทางข้ามไปหน้าอากาศในเล้าของฟาร์มเดียวกัน
+   หน้าตาชุดเดียวกับปุ่ม "เจาะรายโรงเรือน" ของหน้าอุณหภูมิ/ความชื้น */
+.wx-indoor-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--ink-primary);
+  transition: transform 0.16s cubic-bezier(0.22, 0.9, 0.24, 1), border-color 0.16s ease;
+}
+
+.wx-indoor-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.wx-indoor-btn:active {
+  transform: translateY(1px);
+}
+
+.wx-indoor-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.wx-indoor-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.wx-indoor-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.wx-indoor-text span {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+.wx-indoor-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ═══ หัวการ์ดของหน้านี้ใหญ่กว่าหน้าอื่นหนึ่งขั้น ═══
+   ผู้ใช้สั่งให้ "กล่องเด่น ๆ ตัวหนังสือใหญ่ ๆ" (9 ก.ย. 2569)
+   ตั้งทับเฉพาะการ์ดของหน้านี้ ไม่ได้ไปแก้ `.card-title` ที่ใช้ร่วมกันทั้งแอป
+   ไม่งั้นทุกหน้าจะโตตามโดยที่ไม่มีใครขอ */
+.wx-now-card .card-title,
+.wx-trend-card .card-title,
+.wx-indoor-card .card-title {
+  font-size: var(--text-xl);
+}
+
+.wx-now-card .card-subtitle,
+.wx-trend-card .card-subtitle,
+.wx-indoor-card .card-subtitle {
+  font-size: var(--text-base);
+}
+
+/* ---------- แถบบอกที่มาของข้อมูล ---------- */
+.wx-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ---------- แผ่นค่าที่เสาวัดได้ ---------- */
+.wx-metrics {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+/* การ์ดถูกลากให้แคบลงได้ — ใช้ container query ไม่ใช่ความกว้างจอ
+   เพราะการ์ดใบนี้อาจแคบทั้งที่จอกว้าง (ผู้ใช้ย่อกล่องบนกระดานเอง) */
+.wx-now-card {
+  container-type: inline-size;
+  container-name: wxnow;
+}
+
+@container wxnow (max-width: 900px) {
+  .wx-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container wxnow (max-width: 460px) {
+  .wx-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.wx-m {
+  --m-tone: var(--status-good);
+  /* ค่าปกติเรืองจางมาก — ถ้าทุกแผ่นเรืองเท่ากันหมด "ผิดปกติ" จะไม่สะดุดตา */
+  --m-mix: 9%;
+  --m-glow: 10%;
+  position: relative;
+  /* แผ่นเป็น container ของตัวเอง — ตัวเลขจะได้โตตาม "ความกว้างของแผ่น" ไม่ใช่ของจอ
+     ผู้ใช้ลากย่อการ์ดบนกระดานได้ ขนาดตัวเลขจึงต้องอิงของที่ยืดหดจริง */
+  container-type: inline-size;
+  container-name: wxtile;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--m-tone) 30%, var(--border));
+  /* มุมโค้งมากขึ้นหนึ่งขั้น — มุมยิ่งโค้ง ผิวยิ่งอ่านเป็นก้อนนูน ไม่ใช่แผ่นกระดาษ */
+  border-radius: var(--radius-xl);
+  background-image:
+    /* ชั้น 1 แสงจากด้านบน · ชั้น 2 เงาที่ขอบล่าง · ชั้น 3 สีประจำสถานะ (ของเดิม) */
+    linear-gradient(180deg, var(--wx-top) 0%, transparent 42%),
+    linear-gradient(180deg, transparent 58%, var(--wx-bottom) 100%),
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--m-tone) var(--m-mix), var(--bg-surface)) 0%,
+      var(--bg-surface) 62%
+    );
+  box-shadow:
+    /* ขอบในสว่างรอบใบ + เส้นสว่างเน้นที่ขอบบน = สันของผิวที่โค้งขึ้นมารับแสง */
+    0 0 0 1px var(--wx-rim) inset,
+    0 2px 1px -1px var(--wx-rim) inset,
+    /* เงาในที่ขอบล่าง = ผิวโค้งลงกลับไปหาพื้น (นี่คือตัวที่ทำให้ "นูน" จริง ๆ) */
+    0 -18px 24px -12px var(--wx-inner) inset,
+    /* เงาสัมผัสแนบ ๆ ใต้ก้อน แล้วค่อยฟุ้งออก — ก้อนจึงดูวางอยู่บนพื้น ไม่ใช่ลอยเท้งเต้ง */
+    0 2px 3px rgb(var(--shadow-rgb) / 0.12),
+    0 12px 24px rgb(var(--shadow-rgb) / 0.1),
+    0 24px 48px color-mix(in srgb, var(--m-tone) var(--m-glow), transparent);
+}
+
+/* สันขอบบน — ชุดเดียวกับแผ่นค่าในหน้าสภาพแวดล้อม ทั้งแอปจึงดูเป็นวัสดุเดียวกัน */
+.wx-m::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 12%;
+  left: 12%;
+  height: 3px;
+  border-radius: 0 0 999px 999px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--m-tone) 58%, transparent),
+    transparent
+  );
+}
+
+.wx-m.is-warning {
+  --m-tone: var(--status-warning);
+  --m-mix: 18%;
+  --m-glow: 26%;
+}
+
+.wx-m.is-offline {
+  --m-tone: var(--status-offline);
+  --m-mix: 8%;
+  --m-glow: 8%;
+}
+
+.wx-m-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.wx-m-chip {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background-image:
+    linear-gradient(180deg, var(--wx-top) 0%, transparent 55%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--m-tone) 14%, var(--bg-surface)),
+      color-mix(in srgb, var(--m-tone) 22%, var(--bg-surface))
+    );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--m-tone) 30%, transparent),
+    0 1px 0 var(--wx-rim) inset,
+    0 -6px 8px -6px var(--wx-inner) inset,
+    0 2px 4px rgb(var(--shadow-rgb) / 0.16);
+  color: color-mix(in srgb, var(--m-tone) 72%, var(--ink-primary));
+}
+
+.wx-m-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* ═══ ตัวเลขคือพระเอกของแผ่น ═══
+   ผู้ใช้สั่งให้ "ตัวหนังสือใหญ่ ๆ" (9 ก.ย. 2569) — ขึ้นมาที่ `--text-stat` (42px)
+   ซึ่งเป็นขนาดเดียวกับตัวเลขเด่นในกล่องสรุปหน้าภาพรวม
+
+   ใช้ `clamp` กับหน่วย `cqi` ไม่ใช่ตั้งค่าตายตัว เพราะแผ่นแคบลงได้เมื่อผู้ใช้ย่อการ์ด
+   ตายตัวที่ 42px แล้วแผ่นแคบเมื่อไรตัวเลขจะล้นขอบ (บทเรียนจากการ์ดระบบไฟฟ้า T1.19x)
+   20cqi = แผ่นกว้าง 210px ขึ้นไปได้ 42px เต็ม · แคบกว่านั้นย่อลงจนถึงพื้น 24px
+   (cqi วัดจากกรอบ**เนื้อหา** หลังหักขอบในแล้ว ไม่ใช่ความกว้างทั้งแผ่น) */
+.wx-m-value b {
+  font-size: clamp(var(--text-xl), 20cqi, var(--text-stat));
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink-primary);
+}
+
+/* ค่าที่เป็น "คำ" ไม่ใช่ "ตัวเลข" (ทิศทางลม) ต้องเล็กกว่า
+   "ตะวันออกเฉียงเหนือ" ที่ 42px กินสามบรรทัด แล้วดันแผ่นสูงกว่าเพื่อนทั้งแถว */
+.wx-m-value b.is-word {
+  font-size: clamp(var(--text-lg), 9cqi, var(--text-xl));
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.wx-m-value em {
+  font-size: var(--text-base);
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+/* ป้ายสถานะบน · คำอธิบายล่าง — เรียงลงเสมอ ไม่ใช่ wrap เอาเอง
+   ทุกแผ่นจึงสูงเท่ากันทุกความกว้าง (บทเรียนจาก .ev-m-meta ในหน้าสภาพแวดล้อม) */
+.wx-m-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+
+/* กันที่ไว้สองบรรทัดเสมอ — ข้อความยาวไม่เท่ากันตามค่าที่วัดได้จริง
+   ถ้าปล่อยให้สูงตามเนื้อหา แผ่นที่ข้อความตกสองบรรทัดจะดันทั้งแถวให้สูงกว่าเพื่อน */
+.wx-m-note {
+  min-height: calc(var(--text-sm) * 1.5 * 2);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.wx-m-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  box-shadow: var(--shadow-well);
+  overflow: hidden;
+}
+
+.wx-m-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--status-good);
+  transition: width 0.3s ease;
+}
+
+.wx-m-fill.is-warning {
+  background: var(--status-warning);
+}
+
+.wx-m-fill.is-offline {
+  background: var(--ink-muted);
+}
+
+/* รางเปล่าของค่าที่ไม่มีสเกล — โปร่งใสแต่ยังกินที่เท่าเดิม แผ่นทุกใบจึงสูงเท่ากัน */
+.wx-m-track.is-empty {
+  background: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wx-m-fill {
+    transition: none;
+  }
+
+  .wx-indoor-btn,
+  .wx-indoor-btn:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- แท็บ / ปุ่มช่วงเวลา ---------- */
+.wx-trend-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.wx-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  box-shadow: var(--shadow-well);
+}
+
+.wx-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.wx-tab:hover {
+  color: var(--ink-primary);
+}
+
+.wx-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* แท็บที่เลือกอยู่บอกด้วยพื้น + ขอบ + ตัวหนา ไม่ได้บอกด้วยสีอย่างเดียว
+   (และมี aria-selected ให้โปรแกรมอ่านหน้าจอด้วย) */
+.wx-tab.is-active {
+  border-color: var(--accent-bright);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+/* ---------- กล่องแทนกราฟตอนไม่มีข้อมูล ---------- */
+.wx-nochart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  margin: 0;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  text-align: center;
+}
+
+/* ---------- การ์ดเทียบกับในเล้า ---------- */
+.wx-gaps {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wx-gap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+}
+
+.wx-gap-label {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.wx-gap-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--ink-muted);
+}
+
+.wx-gap-side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.wx-gap-side em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.wx-gap-side b {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+
+.wx-gap-note {
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ---------- ข้อความตอนไม่มีข้อมูลเลย ---------- */
+.wx-empty {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  color: var(--ink-secondary);
+}
+
+/* ═══════════ การ์ดพยากรณ์อากาศ ═══════════
+   ผู้ใช้ขอแบบที่แอปพยากรณ์อากาศทั่วไปทำกัน (9 ก.ย. 2569):
+   กราฟรายชั่วโมงด้านบน + แถบวันเรียงข้างล่าง */
+
+.wx-fc-card {
+  container-type: inline-size;
+  container-name: wxfc;
+}
+
+/* ป้ายบอกว่าเป็น "ค่าทำนาย" ไม่ใช่ "ค่าที่วัดได้"
+   ต้องเด่นพอที่คนกวาดตาผ่านแล้วเห็น เพราะตัวเลขในการ์ดนี้ต่างจากเสาอากาศได้หลายองศา */
+.wx-fc-source {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent-bright);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.wx-fc-source svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent-strong);
+}
+
+.wx-fc-source b {
+  color: var(--ink-primary);
+}
+
+.wx-fc-card .wx-tabs {
+  margin-bottom: var(--space-3);
+}
+
+/* ---------- แถบพยากรณ์รายวัน ----------
+   เลื่อนแนวนอนได้เมื่อการ์ดแคบ — ดีกว่าบีบแปดวันให้แคบจนอ่านตัวเลขไม่ออก
+   (`overflow-x: auto` ที่นี่จึงเป็นของตั้งใจ ไม่ใช่ของหลุด) */
+.wx-days {
+  list-style: none;
+  padding: 0 0 var(--space-2);
+  margin: var(--space-4) 0 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(96px, 1fr);
+  gap: var(--space-2);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.wx-day {
+  /* ใบวันเป็นช่องของ grid ความกว้างมาจากกระดาน ไม่ได้มาจากเนื้อใน
+     ประกาศเป็น container จึงวัด cqi ได้ตรงกับความกว้างของใบเอง
+     (ถ้าไม่ประกาศ cqi จะไปวัดจากการ์ดทั้งใบ ซึ่งกว้างกว่าสิบเท่า) */
+  container-type: inline-size;
+  container-name: wxday;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  text-align: center;
+  transition: transform 0.16s cubic-bezier(0.22, 0.9, 0.24, 1), border-color 0.16s ease;
+}
+
+.wx-day:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+/* วันนี้ต้องแยกออกจากวันอื่นได้ทันที — พื้นเน้น + ขอบทอง + ตัวหนา
+   ไม่ได้บอกด้วยสีอย่างเดียว เพราะคำว่า "วันนี้" เขียนอยู่ในช่องด้วย */
+.wx-day.is-today {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+}
+
+.wx-day-name {
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.wx-day-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-surface));
+  color: var(--accent-strong);
+}
+
+.wx-day.is-today .wx-day-icon {
+  background: var(--bg-surface);
+}
+
+.wx-day-sky {
+  min-height: calc(var(--text-xs) * 1.5 * 2);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+/* สูงสุดเป็นตัวหลัก ต่ำสุดจางลง — เรียงแบบเดียวกับที่คนอ่านพยากรณ์คุ้นอยู่แล้ว */
+.wx-day-temp {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  /* ที่จอ 420px ใบวันกว้าง 94px แต่ "30.5° 24.5°" ขอ 101px แล้วล้นออกนอกใบ 7px
+     (มีมาตั้งแต่ T1.227 เพิ่งเห็นตอนวัดทุกแท็บ) — บีบช่องไฟลงเมื่อใบแคบ
+     ไม่ลดขนาดตัวเลข เพราะผู้ใช้สั่งไว้ว่าขอตัวหนังสือใหญ่ */
+  gap: clamp(2px, 4cqi, var(--space-2));
+  max-width: 100%;
+}
+
+.wx-day-temp b {
+  /* ใหญ่เต็มที่เมื่อใบวันกว้างพอ แล้วย่อตามใบเมื่อแคบลง — ที่จอ 420px ใบกว้าง 94px
+     ขนาดคงที่ --text-xl ทำให้ "30.5° 24.5°" ขอ 101px บนพื้นที่ 78px แล้วล้นออกนอกใบ
+     (ล้นมาตั้งแต่ T1.227) ย่อที่นี่แทนการตัดตัวเลขทิ้ง ผู้ใช้ยังได้ตัวใหญ่ที่จอปกติ */
+  font-size: clamp(var(--text-base), 19cqi, var(--text-xl));
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.wx-day-temp em {
+  font-size: clamp(var(--text-xs), 13cqi, var(--text-base));
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.wx-day-rain {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--seq-550);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wx-day,
+  .wx-day:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ชั้นเอฟเฟกต์ — "ล้ำ ๆ สามมิติ ไม่จืดชืด" (ผู้ใช้สั่ง 9 ก.ย. 2569)
+
+   หลักที่ยึดไว้ ไม่งั้นจะกลายเป็นหน้าที่สวยแต่อ่านยาก:
+     1. เอฟเฟกต์ห้ามแตะตัวเลขกับป้ายสถานะ — ขยับตัวเลขแล้วตาต้องไล่อ่านใหม่
+        ที่ขยับได้คือ "กรอบ" เท่านั้น
+     2. ทุกอย่างวิ่งครั้งเดียวตอนเข้าหน้า ไม่วนซ้ำ — ของที่ขยับตลอดเวลาบนหน้าที่คน
+        เปิดค้างไว้ทั้งวันคือการรบกวน ไม่ใช่ความสวย (ยกเว้นจุดสถานะ "ข้อมูลจริง"
+        ซึ่งการเต้นคือความหมายของมันเอง)
+     3. `prefers-reduced-motion` ตัดทิ้งทั้งหมด เหลือแต่สี — อยู่ท้ายไฟล์
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ═══ แสงสะท้อนบนผิวการ์ด ต้องเป็น "แสง" ไม่ใช่ "สีพื้นผิว" ═══
+   รอบแรกเขียนเป็น `rgb(var(--surface-rgb) / …)` ซึ่งถูกเฉพาะโหมดสว่าง —
+   พอสลับไปโหมดมืด สีพื้นผิวคือสีเข้ม ประกายแสงจึงกลายเป็น**เงา**ทาบมุมบนซ้าย
+   ตรงข้ามกับที่ตั้งใจไว้พอดี (มี 10 โหมดมืดให้พังพร้อมกัน)
+   ➜ ใช้ `--orb-light` (ขาวทุกโหมด) แล้วลดความเข้มลงในโหมดมืด ซึ่งพื้นเข้มอยู่แล้ว
+   ต้องการแสงน้อยกว่ามากจึงจะดูเป็นประกาย ไม่ใช่คราบขาว */
+.wx-now-card,
+.wx-fc-card,
+.wx-trend-card,
+.wx-indoor-card,
+.wx-m,
+.wx-day {
+  --wx-spec: rgb(var(--orb-light) / 0.7);
+  --wx-sheen: rgb(var(--orb-light) / 0.42);
+  /* ═══ ชุดทำให้ผิว "นูน" (ผู้ใช้สั่ง 9 ก.ย. 2569 "ขอนูน ๆ") ═══
+     สูตรเดียวกับลูกกลมไอคอนใน tokens.css (`--orb-gloss` / `--shadow-orb`)
+     ซึ่งเป็นภาษา 3 มิติที่โปรเจกต์นี้ใช้อยู่แล้ว — ไม่ได้คิดขึ้นใหม่
+     หลักคือ **แสงมาจากด้านบนเสมอ**: สว่างที่ขอบบน · มืดลงที่ขอบล่าง
+     ตาคนอ่านสองอย่างนี้เป็น "ผิวโค้งขึ้น" โดยอัตโนมัติ */
+  --wx-top: rgb(var(--orb-light) / 0.72);
+  --wx-bottom: rgb(var(--orb-dark) / 0.075);
+  --wx-rim: rgb(var(--orb-light) / 0.8);
+  --wx-inner: rgb(var(--orb-dark) / 0.18);
+}
+
+[data-scheme="dark"] .wx-now-card,
+[data-scheme="dark"] .wx-fc-card,
+[data-scheme="dark"] .wx-trend-card,
+[data-scheme="dark"] .wx-indoor-card,
+[data-scheme="dark"] .wx-m,
+[data-scheme="dark"] .wx-day {
+  --wx-spec: rgb(var(--orb-light) / 0.08);
+  --wx-sheen: rgb(var(--orb-light) / 0.07);
+  /* พื้นเข้มต้องการแสงน้อยกว่ามาก แต่ต้องการ "เงาใน" มากกว่า จึงจะยังเห็นเป็นผิวโค้ง */
+  --wx-top: rgb(var(--orb-light) / 0.1);
+  --wx-bottom: rgb(var(--orb-dark) / 0.22);
+  --wx-rim: rgb(var(--orb-light) / 0.14);
+  --wx-inner: rgb(var(--orb-dark) / 0.32);
+}
+
+@keyframes wx-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+}
+
+@keyframes wx-sheen {
+  to {
+    transform: translateX(160%);
+  }
+}
+
+/* จุดเต้นของป้าย "ข้อมูลจริง" — บอกว่าค่ายังไหลเข้ามาอยู่ ไม่ใช่ภาพนิ่งที่ค้างไว้
+   อันนี้วนซ้ำได้ เพราะการเต้น *คือ* ข้อมูล ไม่ใช่ของประดับ */
+@keyframes wx-live {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.72);
+  }
+}
+
+/* ---------- ความลึกของการ์ดทั้งใบ ----------
+   ขอบบนสว่าง + เงาซ้อนสามชั้น = ผิวโค้งที่มีแสงตกกระทบ ไม่ใช่สี่เหลี่ยมแบน */
+.wx-now-card,
+.wx-fc-card,
+.wx-trend-card,
+.wx-indoor-card {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--accent) 16%, var(--border));
+  background-image:
+    radial-gradient(120% 70% at 0% 0%, var(--glow-gold), transparent 58%),
+    linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-tint) 100%);
+  /* `--shadow-3d` ถูกนิยามใหม่ในทุกโหมดมืดอยู่แล้ว (เส้นขาวบางแทนเงาขอบ)
+     เขียนเงาเองทั้งชุดจะพังในโหมดมืด — ต่อชั้นลึกเพิ่มจากของเดิมพอ */
+  box-shadow:
+    var(--shadow-3d),
+    0 32px 64px rgb(var(--shadow-rgb) / 0.07);
+}
+
+/* แสงกวาดผ่านการ์ดหนึ่งรอบตอนเปิดหน้า — ไล่ทีละใบตามลำดับที่ตาอ่าน */
+.wx-now-card::after,
+.wx-fc-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 40%, var(--wx-sheen) 50%, transparent 60%);
+  transform: translateX(-160%);
+  animation: wx-sheen 1.5s ease-out 0.3s;
+}
+
+.wx-fc-card::after {
+  animation-delay: 0.55s;
+}
+
+/* ---------- แผ่นค่า: เอียงตามเมาส์เล็กน้อย ----------
+   `perspective` อยู่ที่ตัวลิสต์ ไม่ใช่ที่แผ่น — ถ้าตั้งที่แผ่นแต่ละใบ จุดมองจะอยู่กลาง
+   ของแผ่นนั้น ๆ แล้วทุกใบเอียงเหมือนกันหมดเหมือนภาพตัดปะ ตั้งที่แม่ทีเดียว
+   ทั้งแถวจึงเอียงสัมพันธ์กันเหมือนวางอยู่บนระนาบเดียวกันจริง ๆ */
+.wx-metrics,
+.wx-days {
+  perspective: 900px;
+}
+
+.wx-m {
+  transform-style: preserve-3d;
+  animation: wx-rise 0.5s cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+  transition:
+    transform 0.22s cubic-bezier(0.22, 0.9, 0.24, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.wx-m:hover {
+  transform: translateY(-6px) rotateX(4deg) scale(1.015);
+  border-color: color-mix(in srgb, var(--m-tone) 60%, var(--border));
+  box-shadow:
+    0 0 0 1px var(--wx-rim) inset,
+    0 2px 1px -1px var(--wx-rim) inset,
+    0 -20px 28px -12px var(--wx-inner) inset,
+    0 4px 6px rgb(var(--shadow-rgb) / 0.14),
+    0 20px 36px rgb(var(--shadow-rgb) / 0.14),
+    0 34px 64px color-mix(in srgb, var(--m-tone) 26%, transparent);
+}
+
+/* ประกายแสงมุมบนซ้ายของแผ่น — จุดที่แสงตกกระทบผิวโค้ง สว่างขึ้นตอนเอาเมาส์ชี้ */
+.wx-m::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 62%;
+  height: 58%;
+  border-radius: var(--radius-xl) 0 100% 0;
+  background: linear-gradient(134deg, var(--wx-spec), transparent 62%);
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.wx-m:hover::after {
+  opacity: 0.9;
+}
+
+/* เนื้อหาต้องลอยเหนือประกายแสง ไม่งั้นตัวเลขจะถูกฝ้าขาวคลุม */
+.wx-m > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* กรอบไอคอนยกลอยขึ้นจากแผ่นตอนชี้ — ให้รู้สึกว่าเป็นวัตถุคนละชั้นกับพื้นหลัง */
+.wx-m-chip {
+  transition: transform 0.22s cubic-bezier(0.22, 0.9, 0.24, 1), box-shadow 0.22s ease;
+}
+
+.wx-m:hover .wx-m-chip {
+  transform: translateZ(18px) scale(1.06);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--m-tone) 40%, transparent),
+    0 8px 16px color-mix(in srgb, var(--m-tone) 30%, transparent);
+}
+
+/* หลอดค่อย ๆ ไหลขึ้นตอนเข้าหน้า ไม่ใช่โผล่มาเต็มความยาวทันที */
+.wx-m-fill {
+  transition: width 0.9s cubic-bezier(0.22, 0.9, 0.24, 1);
+}
+
+/* ---------- ป้าย "ข้อมูลจริง" มีจุดเต้น ---------- */
+.wx-source .source-badge {
+  position: relative;
+  padding-left: var(--space-6);
+}
+
+.wx-source .source-badge::before {
+  content: "";
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-radius: 999px;
+  background: var(--status-good);
+  animation: wx-live 1.8s ease-in-out infinite;
+}
+
+/* ---------- การ์ดวันในแถบพยากรณ์ ----------
+   ใบเล็กแปดใบเรียงกัน ถ้าทำนูนแรงเท่าแผ่นค่าจะกลายเป็นลายนูนรบกวนตา
+   จึงลดน้ำหนักลงราวครึ่ง แต่ยังใช้สูตรเดียวกัน (แสงบน · เงาล่าง) ให้ภาษาเดียวกันทั้งหน้า */
+.wx-day {
+  transform-style: preserve-3d;
+  animation: wx-rise 0.45s cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+  animation-delay: calc(0.35s + var(--i, 0) * 40ms);
+  border-radius: var(--radius-xl);
+  background-image:
+    linear-gradient(180deg, var(--wx-top) 0%, transparent 46%),
+    linear-gradient(180deg, transparent 62%, var(--wx-bottom) 100%);
+  box-shadow:
+    0 0 0 1px var(--wx-rim) inset,
+    0 2px 1px -1px var(--wx-rim) inset,
+    0 -10px 14px -10px var(--wx-inner) inset,
+    0 2px 3px rgb(var(--shadow-rgb) / 0.1),
+    0 10px 20px rgb(var(--shadow-rgb) / 0.08);
+}
+
+.wx-day:hover {
+  transform: translateY(-6px) rotateX(5deg) scale(1.03);
+  box-shadow:
+    0 0 0 1px var(--wx-rim) inset,
+    0 2px 1px -1px var(--wx-rim) inset,
+    0 -12px 18px -10px var(--wx-inner) inset,
+    0 4px 6px rgb(var(--shadow-rgb) / 0.12),
+    0 18px 34px rgb(var(--shadow-rgb) / 0.12),
+    0 26px 48px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* วันนี้เด่นกว่าเพื่อนด้วยวงแสงรอบกรอบ — บวกกับคำว่า "วันนี้" ที่เขียนอยู่แล้ว
+   จึงไม่ได้บอกด้วยสีอย่างเดียว
+   วงแสงต้องมาก่อนขอบในสว่าง ไม่งั้นเส้นทองจะถูกเส้นขาวทับจนจาง */
+.wx-day.is-today {
+  box-shadow:
+    0 0 0 1.5px var(--accent-bright),
+    0 2px 1px -1px var(--wx-rim) inset,
+    0 -12px 16px -10px var(--wx-inner) inset,
+    0 2px 3px rgb(var(--shadow-rgb) / 0.1),
+    0 22px 44px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.wx-day-icon {
+  transition: transform 0.22s cubic-bezier(0.22, 0.9, 0.24, 1);
+}
+
+.wx-day:hover .wx-day-icon {
+  transform: translateZ(20px) scale(1.1);
+}
+
+/* ---------- แท็บ: ตัวที่เลือกอยู่ยกลอยขึ้นจากราง ---------- */
+.wx-tab {
+  transition:
+    transform 0.16s cubic-bezier(0.22, 0.9, 0.24, 1),
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.wx-tab:hover {
+  transform: translateY(-1px);
+}
+
+.wx-tab.is-active {
+  transform: translateY(-1px);
+  box-shadow:
+    var(--shadow-3d-chip),
+    0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ---------- ปุ่มไปหน้าอากาศในเล้า: เรืองทองตอนชี้ ---------- */
+.wx-indoor-btn:hover {
+  box-shadow:
+    var(--shadow-3d),
+    0 14px 28px color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
+.wx-indoor-btn:hover .wx-indoor-icon {
+  background: var(--accent);
+  color: var(--ink-inverse);
+}
+
+.wx-indoor-icon {
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+/* ---------- ตัดการเคลื่อนไหวทั้งหมดให้คนที่ตั้งค่าไว้ ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .wx-m,
+  .wx-m:hover,
+  .wx-day,
+  .wx-day:hover,
+  .wx-m-chip,
+  .wx-m:hover .wx-m-chip,
+  .wx-day-icon,
+  .wx-day:hover .wx-day-icon,
+  .wx-tab,
+  .wx-tab:hover,
+  .wx-tab.is-active,
+  .wx-m-fill {
+    animation: none;
+    transform: none;
+    transition: none;
+  }
+
+  /* แสงกวาดกับจุดเต้นเป็นของประดับล้วน ตัดทิ้งไปเลย */
+  .wx-now-card::after,
+  .wx-fc-card::after,
+  .wx-source .source-badge::before {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ---------- การ์ดโมเดลที่เราเทรนเอง ----------
+   ใช้แถบที่มาแบบเดียวกับการ์ดพยากรณ์ (`.wx-fc-source`) โดยตั้งใจ —
+   ทั้งสองใบพูดเรื่องเดียวกันคือ "ตัวเลขนี้มาจากไหน" จึงต้องหน้าตาเหมือนกัน */
+.wx-model-card {
+  --wx-spec: rgb(var(--orb-light) / 0.7);
+  --wx-sheen: rgb(var(--orb-light) / 0.42);
+}
+
+/* เตือนว่าโมเดลไม่ยอมทำนายรอบนี้ — โทนเตือน ไม่ใช่โทนพัง เพราะการไม่ทำนาย
+   เมื่อข้อมูลเก่าเกินไปคือพฤติกรรมที่ถูกต้อง ไม่ใช่ความผิดพลาด */
+.wx-model-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--status-warn) 40%, var(--border));
+  border-left: 4px solid var(--status-warn);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--status-warn) 9%, var(--bg-surface));
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.wx-model-warn svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--status-warn);
+}
+
+/* ---------- ตารางคะแนน ----------
+   `nowrap` ทุกช่อง — ตัวเลขกับหน่วยห้ามแยกคนละบรรทัด ("1.3" บรรทัดหนึ่ง "°C" อีกบรรทัด
+   อ่านผิดได้ง่ายมาก) วัดที่จอ 420px แล้วสี่คอลัมน์ยังพอดี ไม่ต้องมีรางเลื่อน */
+.wx-score {
+  width: 100%;
+  margin-top: var(--space-4);
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.wx-score caption {
+  margin-bottom: var(--space-2);
+  text-align: left;
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.wx-score th,
+.wx-score td {
+  padding: var(--space-2) var(--space-3);
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.wx-score thead th {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-muted);
+  border-bottom-width: 1.5px;
+}
+
+.wx-score tbody th {
+  text-align: left;
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.wx-score tbody tr:last-child th,
+.wx-score tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ช่องของเรา — เน้นด้วยพื้นและตัวหนา ไม่ได้เน้นด้วยสีตัวหนังสืออย่างเดียว
+   หัวคอลัมน์เขียนว่า "โมเดลของเรา" อยู่แล้ว สีจึงเป็นตัวช่วย ไม่ใช่ตัวบอก */
+.wx-score td.is-ours {
+  background: var(--accent-tint);
+  color: var(--ink-primary);
+}
+
+.wx-score td.is-ours b {
+  font-size: var(--text-base);
+}
+
+/* บรรทัดรองที่เป็นคู่อุณหภูมิ — ห้ามตกบรรทัด ไม่งั้นใบวันสูงขึ้นตอนสลับแท็บ
+   แล้วทั้งแถวกระตุกทุกครั้งที่กด (เจอที่จอ 420px ซึ่งใบวันกว้างแค่ 95px) */
+.wx-day-pair {
+  white-space: nowrap;
+}
+
+/* ---------- แถบบนของการ์ดพยากรณ์: แท็บค่า + ป้ายบอกช่วงที่กำลังดู ---------- */
+.wx-fc-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.wx-fc-range {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.wx-fc-range svg {
+  color: var(--ink-muted);
+}
+
+/* ทางกลับวันนี้ — ต้องมี ไม่งั้นกดวันอื่นแล้วต้องเดาว่าจะกลับยังไง
+   (ใบ "วันนี้" ยังกดกลับได้เหมือนกัน ปุ่มนี้เป็นทางลัดที่มองเห็นชัดกว่า) */
+.wx-fc-back {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--accent-ink, var(--ink-primary));
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease;
+}
+
+.wx-fc-back:hover {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+/* ---------- ใบวันกลายเป็นปุ่ม ----------
+   ช่องของ grid ย้ายมาอยู่ที่ <li> ปุ่มจึงต้องยืดเต็มช่องเอง ไม่งั้นใบจะหดตามเนื้อใน
+   แล้วแถวเก้ ๆ กัง ๆ ไม่เท่ากันสักใบ */
+.wx-days > li {
+  display: grid;
+  min-width: 0;
+}
+
+.wx-day {
+  width: 100%;
+  height: 100%;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* วงแสงของใบที่เลือกอยู่ — หนากว่าเส้นของ "วันนี้" หนึ่งขั้น เพราะสองสถานะนี้
+   ซ้อนกันได้ (วันนี้ที่กำลังเลือกอยู่) ต้องแยกออกจากกันด้วยตาเปล่า
+   ไม่ได้บอกด้วยสีอย่างเดียว — ป้าย "กำลังดู" อยู่เหนือกราฟบอกซ้ำอีกที */
+.wx-day.is-picked {
+  border-color: var(--accent-bright);
+  box-shadow:
+    0 0 0 2.5px var(--accent-bright),
+    0 2px 1px -1px var(--wx-rim) inset,
+    0 -12px 16px -10px var(--wx-inner) inset,
+    0 2px 3px rgb(var(--shadow-rgb) / 0.1),
+    0 22px 44px color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
+.wx-day:focus-visible {
+  outline: 3px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+/* ---------- ใบเวลาของการ์ดโมเดล ----------
+   ใช้คลาส `.wx-day` ชุดเดียวกับใบวันของการ์ดพยากรณ์ เพราะเป็นของอย่างเดียวกัน
+   คือ "ใบที่กดได้ในแถบคำทำนาย" ต่างกันแค่ใบละชั่วโมงไม่ใช่ใบละวัน
+   `is-lean` = ใบที่ไม่มีไอคอนท้องฟ้า จึงเว้นระยะแทนที่ของไอคอนให้พอดี */
+.wx-day.is-lean {
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+/* เวลาในใบของการ์ดโมเดลนั่งอยู่ในช่องของ "คำบรรยายท้องฟ้า" — ต้องเด่นกว่านั้น
+   เพราะเป็นข้อมูลจริง ไม่ใช่คำขยาย */
+.wx-day.is-lean .wx-day-sky {
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+/* ค่าความคลาดเคลื่อนใต้ตัวเลข — ตัวเลขทำนายที่ไม่มี ± กำกับคือตัวเลขลอย ๆ
+   จึงต้องอยู่ในใบเดียวกันเสมอ ไม่ใช่ไปรวมไว้ที่อื่น */
+.wx-day.is-lean .wx-day-rain {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ตารางคะแนนมีห้าคอลัมน์แล้ว (เพิ่ม "ค่าเฉลี่ยชั่วโมงนั้น" ใน T1.236)
+   ที่จอแคบใส่ไม่ครบ — ให้เลื่อนในรางของตัวเอง ดีกว่าบีบจนตัวเลขตกบรรทัด
+   วิธีเดียวกับแถบใบวันของการ์ดพยากรณ์ */
+.wx-score-wrap {
+  margin-top: var(--space-4);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.wx-score-wrap .wx-score {
+  margin-top: 0;
+  min-width: 480px;
+}
+
+/* แถบบอกว่าเส้นไหนถูกตัดออกเพราะเสาอากาศส่งค่าค้าง (T1.312)
+   ใช้สไตล์เดียวกับหน้าสภาพแวดล้อม เพื่อให้ผู้ใช้จำรูปแบบได้ */
+.wx-stuck {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-well);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}

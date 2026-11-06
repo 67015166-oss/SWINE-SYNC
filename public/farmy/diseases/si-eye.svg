@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการที่ตา</title><desc id="dsc">ภาพวาดหัวสุกรมองจากด้านหน้า เยื่อตาแดงอักเสบ ตาบวม มีขี้ตาและน้ำตาไหล</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="200" cy="150" rx="106" ry="92" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M112 76 q-26 -46 6 -50 q30 -4 38 34 z" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M288 76 q26 -46 -6 -50 q-30 -4 -38 34 z" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="158" cy="120" rx="22" ry="17" fill="#f6ded6" stroke="#9b7268" stroke-width="2"/>
+  <ellipse cx="242" cy="120" rx="22" ry="17" fill="#f6ded6" stroke="#9b7268" stroke-width="2"/>
+  <ellipse cx="158" cy="120" rx="8" ry="10" fill="#6f4f47"/><ellipse cx="242" cy="120" rx="8" ry="10" fill="#6f4f47"/>
+  <path d="M136 120 q22 -18 44 0" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/>
+  <path d="M220 120 q22 -18 44 0" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/>
+  <path d="M138 132 q20 14 40 2" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/>
+  <path d="M222 132 q20 14 40 2" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/>
+  <path d="M152 142 q-6 16 -2 24" fill="none" stroke="#c9b18f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M248 142 q6 16 2 24" fill="none" stroke="#c9b18f" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="200" cy="188" rx="52" ry="38" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="182" cy="184" rx="8" ry="12" fill="#6f4f47"/><ellipse cx="218" cy="184" rx="8" ry="12" fill="#6f4f47"/>
+  <path d="M150 134 L70 172" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="150" cy="134" r="3" fill="#c0392b"/><text x="8" y="177" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">เยื่อตาแดง ขี้ตาแฉะ</text>
+  <path d="M252 128 L322 92" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="252" cy="128" r="3" fill="#c0392b"/><text x="316" y="97" text-anchor="end" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">ตาบวม น้ำตาไหล</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">ตาอักเสบ ขี้ตาแฉะ</text>
+</svg>

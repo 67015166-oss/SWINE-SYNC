@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการที่กีบเท้า</title><desc id="dsc">ภาพวาดขาและกีบสุกร แสดงตุ่มน้ำที่ขอบกีบและแผลในซอกกีบ</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <path d="M148 26 q-14 30 -10 60 q4 28 6 46 q2 20 0 38 h112 q-2 -18 0 -38 q2 -18 6 -46 q4 -30 -10 -60 z"
+        fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M150 132 q50 14 100 0" fill="none" stroke="#9b7268" stroke-width="2" opacity=".5"/>
+  <ellipse cx="200" cy="170" rx="58" ry="12" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M150 178 h44 q6 0 6 8 l-2 44 q-1 16 -18 16 h-14 q-17 0 -18 -16 l-2 -44 q0 -8 4 -8 z" fill="#4a4038"/>
+  <path d="M250 178 h-44 q-6 0 -6 8 l2 44 q1 16 18 16 h14 q17 0 18 -16 l2 -44 q0 -8 -4 -8 z" fill="#4a4038"/>
+  <rect x="196" y="178" width="8" height="60" rx="4" fill="#dda596"/>
+  <path d="M146 150 q-14 4 -14 18 q0 12 12 14" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M254 150 q14 4 14 18 q0 12 -12 14" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <circle cx="168" cy="174" r="9" fill="#ffe9b0" stroke="#c0392b" stroke-width="2.5"/><circle cx="165" cy="171" r="3" fill="#fff" opacity=".75"/><circle cx="232" cy="174" r="9" fill="#ffe9b0" stroke="#c0392b" stroke-width="2.5"/><circle cx="229" cy="171" r="3" fill="#fff" opacity=".75"/>
+  <ellipse cx="200" cy="206" rx="6" ry="14" fill="#c0392b"/><ellipse cx="200" cy="206" rx="3" ry="6" fill="#8e2a20"/>
+  <path d="M168 174 L108 140" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="168" cy="174" r="3" fill="#c0392b"/><text x="102" y="145" text-anchor="end" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">ไรกีบ</text>
+  <path d="M200 206 L286 224" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="200" cy="206" r="3" fill="#c0392b"/><text x="292" y="229" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">ซอกกีบ</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">ไรกีบและซอกกีบ</text>
+</svg>

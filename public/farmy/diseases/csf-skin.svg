@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการทางผิวหนัง</title><desc id="dsc">ภาพวาดสุกรที่มีจุดเลือดออกสีแดงกระจายตามผิวหนังท้องและขาหนีบ ปลายหูเขียวคล้ำ</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="180" cy="158" rx="118" ry="62" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="296" cy="132" rx="46" ry="40" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M272 92 q-18 -32 10 -36 q26 -2 22 28 z" fill="#7d4f86" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="336" cy="142" rx="17" ry="14" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="331" cy="142" rx="2.6" ry="3.6" fill="#6f4f47"/><ellipse cx="341" cy="142" rx="2.6" ry="3.6" fill="#6f4f47"/>
+  <path d="M300 122 q12 4 20 0" fill="none" stroke="#9b7268" stroke-width="3" stroke-linecap="round"/>
+  <path d="M96 208 q10 22 32 18 M158 212 q12 20 34 14 M214 210 q12 20 34 14" fill="none" stroke="#9b7268" stroke-width="9" stroke-linecap="round"/>
+  <path d="M64 146 q-16 12 -8 28" fill="none" stroke="#9b7268" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="150" cy="186" rx="62" ry="24" fill="#7d4f86" opacity=".22"/>
+  <circle cx="108" cy="150" r="3.2" fill="#b02a2a"/><circle cx="124" cy="162" r="3.2" fill="#b02a2a"/><circle cx="140" cy="146" r="3.2" fill="#b02a2a"/><circle cx="156" cy="158" r="3.2" fill="#b02a2a"/><circle cx="172" cy="148" r="3.2" fill="#b02a2a"/><circle cx="120" cy="182" r="3.2" fill="#b02a2a"/><circle cx="142" cy="190" r="3.2" fill="#b02a2a"/><circle cx="164" cy="180" r="3.2" fill="#b02a2a"/><circle cx="186" cy="188" r="3.2" fill="#b02a2a"/><circle cx="200" cy="166" r="3.2" fill="#b02a2a"/><circle cx="96" cy="168" r="3.2" fill="#b02a2a"/><circle cx="182" cy="166" r="3.2" fill="#b02a2a"/><circle cx="206" cy="190" r="3.2" fill="#b02a2a"/><circle cx="128" cy="200" r="3.2" fill="#b02a2a"/>
+  <path d="M140 168 L74 104" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="140" cy="168" r="3" fill="#c0392b"/><text x="14" y="109" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">จุดเลือดออกที่ผิวหนัง</text>
+  <path d="M286 80 L316 58" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="286" cy="80" r="3" fill="#c0392b"/><text x="310" y="63" text-anchor="end" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">ปลายหูเขียวคล้ำ</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">จุดเลือดออกและปลายหูคล้ำ</text>
+</svg>

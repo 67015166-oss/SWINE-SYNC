@@ -1,0 +1,14 @@
+{
+  "name": "weather-collector",
+  "private": true,
+  "type": "module",
+  "description": "เก็บค่าเซนเซอร์จาก PlotNexus + อากาศภายนอกจาก Open-Meteo ลง TimescaleDB สำหรับเทรนโมเดล",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node src/index.js",
+    "backfill": "node src/backfill.js"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}

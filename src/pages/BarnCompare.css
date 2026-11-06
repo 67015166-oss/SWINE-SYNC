@@ -1,0 +1,319 @@
+/* หน้า "เทียบโรงเรือนในฟาร์ม" (/dashboard/environment/compare)
+   หัวเรื่อง + ปุ่มกลับ → แถบเลือกฟาร์ม/ตัวชี้วัด → ตัวเลขสรุป 4 ใบ
+   → กราฟแท่ง → จัดอันดับ → ตารางครบทุกค่า (ทุกใบเต็มความกว้าง — เหตุผลอยู่ที่ presets.js)
+
+   สถานะทุกจุดมีไอคอนหรือข้อความกำกับเสมอ ไม่ได้สื่อด้วยสีอย่างเดียว (กติกาใน CLAUDE.md)
+   สีทุกค่ามาจาก tokens.css — ห้ามเขียน hex ตรง ๆ ในไฟล์นี้ */
+
+/* ---------- ปุ่มกลับหน้าสภาพแวดล้อม (มุมขวาของหัวหน้า) ---------- */
+.bc-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.bc-back:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.bc-back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ลูกศรของไอคอน chevron ชี้ขวาเป็นค่าตั้งต้น — ปุ่ม "ย้อนกลับ" ต้องชี้ซ้าย */
+.bc-back-arrow {
+  transform: rotate(180deg);
+}
+
+/* ---------- แถบเลือกฟาร์มและตัวชี้วัด ----------
+   อยู่เหนือกระดาน ไม่ใช่ในการ์ดใบใดใบหนึ่ง เพราะมันเปลี่ยน "ทั้งหน้า"
+   (ตัวเลขสรุป กราฟ และรายการจัดอันดับ พูดถึงตัวชี้วัดตัวเดียวกันเสมอ) */
+.bc-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.bc-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.bc-group-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.bc-pill,
+.bc-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bc-pill svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+.bc-pill:hover,
+.bc-sort:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-3d);
+}
+
+.bc-pill:focus-visible,
+.bc-sort:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ที่เลือกอยู่ — พื้นทองอ่อน + ตัวหนา + ไอคอนถูก (ไม่ได้ต่างกันแค่สี) */
+.bc-pill.is-on,
+.bc-sort.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  font-weight: 800;
+  color: var(--accent-strong);
+}
+
+.bc-pill.is-on svg {
+  color: var(--accent);
+}
+
+/* ---------- แถบเรียงในการ์ดจัดอันดับ ---------- */
+.bc-sorts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.bc-sorts-label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+/* ---------- รายการจัดอันดับ ----------
+   หนึ่งแถวต่อหนึ่งโรงเรือน: ชื่อ · แถบยาวตามระยะห่างจากเกณฑ์ · ตัวเลข + ป้ายสถานะ */
+.bc-rank {
+  list-style: none;
+  padding: 0;
+  /* กริดที่ไหลเอง ไม่ใช่คอลัมน์เดียว — ฟาร์มหนึ่งมีได้สิบกว่าหลัง เรียงลงมาแถวเดียว
+     การ์ดจะยาวเป็นเมตรและกินความสูงทั้งแถวของกระดานไปเปล่า ๆ
+     260px คือความกว้างที่ยังใส่ "ชื่อ · แถบ · ตัวเลข + ป้ายสถานะ" ได้ครบโดยไม่ตัดบรรทัด */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.bc-rank-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+}
+
+.bc-rank-link:hover {
+  border-color: var(--accent);
+  background: var(--bg-tint);
+}
+
+.bc-rank-link:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* หลังที่ผู้ใช้เดินทางมาจาก — มีทั้งขอบ พื้น และป้ายข้อความ ไม่ได้บอกด้วยสีอย่างเดียว */
+.bc-rank .is-current .bc-rank-link {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.bc-rank-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.bc-rank-now {
+  padding: 1px var(--space-2);
+  border-radius: 999px;
+  background: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-inverse);
+}
+
+.bc-rank-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  overflow: hidden;
+}
+
+.bc-rank-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--status-good);
+}
+
+.bc-rank-fill.is-warning {
+  background: var(--status-warning);
+}
+
+.bc-rank-fill.is-serious {
+  background: var(--status-serious);
+}
+
+.bc-rank-fill.is-critical {
+  background: var(--status-critical);
+}
+
+/* หลังที่ไม่มีค่า — ไม่วาดแถบเปล่า ๆ ทิ้งไว้ เพราะแถบยาวศูนย์อ่านเหมือน "ค่าน้อยมาก"
+   ซึ่งคนละความหมายกับ "ไม่มีค่า" */
+.bc-rank-none {
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.bc-rank-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ---------- ตารางครบทุกค่า ---------- */
+.bc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bc-table th {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-strong);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-align: left;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.bc-table th.num,
+.bc-table td.num {
+  text-align: right;
+}
+
+.bc-table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--ink-primary);
+  vertical-align: top;
+}
+
+.bc-table tbody tr:hover {
+  background: var(--bg-tint);
+}
+
+/* แถวของหลังที่เดินทางมาจาก — พื้นทองอ่อน คู่กับป้ายในรายการจัดอันดับ */
+.bc-table tbody tr.is-current {
+  background: var(--accent-tint);
+}
+
+.bc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.bc-link:hover {
+  color: var(--accent-strong);
+}
+
+.bc-link svg {
+  color: var(--ink-muted);
+}
+
+.bc-stage {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ---------- ไม่มีข้อมูล ---------- */
+.bc-empty,
+.bc-empty-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  font-size: var(--text-base);
+  color: var(--ink-muted);
+}
+
+.bc-empty-cell {
+  justify-content: center;
+}
+
+/* ---------- จอแคบ ---------- */
+@media (max-width: 900px) {
+  .bc-bar {
+    gap: var(--space-3);
+  }
+
+  /* ปุ่มกลับอยู่ใต้หัวเรื่องแทนที่จะเบียดอยู่ข้าง ๆ */
+  .bc-back {
+    width: 100%;
+    justify-content: center;
+  }
+}

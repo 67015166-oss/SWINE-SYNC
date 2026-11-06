@@ -1,0 +1,218 @@
+/* ================= กรอบเว็บ Voice AI (components/voice/VoiceFrame.jsx) =================
+   ใช้ทั้งหน้า /dashboard/voice และป๊อบอัพจากแถบบน — ความสูงให้ "ผู้ห่อ" เป็นคนกำหนด */
+
+/* ตัวที่ขยายเต็มจอ — ห่อกรอบเว็บ + ปุ่มออกจากเต็มจอ (T1.250) */
+.vo-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  background: var(--bg-surface);
+}
+
+.vo-stage:fullscreen {
+  width: 100%;
+  height: 100%;
+}
+
+/* เบราว์เซอร์ที่ไม่ให้เต็มจอจริง (Safari บน iPhone) — ทับทั้งหน้าต่างแทน */
+.vo-stage.is-pseudo-full,
+.vo-card .vo-stage.is-pseudo-full {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  /* ล้างความสูงที่หน้า /dashboard/voice ตั้งให้กรอบบนจอแคบ (75vh · ขั้นต่ำ 32rem)
+     ไม่งั้นตอนเต็มหน้าต่างบนมือถือกรอบสูงเกินจอ ปุ่มล่างของเว็บหลุดขอบ
+     (เต็มจอจริงไม่เจอปัญหานี้ — เบราว์เซอร์บังคับขนาดด้วย !important ให้เอง) */
+  height: auto;
+  min-height: 0;
+}
+
+/* ปุ่มออก — ลอยกลางขอบบน เลี่ยงมุมที่เว็บปลายทางมักวางปุ่มของตัวเอง (โลโก้ซ้าย · ปุ่มขวา) */
+.vo-exit-full {
+  position: absolute;
+  top: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-float);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-primary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.vo-exit-full:hover {
+  border-color: var(--accent);
+}
+
+.vo-exit-full:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.vo-exit-full kbd {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.vo-frame-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+}
+
+.vo-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  border: 0;
+  background: var(--bg-surface);
+  /* ซ่อนไว้จนโหลดเสร็จ — ไม่งั้นเห็นพื้นขาวว่างอยู่ใต้ข้อความรอ */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.vo-frame.is-loaded {
+  opacity: 1;
+}
+
+.vo-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+  text-align: left;
+}
+
+.vo-loading span {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 32rem;
+}
+
+.vo-loading b {
+  color: var(--ink-primary);
+}
+
+.vo-loading svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.vo-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ---------- ป๊อบอัพ (VoiceModal.jsx) ----------
+   กล่องสูงเกือบเต็มจอ · ตัวกล่องเนื้อหาไม่มีระยะขอบ ให้กรอบเว็บกินเต็มพื้นที่
+   ไม่เลื่อนในตัวเอง (เว็บในกรอบเลื่อนของมันเองอยู่แล้ว เลื่อนซ้อนสองชั้นจะงง) */
+.modal.vo-modal .modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vo-frame {
+    transition: none;
+  }
+}
+
+/* ---------- แถบสถานะไมโครโฟน (MicPermissionBar.jsx) ---------- */
+.mic-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.mic-bar > span {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.mic-bar svg {
+  flex-shrink: 0;
+}
+
+.mic-bar.is-ready {
+  color: var(--status-good-text);
+}
+
+.mic-bar.is-blocked {
+  color: var(--status-warning-text);
+}
+
+.mic-bar.is-ask svg {
+  color: var(--accent-strong);
+}
+
+.mic-bar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--accent-strong);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.mic-bar-btn:hover {
+  background: var(--accent-strong);
+}
+
+.mic-bar-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ในป๊อบอัพ แถบกินที่ที่เหลือของแถวท้ายกล่อง ปุ่ม "เปิดในแท็บใหม่" อยู่ขวาสุด */
+.modal-foot .mic-bar {
+  flex: 1 1 20rem;
+}
+
+/* ในหน้า /dashboard/voice แถบอยู่ใต้หัวหน้า เป็นกล่องเตือนแบบเดียวกับ .live-offline-note */
+.vo-page-mic {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+}

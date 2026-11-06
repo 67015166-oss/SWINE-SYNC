@@ -1,0 +1,18 @@
+# ทับค่าตอนพัฒนา — ใช้คู่กับ docker-compose.yml เท่านั้น
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#
+# ต่างจากของหลักอย่างเดียว: **เมานต์ `server/src` เข้าไปตรง ๆ**
+# แก้โค้ดแล้ว `docker compose restart api` พอ ไม่ต้อง build ใหม่ทั้ง image
+# (การ build ใหม่ต้องต่อ Docker Hub ซึ่งเน็ตล่มเมื่อไหร่ก็ทำงานต่อไม่ได้)
+#
+# เมานต์เป็น read-only — container แก้ไฟล์ในเครื่องเราไม่ได้
+
+services:
+  api:
+    volumes:
+      - ./server/src:/app/src:ro
+
+  bridge:
+    volumes:
+      - ./server/src:/app/src:ro

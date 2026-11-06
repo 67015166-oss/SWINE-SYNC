@@ -1,0 +1,12 @@
+/* หน้า "การเงิน" — มีของเฉพาะหน้านี้แค่บรรทัดสรุปใต้กราฟราคาหน้าฟาร์ม */
+
+.fn-note {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}

@@ -1,0 +1,509 @@
+/* หน้า "โรงเรือนทั้งหมดในฟาร์ม X" (/dashboard/farms/:farmId)
+   สี/ขนาด/ระยะทั้งหมดมาจาก tokens.css */
+
+/* ---------- เส้นทางนำทาง ---------- */
+/* ---------- หัวเรื่อง + แถบสรุป ---------- */
+.barns-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.barns-head-main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  /* ยอมให้หดได้ (คำอธิบายใต้ชื่อหน้าตกบรรทัดแทน) เพื่อให้ตัวเลขสรุปกับปุ่มจัดเลย์เอาต์
+     อยู่บรรทัดเดียวกับชื่อหน้าได้ครบ — ถ้าไม่ยอมหด ปุ่มจะถูกดันไปขึ้นบรรทัดใหม่ */
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* กล่องข้อความของหัวหน้า — ต้องยอมหดได้ ไม่งั้น … ท้ายบรรทัดไม่ทำงาน */
+.barns-head-text {
+  min-width: 0;
+}
+
+/* ชื่อหน้า + คำโปรย **บรรทัดเดียวตายตัวทั้งคู่**
+   หัวหน้านี้ต้องสูงเท่าหัวหน้าฟาร์มทั้งหมดเป๊ะ ๆ ทุกขนาดจอ (101px)
+   ปุ่มกับแถบสรุปจะได้อยู่ตำแหน่งเดิมเวลาสลับสองหน้าไปมา ไม่กระโดดขึ้นลง
+   ชื่อฟาร์มยาวกว่าที่ว่างเมื่อไรให้ตัดด้วย … (ชื่อเต็มอ่านได้จาก tooltip และแถบนำทางด้านบน) */
+.barns-title,
+.barns-subtitle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.barns-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.barns-subtitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ป้ายที่มาข้อมูลห้ามหด ส่วนข้อความยอมหดแล้วตัดด้วย …
+   และต้องสูงเท่าบรรทัดคำโปรยพอดี (18px × 1.5 = 27px) — ปล่อยตามธรรมชาติจะได้ 31px
+   ซึ่งดันหัวหน้าให้สูงกว่าหน้าฟาร์มทั้งหมด 4px แล้วปุ่มกับแถบสรุปจะเยื้องกันเวลาสลับสองหน้า */
+.barns-subtitle > .source-badge {
+  flex-shrink: 0;
+  height: calc(var(--text-base) * 1.5);
+  padding-block: 0;
+}
+
+.barns-subtitle > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- ปุ่มสลับมุมมองการ์ด/ตาราง ---------- */
+.view-switch {
+  display: inline-flex;
+  gap: var(--space-1);
+  margin-left: auto;
+  padding: var(--space-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+}
+
+.view-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.view-switch-btn:hover {
+  color: var(--ink-primary);
+}
+
+.view-switch-btn.is-active {
+  background: var(--accent);
+  color: var(--ink-inverse);
+}
+
+.view-switch-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- การ์ดโรงเรือน ---------- */
+.barn-card-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  /* min(...) กัน grid ล้นจอมือถือที่กว้างน้อยกว่าค่าขั้นต่ำของคอลัมน์
+     auto-fill ไม่ใช่ auto-fit — เหลือโรงเรือนใบเดียว (กรองอยู่/ฟาร์มมีหลังเดียว)
+     การ์ดต้องกว้างเท่าเดิม ไม่ใช่ยืดเต็มแถวจนภาพกับตัวเลขใหญ่ผิดสัดส่วนกับหน้าอื่น
+     (auto-fit ยุบคอลัมน์ว่างทิ้งแล้วให้ใบที่เหลือกินพื้นที่ทั้งหมด) */
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+  gap: var(--space-5);
+}
+
+.barn-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.barn-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-bright);
+  box-shadow:
+    0 6px 12px rgb(var(--shadow-rgb) / 0.1),
+    0 26px 50px rgb(var(--shadow-rgb) / 0.18);
+}
+
+/* ภาพลอยสูงขึ้นอีกนิดตอนชี้การ์ด — เสริมความรู้สึกสามมิติ */
+.barn-card:hover .barn-card-scene {
+  filter: drop-shadow(0 16px 20px rgb(var(--shadow-rgb) / 0.2));
+}
+
+/* โรงเรือนออฟไลน์ = ไม่มีข้อมูลสด (ยังมีป้ายสถานะ + “—” กำกับเสมอ ไม่ได้สื่อด้วยสีอย่างเดียว) */
+/* โรงเรือนออฟไลน์ = ไม่มีข้อมูลสด (ยังมีป้ายสถานะ + “—” กำกับเสมอ ไม่ได้สื่อด้วยสีอย่างเดียว) */
+.barn-card.is-offline .barn-card-photo {
+  filter: grayscale(0.9);
+  opacity: 0.72;
+}
+
+.barn-card.is-offline .barn-float,
+.barn-card.is-offline .barn-float-shadow {
+  animation: none;
+}
+
+/* เหมือนหัวการ์ดฟาร์ม — ทุกชิ้นอยู่แถวเดียวกัน
+   ถ้าที่ไม่พอ ชื่อโรงเรือนหดและตัดคำในกล่องตัวเอง ไม่ใช่ปุ่มหลุดไปแถวล่าง */
+/* หัวการ์ดเป็น **สองแถวซ้อนกัน** เหมือนการ์ดฟาร์มเป๊ะ ๆ (5 พ.ย. 2569)
+   ป้ายสถานะ+ปุ่มแถวบน · ชื่อโรงเรือนกับที่ตั้งแถวล่างชิดซ้ายเต็มความกว้าง
+   ★ สองหน้านี้การ์ดต้องหน้าตาเดียวกันเสมอ — สลับหน้าทีแล้วต้องไม่ต้องกวาดตาหาของใหม่ */
+.barn-card-top {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-5) var(--space-3);
+  /* ล็อกความสูงเหมือนหัวการ์ดฟาร์ม
+     (ระยะขอบ 20+12 + แถวป้าย 32 + ช่องไฟ 8 + ชื่อ 2 บรรทัด + ช่องไฟ + ที่ตั้ง 1 บรรทัด)
+     ทุกใบสูงเท่ากัน รูปและตัวเลขของทุกการ์ดจะได้อยู่ระดับเดียวกัน */
+  min-height: 160px;
+}
+
+/* ชื่อโรงเรือน — สูงสุด 2 บรรทัด เกินกว่านั้นตัดด้วย … */
+.barn-card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* ★★ `.status-badge` ตั้ง `align-self: center` ไว้ในชุด component กลาง
+   พอหัวการ์ดเปลี่ยนเป็นคอลัมน์ ป้ายจึงลอยไปอยู่กลางการ์ดแทนที่จะชิดซ้าย
+   (อาการเดียวกับแถบสถานะในหน้าภาพรวม — จำไว้ว่าชุดกลางตั้งค่านี้ไว้) */
+.barn-card-status > .status-badge {
+  align-self: flex-start;
+}
+
+/* ชื่อโรงเรือนอยู่แถวล่าง ชิดซ้ายเต็มความกว้าง — เรียงเหมือน .farm-card-name ของหน้าฟาร์ม
+   ★ เดิมชิดขวาและแย่งแถวกับป้ายสถานะ พอการ์ดแคบชื่อจะแตกบรรทัดและที่ตั้งถูกตัดด้วย …
+     ทั้งที่การ์ดยังว่างอีกครึ่งใบ (ผู้ใช้ทักว่าไม่สมส่วน — แก้พร้อมกันทั้งสองหน้า) */
+.barn-card-name {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  min-width: 0;
+  text-align: left;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ที่ตั้ง — บรรทัดเดียวเสมอ (ยาวเกินก็ตัด) เพื่อให้หัวการ์ดสูงคงที่ */
+.barn-card-place {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.barn-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: 0 var(--space-5);
+}
+
+/* ---------- ภาพโรงเรือน (ลอยเบา ๆ ให้ดูมีมิติ) ---------- */
+.barn-card-photo {
+  position: relative;
+  /* สูงพอให้ภาพโรงเรือน (สัดส่วน 5:4) ขึ้นได้เต็มตาและยังมีที่ให้ลอยขึ้น-ลง */
+  height: 218px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, var(--bg-tint), var(--scene-sky-bottom));
+  overflow: hidden;
+}
+
+.barn-float {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: barn-float 5.5s ease-in-out infinite;
+}
+
+.barn-card:nth-child(2n) .barn-float {
+  animation-delay: -1.8s;
+}
+
+.barn-card:nth-child(3n) .barn-float {
+  animation-delay: -3.4s;
+}
+
+.barn-card-scene {
+  width: 100%;
+  height: 100%;
+  /* ภาพจริงเป็น <img> จึงต้องคุมสัดส่วนไว้ ไม่ให้ยืดตามกล่อง
+     ขยายเล็กน้อยเพื่อกินพื้นที่ว่างรอบภาพ (ภาพมีขอบโปร่งของตัวเอง) */
+  object-fit: contain;
+  transform: scale(1.14);
+  filter: drop-shadow(0 10px 14px rgb(var(--shadow-rgb) / 0.16));
+}
+
+/* เงาบนพื้นที่หด-ขยายตามจังหวะการลอย ทำให้รู้สึกว่าลอยจริง */
+.barn-float-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 56%;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(var(--shadow-rgb) / 0.22),
+    rgb(var(--shadow-rgb) / 0) 70%
+  );
+  animation: barn-float-shadow 5.5s ease-in-out infinite;
+}
+
+.barn-card:nth-child(2n) .barn-float-shadow {
+  animation-delay: -1.8s;
+}
+
+.barn-card:nth-child(3n) .barn-float-shadow {
+  animation-delay: -3.4s;
+}
+
+@keyframes barn-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes barn-float-shadow {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(-50%) scale(0.86);
+    opacity: 0.55;
+  }
+}
+
+/* ผู้ใช้ที่ตั้งค่าลดการเคลื่อนไหวต้องไม่เห็นภาพขยับ */
+@media (prefers-reduced-motion: reduce) {
+  .barn-float,
+  .barn-float-shadow {
+    animation: none;
+  }
+}
+
+/* ---------- ตัวเลขในการ์ด ----------
+   เหลือเฉพาะที่ต้องรู้ทันที: จำนวนสุกร + อุณหภูมิ + ความชื้น */
+.barn-card-data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+}
+
+.barn-kpi {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+}
+
+.barn-kpi span {
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.barn-kpi b {
+  margin-left: auto;
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.barn-kpi em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.barn-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.barn-facts > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.barn-facts dt {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.barn-facts dd {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.barn-facts dd b {
+  margin-right: 2px;
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ค่าที่เกินเกณฑ์ — ตัวเลขเปลี่ยนสี และมีป้ายสถานะของโรงเรือนกำกับอยู่แล้วด้านบน */
+.barn-facts > div.is-warn {
+  border-color: var(--status-warning-bg);
+  background: var(--status-warning-bg);
+}
+
+.barn-facts > div.is-warn dd b {
+  color: var(--status-warning-text);
+}
+
+.barn-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--border);
+  background: var(--bg-tint);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* กดที่ไหนก็ได้ในการ์ดแล้วเข้าหน้าภายในโรงเรือน — ยืดลิงก์เดิมให้คลุมทั้งใบ */
+.barn-card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.barn-card:hover .barn-card-link {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.barn-card:has(.barn-card-link:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.barn-card-link:hover {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* ---------- จอแคบ ---------- */
+@media (max-width: 899px) {
+  .barns-title {
+    font-size: var(--text-xl);
+  }
+
+  .barn-card-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .barn-card-photo {
+    max-height: 170px;
+  }
+
+  .view-switch {
+    margin-left: 0;
+  }
+}
+
+/* กลุ่มสถานะ + ปุ่มแก้ไข/ลบ มุมซ้ายบนของการ์ด (คู่กับ .farm-card-tools ในหน้าฟาร์ม)
+   ห้ามหด เพราะปุ่มขนาดคงที่อยู่ในนี้ — ให้ชื่อโรงเรือนทางซ้ายตัดบรรทัดแทน
+   สถานะ + ดินสอ + ถังขยะ **ห้ามแยกแถวกัน** จึงเป็น nowrap (ชื่อโรงเรือนตกแถวล่างแทน) */
+/* มุมซ้ายบนของการ์ดเป็น **สองแถวซ้อนกัน**: ป้ายสถานะบน · ปุ่มแก้ไข/ลบล่าง
+   (เหมือน .farm-card-tools ในหน้าฟาร์มทั้งหมด — การ์ดสองหน้านี้ต้องเรียงเหมือนกัน) */
+.barn-card-status {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+/* แถวเครื่องมือในการ์ดโรงเรือน — ปุ่มปรับจำนวน
+   ตัดบรรทัดได้ ไม่งั้นการ์ดแคบ ๆ จะดันปุ่มหลุดขอบ */
+.barn-card-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* เหตุผลเดียวกับหน้าฟาร์มทั้งหมด — ปุ่มในการ์ดต้องอยู่เหนือแผ่นลิงก์ที่คลุมทั้งใบ */
+.barn-card .rc-del,
+.barn-card .rc-edit,
+.barn-card .rc-btns,
+.barn-card .aj-open,
+.barn-card .aj-net,
+.barn-card .barn-card-status,
+.barn-card .barn-card-tools {
+  position: relative;
+  z-index: 1;
+}
+
+/* ค่าค้างเมื่อเซนเซอร์เงียบ (T1.345) — เลขยังอ่านได้ แต่ต้องไม่เด่นเท่าค่าสด */
+.barn-facts div.is-held b,
+td.num.is-held {
+  opacity: 0.62;
+}
+
+.barn-held {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--text-xs, var(--text-sm));
+  line-height: 1.4;
+  color: var(--ink-muted);
+}

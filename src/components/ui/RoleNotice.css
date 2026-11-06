@@ -1,0 +1,82 @@
+/* ประกาศสิทธิ์เปลี่ยน (components/ui/RoleNotice.jsx) — ใช้ token ทั้งหมด
+   ลอยกลางบนใต้แถบบน ไม่ชนแถบ "กำลังจัดเลย์เอาต์" ที่อยู่ล่างจอ และไม่ดันเนื้อหา */
+.rn {
+  position: fixed;
+  top: calc(var(--space-6) + 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  width: max-content;
+  max-width: min(640px, calc(100vw - var(--space-5)));
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border: 1px solid var(--accent-bright);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-float);
+}
+
+.rn > svg {
+  flex-shrink: 0;
+  color: var(--accent-strong);
+}
+
+.rn.is-revoked {
+  border-color: var(--status-critical);
+}
+
+.rn.is-revoked > svg {
+  color: var(--status-critical-text);
+}
+
+.rn-text {
+  display: flex;
+  flex: 1 1 16rem;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.rn-text b {
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.rn-more {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.rn-close {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  cursor: pointer;
+}
+
+.rn-more:focus-visible,
+.rn-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

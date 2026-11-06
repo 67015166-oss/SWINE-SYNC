@@ -1,0 +1,1255 @@
+/* คู่มือฟาร์ม (T1.289) — สไตล์ร่วมของหน้าคู่มือทุกหน้า
+   เนื้อหามาจากทีม Farmy แต่หน้าตาเป็นของเรา: ใช้ token สีและระยะของโปรเจกต์นี้เท่านั้น
+   ห้ามเขียน hex หรือขนาดฟอนต์ตรง ๆ ที่นี่ (CLAUDE.md) */
+
+/* ---------- รายการโรค / รายการหัวข้อ ---------- */
+
+.gd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gd-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-item:hover:not(:disabled) {
+  background: var(--bg-tint);
+}
+
+/* เปิดอยู่ = ขอบหนาขึ้น ไม่ใช่เปลี่ยนสีอย่างเดียว — คนตาบอดสีต้องแยกออกเหมือนกัน */
+.gd-item.is-open {
+  border-color: var(--ink-secondary);
+  border-width: 2px;
+  padding: calc(var(--space-3) - 1px) calc(var(--space-4) - 1px);
+}
+
+.gd-item:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.gd-item-mark {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+}
+
+.gd-item-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ชื่อโรคกับป้ายความร้ายแรงอยู่บรรทัดเดียวกัน — ป้ายห้ามดันชื่อจนคำแตก */
+.gd-item-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.gd-item-soon {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-item-en {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-item-sum {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+}
+
+/* ---------- คำเตือนของโรค ---------- */
+
+/* ★ ต้องเด่นกว่าทุกอย่างในการ์ด คนต้องอ่านก่อนดูรายการอาการ */
+.gd-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.gd-warn svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+/* ---------- อาการแยกตามตำแหน่ง ---------- */
+
+.gd-signs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.gd-sign {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+
+/* ภาพวาดของทีม Farmy — พื้นขาวเพราะเป็นภาพลายเส้นบนพื้นโปร่ง
+   วางบนพื้นครีมแล้วเส้นจะจม */
+.gd-sign-art {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+}
+
+.gd-sign-body h4 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-base);
+}
+
+.gd-sign-where,
+.gd-sign-stage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-sign-body ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+.gd-sign-body li + li {
+  margin-top: var(--space-1);
+}
+
+/* ---------- สิ่งที่ต้องทำ ---------- */
+
+.gd-head {
+  margin: var(--space-6) 0 var(--space-3);
+  font-size: var(--text-base);
+}
+
+.gd-actions {
+  list-style: none;
+  counter-reset: gd;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.gd-actions li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.gd-actions li > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.gd-actions li > span:last-child span {
+  color: var(--ink-secondary);
+}
+
+.gd-act-mark {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+}
+
+.gd-look {
+  margin: 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+/* ---------- ที่มา / สถานะว่าง ---------- */
+
+.gd-source {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.gd-source svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.gd-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- แถวข้อมูลจากฟาร์มมี่ (T1.290) ----------
+   ใช้กับทั้งสามชุด (วัคซีน · งานฟาร์ม · เคสสัตวแพทย์) ให้หน้าตาเหมือนกัน
+   ถ้าชุดไหนเริ่มมีสไตล์ของตัวเอง แปลว่ากำลังจะกลายเป็นสามหน้าตาที่ต้องดูแลแยกกัน */
+.gd-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gd-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  flex-wrap: wrap;
+}
+
+.gd-row-main {
+  flex: 1 1 220px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gd-row-sub {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+  line-height: 1.55;
+}
+
+/* ป้ายสถานะห้ามถูกบีบจนตัดคำ — ยอมให้ตกลงมาอยู่บรรทัดใหม่แทน */
+.gd-row-side {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.gd-row-date {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* ---------- เช็กลิสต์ฟาร์ม (T1.291) ---------- */
+
+.gd-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.gd-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+/* เลือกอยู่ = ขอบหนา + พื้นเข้ม ไม่ใช่เปลี่ยนสีอย่างเดียว */
+.gd-tab.is-on {
+  border-color: var(--ink-secondary);
+  border-width: 2px;
+  padding: calc(var(--space-2) - 1px) calc(var(--space-4) - 1px);
+  background: var(--bg-tint);
+  font-weight: 600;
+}
+
+.gd-tab-n {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+}
+
+.gd-reset {
+  margin-left: auto;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.gd-sys + .gd-sys {
+  margin-top: var(--space-6);
+}
+
+.gd-sys h4 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+}
+
+.gd-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gd-check label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+}
+
+.gd-check input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+/* ติ๊กแล้วจางลง แต่ยังอ่านออก — ต้องย้อนดูได้ว่าตรวจอะไรไปแล้วบ้าง */
+.gd-check.is-done label {
+  background: var(--bg-sunken);
+}
+
+.gd-check.is-done .gd-check-body b {
+  color: var(--ink-secondary);
+}
+
+.gd-check-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.gd-check-ok,
+.gd-check-fix {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+.gd-check-ok svg,
+.gd-check-fix svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+}
+
+/* ---------- ทำความสะอาด & ฆ่าเชื้อ (T1.292) ---------- */
+
+/* หลักของทั้งหน้า — ต้องเด่นกว่าทุกอย่าง แต่ไม่ใช่สีของคำเตือน
+   เพราะนี่เป็น "วิธีที่ถูก" ไม่ใช่ "ปัญหาที่ต้องแก้" */
+.gd-rule {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.gd-rule svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--ink-secondary);
+}
+
+.gd-rule b {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: var(--text-base);
+}
+
+/* ---------- ขั้นตอนที่เรียงลำดับ ---------- */
+
+.gd-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.gd-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+/* เลขขั้นคือเครื่องหมายหลักของแถว (ดูเหตุผลที่หัวไฟล์หน้า Cleaning.jsx) */
+.gd-step-n {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.gd-step-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.gd-step-body h4 {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.45;
+}
+
+.gd-step-time {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-step-why {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+.gd-step-dos,
+.gd-rules {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.gd-step-dos li,
+.gd-rules li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+}
+
+.gd-rules li {
+  font-size: var(--text-sm);
+}
+
+.gd-step-dos svg,
+.gd-rules svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--ink-secondary);
+}
+
+/* ---------- น้ำยาฆ่าเชื้อ ---------- */
+
+.gd-chems {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.gd-chem {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.gd-chem h4 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-base);
+}
+
+.gd-chem-use,
+.gd-chem-good,
+.gd-chem-care {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.gd-chem-use,
+.gd-chem-good {
+  color: var(--ink-secondary);
+}
+
+.gd-chem-use svg,
+.gd-chem-good svg,
+.gd-chem-care svg {
+  flex: 0 0 auto;
+  margin-top: 4px;
+}
+
+.gd-chem-good {
+  margin-top: var(--space-1);
+}
+
+/* ข้อควรระวังอยู่ในกล่องเน้น — ของในนี้กัดผิวหนังและกัดโลหะได้จริง */
+.gd-chem-care {
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+  font-size: var(--text-xs);
+}
+
+/* ---------- องค์ประกอบ 8 ด้าน / งานประจำ ---------- */
+
+.gd-comps,
+.gd-routine {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.gd-comp,
+.gd-when {
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+
+.gd-comp h4,
+.gd-when h4 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-base);
+}
+
+.gd-comp-lead {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.gd-comp ul,
+.gd-when ul {
+  margin: 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+.gd-comp li + li,
+.gd-when li + li {
+  margin-top: var(--space-1);
+}
+
+/* ---------- ผสมพันธุ์ & สายพันธุ์ (T1.293) ---------- */
+
+.gd-ask {
+  margin: var(--space-5) 0 var(--space-3);
+  font-size: var(--text-base);
+}
+
+.gd-ask:first-child {
+  margin-top: 0;
+}
+
+.gd-sub {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ---------- ปุ่มเลือก (แม่พันธุ์ / เป้าหมาย) ---------- */
+
+.gd-picks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--space-2);
+}
+
+.gd-picks.is-wide {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.gd-pick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* เลือกอยู่ = ขอบหนา + พื้นเข้ม ไม่ใช่เปลี่ยนสีอย่างเดียว */
+.gd-pick.is-on {
+  border-color: var(--ink-secondary);
+  border-width: 2px;
+  padding: calc(var(--space-3) - 1px);
+  background: var(--bg-tint);
+}
+
+.gd-pick img {
+  flex: 0 0 auto;
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+}
+
+.gd-pick-mark {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+}
+
+.gd-pick > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: var(--text-sm);
+}
+
+.gd-pick-look {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+/* ---------- ผลคำแนะนำ ---------- */
+
+.gd-plan {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+.gd-sire {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+
+/* ตัวสำรองใช้ขอบประ — ต่างจากตัวหลักโดยไม่ต้องพึ่งสี */
+.gd-sire.is-alt {
+  border-style: dashed;
+  background: var(--bg-surface);
+}
+
+.gd-sire-art {
+  flex: 0 0 auto;
+  width: 110px;
+  height: 90px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+}
+
+.gd-sire-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.gd-sire-body h4 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.gd-sire-look {
+  margin: 2px 0 var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-sire-body ul {
+  margin: 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.gd-out {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+}
+
+.gd-out svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--ink-secondary);
+}
+
+.gd-out > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gd-out span span {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+.gd-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+}
+
+.gd-tags li {
+  padding: 2px var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+.gd-alt-note {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+.gd-cautions {
+  margin-top: var(--space-4);
+}
+
+/* `.gd-warn` มี margin ท้ายไว้สำหรับกล่องเดี่ยว — ในชุดนี้ให้ชิดกันแล้วตัวสุดท้ายไม่ต้องเว้น */
+.gd-cautions .gd-warn {
+  margin-bottom: var(--space-2);
+}
+
+.gd-cautions .gd-warn:last-child {
+  margin-bottom: 0;
+}
+
+/* รายการข้อเสีย/ข้อจำกัด — ไอคอนเตือนต้องอ่านออกว่าเป็นคนละเรื่องกับรายการติ๊กถูก */
+.gd-rules.is-warn svg {
+  color: var(--status-warning-text);
+}
+
+/* ---------- นับวันจากวันผสม ---------- */
+
+.gd-date {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.gd-date input {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.gd-days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gd-day {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  flex-wrap: wrap;
+}
+
+/* กำหนดคลอดคือวันที่คนมาหาเป็นอันดับแรก — ขอบหนาขึ้น ไม่ใช่แค่สี */
+.gd-day.is-key {
+  border-color: var(--ink-secondary);
+  border-width: 2px;
+  padding: calc(var(--space-3) - 1px) calc(var(--space-4) - 1px);
+  background: var(--bg-tint);
+}
+
+.gd-day-n {
+  flex: 0 0 auto;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.gd-day.is-key .gd-day-n {
+  background: var(--bg-surface);
+}
+
+.gd-day-body {
+  flex: 1 1 200px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-sm);
+}
+
+.gd-day-body span {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+  line-height: 1.55;
+}
+
+.gd-day-date {
+  flex: 0 0 auto;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------- สายพันธุ์ ---------- */
+
+.gd-breeds,
+.gd-crosses {
+  display: grid;
+  /* `min(320px, 100%)` ไม่ใช่ `320px` เฉย ๆ — ที่จอ 375px ช่องว่างในการ์ดเหลือ ~317px
+     คอลัมน์ขั้นต่ำ 320px จึงล้นกรอบไป 3px และได้แถบเลื่อนแนวนอนทั้งหน้า */
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: var(--space-4);
+}
+
+.gd-breed,
+.gd-cross {
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+
+.gd-breed-art {
+  width: 100%;
+  height: 130px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  margin-bottom: var(--space-3);
+}
+
+.gd-breed-body h4 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.gd-specs {
+  margin: var(--space-3) 0 0;
+}
+
+.gd-specs > div {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+}
+
+.gd-specs dt {
+  flex: 0 0 110px;
+  color: var(--ink-muted);
+}
+
+.gd-specs dd {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.gd-breed-note,
+.gd-cross-sum {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+.gd-cross-sum {
+  margin: var(--space-1) 0 var(--space-3);
+}
+
+/* ---------- ตัวเลขหน้าคอก ---------- */
+
+.gd-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.gd-fact {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.gd-fact dt {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-fact dd {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: var(--space-1) 0 0;
+}
+
+.gd-fact dd b {
+  font-size: var(--text-base);
+}
+
+.gd-fact dd span {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+  line-height: 1.55;
+}
+
+/* ---------- ผสมอาหารต้นทุนต่ำ (T1.294) ---------- */
+
+.gd-ings {
+  list-style: none;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gd-ing {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.gd-ing.is-on {
+  background: var(--bg-tint);
+}
+
+/* พรีมิกซ์ไม่มีช่องติ๊ก — ขอบประบอกว่า "อยู่ในสูตรเสมอ" ไม่ใช่ตัวเลือกที่กดปิดได้ */
+.gd-ing.is-fixed {
+  border-style: dashed;
+  background: var(--bg-sunken);
+}
+
+.gd-ing-pick {
+  flex: 1 1 260px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+  cursor: pointer;
+}
+
+.gd-ing.is-fixed .gd-ing-pick {
+  cursor: default;
+}
+
+.gd-ing-pick input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.gd-ing-pick svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--ink-muted);
+}
+
+.gd-ing-pick > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: var(--text-sm);
+}
+
+.gd-ing-spec {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+.gd-ing-note {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+/* ---------- ช่องกรอกตัวเลข ---------- */
+
+.gd-price {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.gd-price.is-wide {
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
+  color: inherit;
+}
+
+.gd-price input {
+  width: 110px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.gd-price.is-wide input {
+  width: 140px;
+}
+
+/* ---------- แถบเทียบกับเกณฑ์ ---------- */
+
+.gd-meter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+}
+
+.gd-meter > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-sm);
+}
+
+.gd-meter > span:first-child span {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+/* ---------- ตาราง ---------- */
+
+.gd-table {
+  width: 100%;
+  margin: var(--space-4) 0 0;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.gd-table th,
+.gd-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gd-table th:first-child,
+.gd-table td:first-child {
+  text-align: left;
+  white-space: normal;
+}
+
+.gd-table thead th {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.gd-table tbody tr.is-fixed {
+  background: var(--bg-sunken);
+}
+
+.gd-table tfoot th {
+  border-bottom: none;
+  border-top: 2px solid var(--border);
+  background: var(--bg-tint);
+}
+
+/* ส่วนที่เราเติมเข้าไปเอง / หมายเหตุประจำแถว — ต้องอ่านออกว่าเป็นคำอธิบาย ไม่ใช่ชื่อของ */
+.gd-added {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+/* ตารางกว้างกว่ากล่องเมื่อจอแคบ — ให้เลื่อนในตัวมันเอง ไม่ใช่ดันทั้งหน้าให้เลื่อนแนวนอน */
+.gd-table-wrap {
+  overflow-x: auto;
+}

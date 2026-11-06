@@ -1,0 +1,225 @@
+/* ตัวเลือกธีมและโหมดสี — ใช้ทั้งในป๊อบอัพธีมและหน้าตั้งค่า
+   ทุกสีมาจาก token จึงเปลี่ยนตามโหมดที่เลือกอยู่เอง
+   ยกเว้นกล่องตัวอย่างสี (.tm-mode-art) ที่จงใจแปะ data-mode ของโหมดนั้น ๆ ทับไว้ */
+
+.tm-now {
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.tm-now b {
+  color: var(--ink-primary);
+}
+
+.tm-section + .tm-section {
+  margin-top: var(--space-7);
+}
+
+.tm-section-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-4);
+  font-size: var(--text-lg);
+  color: var(--ink-primary);
+}
+
+.tm-section-num {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--green-tint);
+  color: var(--green-strong);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.tm-section-note {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-secondary);
+}
+
+/* ---------- ธีมบทบาท ---------- */
+
+.tm-roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.tm-role,
+.tm-mode {
+  display: grid;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+
+.tm-role {
+  grid-template-columns: auto 1fr auto;
+}
+
+.tm-role:hover,
+.tm-mode:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-tint);
+  transform: translateY(-1px);
+}
+
+.tm-role.is-on,
+.tm-mode.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+/* วงแหวนโฟกัสของ input ที่ซ่อนอยู่ ต้องเห็นที่ตัว label แทน */
+.tm-role:focus-within,
+.tm-mode:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tm-role-text,
+.tm-mode-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.tm-role-text b,
+.tm-mode-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.tm-role-text span,
+.tm-mode-text span {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.tm-check {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--ink-inverse);
+}
+
+.is-on .tm-check {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+/* ---------- โหมดโทนสี ---------- */
+
+.tm-mode-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: var(--space-5);
+}
+
+.tm-mode-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.tm-modes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tm-mode {
+  grid-template-columns: auto 1fr auto;
+}
+
+/* กล่องตัวอย่าง: พื้นหน้า + การ์ด + จุดสีแบรนด์ของโหมดนั้นจริง ๆ */
+.tm-mode-art {
+  display: block;
+  width: 66px;
+  height: 46px;
+  flex-shrink: 0;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-page);
+}
+
+.tm-mode-card {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  height: 100%;
+  padding: 5px;
+  border-radius: 6px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.tm-mode-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.tm-mode-line {
+  width: 24px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--ink-muted);
+}
+
+.tm-mode-line.is-short {
+  width: 16px;
+  background: var(--border-strong);
+}
+
+/* ---------- แถวปุ่มท้ายป๊อบอัพ ---------- */
+
+.tm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 519px) {
+  .tm-actions {
+    flex-direction: column-reverse;
+  }
+
+  .tm-actions .modal-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}

@@ -1,0 +1,54 @@
+/* สกินเต็มพื้นที่ของวอยซ์ (T1.286) — ใช้คลาส vp-* ร่วมกับแผงเล็ก
+   ไฟล์นี้ทำหน้าที่เดียวคือ "ขยาย" ไม่ได้เปลี่ยนหน้าตาของชิ้นส่วนข้างใน
+   ถ้าเริ่มมีสีหรือระยะของตัวเองเมื่อไร แปลว่ากำลังจะกลายเป็นสองหน้าตาที่ต้องดูแลคู่กัน */
+.vs {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* สูงพอให้อ่านบทสนทนายาว ๆ ได้โดยไม่ต้องเลื่อนทั้งหน้า แต่ไม่ล้นจอเตี้ย */
+  height: min(620px, calc(100vh - 220px));
+}
+
+/* หน้าจอแรกก่อนเริ่มคุย — ต้องบอกว่าถามอะไรได้ ไม่ใช่ปล่อยว่างให้เดาเอง */
+.vs-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  margin: auto;
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--ink-muted);
+}
+
+.vs-start p {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.vs-samples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.vs-samples button {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.vs-samples button:hover:not(:disabled) {
+  background: var(--bg-sunken);
+}
+
+.vs-samples button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

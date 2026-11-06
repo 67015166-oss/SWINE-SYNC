@@ -1,0 +1,49 @@
+/* ================= หน้า Voice AI (pages/Voice.jsx) ================= */
+
+/* ปุ่มรอง "เต็มจอ" (เดิม "เปิดในแท็บใหม่") — หน้าตาเดียวกับปุ่มรองอื่นในแอป (.rc-editmode) */
+.vo-newtab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.vo-newtab:hover {
+  border-color: var(--accent);
+  color: var(--ink-primary);
+}
+
+.vo-newtab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* กรอบเว็บ ข้อความรอ และสถานะว่าง อยู่ที่ components/voice/voice.css (ใช้ร่วมกับป๊อบอัพ)
+   ไฟล์นี้เหลือแค่ของเฉพาะหน้า /dashboard/voice */
+
+/* การ์ดไม่มีขอบใน — กรอบเว็บกินเต็มการ์ด เนื้อหาเว็บปลายทางมีระยะขอบของตัวเองอยู่แล้ว
+   ต้องมี overflow: hidden (ทับ .lb-body > .card ที่ตั้ง auto) ไม่งั้นมุมกรอบเว็บทับมุมมนของการ์ด */
+.lb-body > .card.vo-card,
+.vo-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* จอแคบ: กระดานเรียงคอลัมน์เดียวและกล่องสูงตามเนื้อหา (board.css)
+   กรอบเว็บไม่มีความสูงของตัวเอง จึงต้องตั้งให้ ไม่งั้นยุบเหลือ 0 */
+@media (max-width: 899px) {
+  .vo-card .vo-stage {
+    height: 75vh;
+    min-height: 32rem;
+  }
+}

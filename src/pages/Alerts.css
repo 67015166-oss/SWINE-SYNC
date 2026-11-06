@@ -1,0 +1,963 @@
+/* หน้า "ศูนย์การแจ้งเตือน" (/dashboard/alerts)
+   หัวเรื่อง → ไทล์สรุป 4 ช่อง → ตารางรายการ → คำแนะนำ AI → กราฟสองใบ → โรงเรือนที่ต้องติดตาม
+   ความลึกมาจากเงาการ์ด (--shadow-3d) · ระดับความรุนแรงมีไอคอน+ข้อความเสมอ ไม่ได้สื่อด้วยสีอย่างเดียว */
+
+/* ความสูงกราฟของหน้านี้ — กราฟแท่งกับวงโดนัทใช้ค่าเดียวกัน
+   การ์ดสองใบที่วางคู่กันจะได้จบบรรทัดล่างตรงกัน */
+.al-page {
+  --al-chart-h: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ---------- หัวเรื่อง ---------- */
+.al-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.al-head-icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  flex-shrink: 0;
+  border-radius: var(--radius-lg);
+  background: var(--accent-tint);
+  box-shadow: var(--shadow-3d);
+  color: var(--accent);
+}
+
+.al-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.al-subtitle {
+  margin-top: var(--space-2);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ---------- ไทล์สรุป ---------- */
+.al-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: var(--space-4);
+}
+
+.al-kpi {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5) var(--space-6);
+  padding-right: 84px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d);
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.al-kpi:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+/* หัวกล่องขนาดเดียวกับไทล์หน้าอื่น (--text-lg) เพื่อให้ทุกกล่องในระบบเท่ากัน */
+.al-kpi-label {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.al-kpi-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.al-kpi-value b {
+  font-size: var(--text-stat);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.al-kpi-value em {
+  font-size: var(--text-base);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.al-kpi-foot {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ไอคอนวงกลมนูนมุมขวาของไทล์ */
+.al-kpi-icon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-5);
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  box-shadow: var(--shadow-3d-chip);
+}
+
+/* สีประจำไทล์ตามความหมาย (พื้นอ่อน + ตัวอักษรเข้ม อ่านออกทุกใบ) */
+.al-kpi.is-critical {
+  background: var(--status-critical-bg);
+  border-color: var(--status-critical);
+}
+
+.al-kpi.is-critical .al-kpi-label,
+.al-kpi.is-critical .al-kpi-value b {
+  color: var(--status-critical-text);
+}
+
+.al-kpi.is-critical .al-kpi-icon {
+  background: var(--bg-surface);
+  color: var(--status-critical);
+}
+
+.al-kpi.is-good {
+  background: var(--status-good-bg);
+  border-color: var(--status-good);
+}
+
+.al-kpi.is-good .al-kpi-label,
+.al-kpi.is-good .al-kpi-value b {
+  color: var(--status-good-text);
+}
+
+.al-kpi.is-good .al-kpi-icon {
+  background: var(--bg-surface);
+  color: var(--status-good-text);
+}
+
+.al-kpi.is-offline {
+  background: var(--status-offline-bg);
+  border-color: var(--status-offline);
+}
+
+.al-kpi.is-offline .al-kpi-label,
+.al-kpi.is-offline .al-kpi-value b {
+  color: var(--status-offline-text);
+}
+
+.al-kpi.is-offline .al-kpi-icon {
+  background: var(--bg-surface);
+  color: var(--status-offline-text);
+}
+
+/* เดิมเลือกด้วยกล่องแถว (.al-board/.al-side/.al-charts) ซึ่งถูกแทนด้วยกระดานจัดเลย์เอาต์แล้ว */
+.al-page .lb-body > .card {
+  box-shadow: var(--shadow-3d);
+}
+
+/* ---------- ตารางรายการ ---------- */
+.al-table {
+  width: 100%;
+}
+
+/* บีบระยะในตารางให้ทั้ง 6 คอลัมน์อยู่ในการ์ดได้โดยไม่ต้องเลื่อนแนวนอน */
+.al-table th,
+.al-table td {
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+}
+
+.al-table td:first-child,
+.al-table th:first-child {
+  padding-left: var(--space-3);
+}
+
+/* ชื่อเรื่องยาวให้ตัดด้วย … แทนการดันตารางให้กว้าง */
+/* ชื่อเรื่องแจ้งเตือนยาวได้ถึงราว 270px ("แอมโมเนีย 16 ppm สูงเกินเกณฑ์")
+   เดิมตรึงไว้ 230px แล้วตัดด้วยจุดไข่ปลา ทั้งที่ตารางยังเหลือที่ว่างอยู่ —
+   เรื่องสำคัญเลยถูกตัดหายไปตรงกลางประโยค ยิ่งขยายขนาดตัวอักษรยิ่งตัดเยอะ
+   ➜ ปล่อยให้ขึ้นบรรทัดที่สองแทนการตัดทิ้ง (แถวสูงขึ้นนิดเดียว แต่ได้อ่านครบ) */
+.al-cell-type {
+  max-width: 320px;
+}
+
+.al-cell-type-text {
+  overflow-wrap: anywhere;
+}
+
+.al-table th {
+  background: var(--bg-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.al-table td {
+  vertical-align: middle;
+}
+
+.al-table tbody tr:hover {
+  background: var(--bg-tint);
+}
+
+.al-cell-place {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
+
+.al-cell-place b {
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.al-cell-place span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.al-cell-type {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.al-type-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.al-status {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.al-status.is-open {
+  background: var(--bg-sunken);
+  color: var(--ink-secondary);
+}
+
+.al-status.is-done {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.al-th-action,
+.al-td-action {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.al-row-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--accent-bright);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease;
+}
+
+.al-row-btn:hover {
+  transform: translateY(-2px);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* ปุ่ม "แสดงทั้งหมด / ย่อกลับ" ใต้รายการที่ถูกย่อไว้
+   เต็มความกว้างและอยู่ติดรายการสุดท้าย เพื่อให้เห็นชัดว่ายังมีของต่อข้างล่าง
+   (ไม่ใช่ปุ่มลอยที่ดูเหมือนไม่เกี่ยวกับตารางด้านบน) */
+.al-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.al-more:hover {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.al-more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ลูกศรชี้ลง = ยังมีของซ่อนอยู่ · ชี้ขึ้น = กดแล้วย่อกลับ
+   (มีข้อความกำกับเสมอ ไม่ได้สื่อด้วยทิศลูกศรอย่างเดียว) */
+.al-more svg {
+  flex-shrink: 0;
+  transform: rotate(90deg);
+}
+
+.al-more .al-more-up {
+  transform: rotate(-90deg);
+}
+
+.al-empty-cell {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--ink-secondary);
+}
+
+/* ---------- ชิปตัวกรอง ---------- */
+/* ---------- ปุ่มตัวกรอง + แผงที่กางออกมา ---------- */
+.al-filterwrap {
+  margin-bottom: var(--space-4);
+}
+
+.al-filterbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ปุ่มเปิดตัวกรอง — เด่นกว่าชิปข้างใน เพราะเป็นทางเข้าของทั้งชุด */
+.al-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.al-filter-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* มีตัวกรองทำงานอยู่ = ปุ่มเป็นโทนทอง + มีตัวเลขกำกับ
+   (ไม่ได้บอกด้วยสีอย่างเดียว ตัวเลขคือตัวบอกจริง) */
+.al-filter-btn.is-on {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.al-filter-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--space-1);
+  border-radius: 999px;
+  background: var(--accent-gradient);
+  font-size: var(--text-xs);
+  color: var(--ink-inverse);
+}
+
+.al-filter-btn svg {
+  flex-shrink: 0;
+}
+
+/* ลูกศรชี้ลงตอนปิด · ชี้ขึ้นตอนกางแล้ว (มีคำว่า "ตัวกรอง" กำกับอยู่เสมอ) */
+.al-filter-caret {
+  transform: rotate(90deg);
+  transition: transform 0.15s ease;
+}
+
+.al-filter-caret.is-open {
+  transform: rotate(-90deg);
+}
+
+.al-filter-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* แผงตัวกรองที่กางออกมา — วางเป็นกล่องลอยใต้ปุ่ม (มีขอบ+เงา) ให้อ่านเป็นเมนู
+   แต่ยังกินที่จริงในหน้า ไม่ได้ลอยทับ เพราะการ์ดนี้เลื่อนในตัวเอง
+   (.lb-body > .card { overflow: auto }) กล่องที่ลอยออกนอกกรอบจะโดนตัดหาย */
+.al-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-3d-chip);
+  animation: al-filter-open 0.14s ease-out;
+}
+
+@keyframes al-filter-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .al-filters {
+    animation: none;
+  }
+}
+
+.al-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.al-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.al-chip:hover {
+  transform: translateY(-2px);
+  color: var(--ink-primary);
+}
+
+.al-chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--ink-muted);
+}
+
+.al-chip.is-accent .al-chip-dot {
+  background: var(--accent);
+}
+
+.al-chip.is-critical .al-chip-dot {
+  background: var(--status-critical);
+}
+
+.al-chip.is-serious .al-chip-dot {
+  background: var(--status-warning);
+}
+
+.al-chip.is-active {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.al-selects {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.al-select {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--accent);
+}
+
+.al-select select {
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+  cursor: pointer;
+}
+
+.al-select select:disabled {
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+.al-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.al-clear:hover {
+  color: var(--accent-strong);
+}
+
+.al-chip:focus-visible,
+.al-select select:focus-visible,
+.al-clear:focus-visible,
+.al-row-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- คำแนะนำจาก AI ---------- */
+.al-ai {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.al-ai li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.al-ai-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.al-ai-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.al-ai-text b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.al-ai-text span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ---------- กราฟแนวโน้ม + โดนัท ---------- */
+.al-trend-box {
+  width: 100%;
+  height: var(--al-chart-h);
+}
+
+.al-donut {
+  display: grid;
+  grid-template-columns: minmax(0, var(--al-chart-h)) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-5);
+}
+
+/* วงโดนัทสูงเท่ากราฟแท่งที่วางคู่กัน (--al-chart-h ตัวเดียวคุมทั้งสองใบ)
+   ของเดิมโดนัทสูง 168 กราฟแท่งสูง 230 การ์ดสองใบในแถวเดียวกันจึงจบไม่เท่ากัน
+   เห็นเป็นขั้นบันไดกลางหน้า (ผู้ใช้แจ้ง 1 ก.ย. 2569 ว่าไม่สมส่วน)
+   กว้างเท่าสูงด้วย วงจะได้เป็นวงกลมเต็มกรอบ ไม่เหลือขอบว่างบน-ล่าง */
+.al-donut-chart {
+  position: relative;
+  width: 100%;
+  max-width: var(--al-chart-h);
+  height: var(--al-chart-h);
+}
+
+.al-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.al-donut-center b {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.al-donut-center em {
+  font-size: var(--text-xs);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.al-donut-legend {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.al-donut-legend li {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.al-legend-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-primary);
+}
+
+.al-donut-legend b {
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.al-legend-pct {
+  min-width: 52px;
+  text-align: right;
+}
+
+.al-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  transform: translateY(1px);
+}
+
+/* ---------- โรงเรือนที่ต้องติดตาม ---------- */
+.al-watch {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: var(--space-4);
+}
+
+.al-watch-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-bottom: 3px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--ink-primary);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.al-watch-link:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-3d);
+  color: var(--ink-primary);
+}
+
+.al-watch li.is-critical .al-watch-link {
+  border-bottom-color: var(--status-critical);
+}
+
+.al-watch li.is-serious .al-watch-link {
+  border-bottom-color: var(--status-serious);
+}
+
+.al-watch li.is-warning .al-watch-link {
+  border-bottom-color: var(--status-warning);
+}
+
+.al-watch-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--accent-strong);
+}
+
+.al-watch-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.al-watch-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.al-watch-top b {
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+.al-watch-detail {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.al-watch-meta {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+/* ---------- อื่น ๆ ---------- */
+.al-empty {
+  padding: var(--space-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.al-foot {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ---------- จอแคบ ---------- */
+@media (max-width: 899px) {
+  .al-filters {
+    justify-content: flex-start;
+  }
+
+  .al-donut {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .al-donut-legend {
+    width: 100%;
+  }
+
+  .al-kpi {
+    padding-right: 76px;
+  }
+}
+
+/* แถบบอกว่ามีแจ้งเตือนถูกซ่อนจากการตั้งค่า — ต้องมี ไม่งั้นผู้ใช้จะนึกว่าระบบไม่เจออะไร */
+.al-hidden {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.al-hidden svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+/* ปุ่มที่หน้าตาเหมือนลิงก์ — เปิดป๊อบอัพตั้งค่า ไม่ได้เปลี่ยนหน้า จึงต้องเป็น <button> */
+.al-hidden-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.al-hidden-btn:hover {
+  color: var(--accent-strong);
+}
+
+.al-hidden-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- กล่องบนกระดานหน้านี้สูงตามเนื้อหาตัวเอง ----------
+   ปกติกล่องบนกระดานจะยืดเต็มความสูงของแถว แต่หน้านี้มีรายการที่ "กางทั้งหมด" ได้
+   (3 → 18 รายการ) พอกางแล้วแถวสูงขึ้นตาม การ์ด "คำแนะนำจาก AI" ที่อยู่ข้าง ๆ
+   จะถูกยืดตามไปด้วยจนเหลือช่องว่างเปล่าในการ์ดพันกว่าพิกเซล
+   ➜ ให้แต่ละใบสูงเท่าเนื้อหาตัวเอง ใบข้าง ๆ จึงไม่พองตาม
+   (ความสูงตั้งต้นใน DEFAULT_LAYOUTS ตั้งไว้พอดีเนื้อหาอยู่แล้ว จึงไม่เห็นความต่างตอนยังไม่กาง)
+   จอแคบกระดานเรียงคอลัมน์เดียวและสูงตามเนื้อหาอยู่แล้ว จึงจำกัดไว้ที่จอกว้าง */
+@media (min-width: 900px) {
+  .lb-board[data-board="alerts"] .lb-block {
+    align-self: start;
+  }
+
+  /* ...ยกเว้นตอนกำลังจัดเลย์เอาต์ — ตรงนั้นต้องเห็นว่ายืดแล้วกล่องจะใหญ่เท่าไร
+     ถ้ายังสูงตามเนื้อหาอยู่ ยืดขอบล่างแล้วจะไม่มีอะไรขยับให้เห็นเลย
+     สองเรื่องนี้ไม่ชนกันเพราะเกิดคนละจังหวะ (จัดเลย์เอาต์ ↔ อ่านข้อมูลตามปกติ) */
+  .lb-board[data-board="alerts"].is-editing .lb-block {
+    align-self: stretch;
+  }
+}
+
+/* ป้าย "ตรวจซ้ำไม่ได้" ในตารางแจ้งเตือน (T1.307)
+   ใบที่เปิดไว้ก่อนเซนเซอร์เงียบ — ปิดเองไม่ได้เพราะไม่มีค่ามาพิสูจน์ว่าหายแล้ว
+   และปิดให้เองก็ไม่ถูก เพราะเท่ากับบอกว่าตอนนี้ปกติแล้ว ซึ่งไม่มีใครรู้ */
+.al-unverified {
+  display: inline-block;
+  margin-inline-start: var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-well);
+  color: var(--ink-secondary);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+/* ───── ใครทำอะไรในระบบ (T1.359) ─────
+   รายการอ่านเร็ว: เวลาซ้าย · เรื่องขวา — เวลาจองความกว้างคงที่ทุกแถว
+   ตาจึงไล่ลงคอลัมน์เดียวได้โดยไม่ต้องกวาดซ้าย-ขวา */
+.al-activity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.al-activity li {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+/* แถวสลับสี — รายการยาว ๆ อ่านไม่หลงบรรทัด */
+.al-activity li:nth-child(odd) {
+  background: var(--bg-tint);
+}
+
+.al-activity-when {
+  flex: 0 0 auto;
+  min-width: 11ch;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.al-activity-what {
+  color: var(--ink-primary);
+  line-height: 1.5;
+}
+
+/* จอแคบ: เวลาขึ้นบรรทัดบน เรื่องอยู่บรรทัดล่าง — บีบสองคอลัมน์แล้วอ่านไม่ออก */
+@media (max-width: 599px) {
+  .al-activity li {
+    flex-direction: column;
+    gap: 2px;
+  }
+}

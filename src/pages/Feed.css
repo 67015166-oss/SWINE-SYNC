@@ -1,0 +1,53 @@
+/* หน้า "อาหาร & น้ำหนัก" — มีของเฉพาะหน้านี้แค่รายการชุดเลี้ยงท้ายการ์ดสต็อก */
+
+.fd-batches {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+.fd-batch {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.fd-batch-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.fd-batch-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.fd-batch-text span {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+@media (max-width: 899px) {
+  .fd-batch {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .fd-batch .status-badge {
+    grid-column: 2;
+  }
+}

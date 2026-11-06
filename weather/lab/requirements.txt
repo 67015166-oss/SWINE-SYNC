@@ -1,0 +1,17 @@
+# ─── ไฟล์นี้ไม่ได้ถูกใช้ตอน build แล้ว เก็บไว้เป็นบันทึกว่าต้องมีอะไรบ้าง ───
+#
+# ตอนนี้ Dockerfile ใช้ image สำเร็จรูป quay.io/jupyter/scipy-notebook
+# ซึ่งมีทุกตัวข้างล่างนี้มาให้แล้ว ยกเว้นสองตัวท้ายที่ยัง pip install เอง
+# (เหตุผลที่เลิก pip install เองทั้งหมด อยู่ในหัว Dockerfile — เน็ตเข้า pypi ช้าเกินไป)
+#
+# ถ้าวันหนึ่งย้ายไปเครื่องที่เน็ตเร็ว แล้วอยากคุมเวอร์ชันเองทุกตัว
+# ก๊อบไฟล์นี้กลับไปใช้กับ `FROM python:3.12-slim` ได้เลย
+pandas
+numpy
+scikit-learn
+matplotlib
+jupyterlab
+
+# สองตัวนี้ image ต้นทางไม่มี — ยังต้องลงเอง
+psycopg2-binary
+SQLAlchemy

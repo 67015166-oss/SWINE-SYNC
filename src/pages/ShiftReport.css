@@ -1,0 +1,404 @@
+/* หน้ารายงานส่งเวร (T1.268) — สี/ขนาด/ระยะทุกค่ามาจาก tokens.css เท่านั้น */
+
+.sr-empty {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+
+.sr-muted {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- ปุ่มเลือกกะ / โรงเรือน / ค่าในกราฟ ---------- */
+.sr-pick {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sr-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.sr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-raised);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sr-btn:hover:not(:disabled) {
+  background: var(--bg-tint);
+}
+
+.sr-btn:active:not(:disabled) {
+  transform: translateY(2px);
+}
+
+.sr-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sr-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sr-btn.is-on {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.sr-btn.is-sm {
+  padding: var(--space-1) var(--space-3);
+}
+
+.sr-print {
+  font-size: var(--text-base);
+}
+
+.sr-state {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ---------- ตาราง ---------- */
+.sr-table-wrap {
+  overflow-x: auto;
+}
+
+.sr-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-base);
+}
+
+.sr-table th,
+.sr-table td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+  vertical-align: top;
+}
+
+.sr-table thead th {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.sr-table tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sr-at {
+  display: block;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.sr-chart-head {
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.sr-gaps {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-well);
+}
+
+.sr-gaps-title {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.sr-gap-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+/* ---------- รายการเหตุ ---------- */
+.sr-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sr-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.sr-item:last-child {
+  border-bottom: 0;
+}
+
+.sr-item-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.sr-item-detail,
+.sr-item-meta {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sr-item-detail {
+  color: var(--ink-secondary);
+  font-size: var(--text-base);
+}
+
+.sr-item-meta {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- บันทึกของคน ---------- */
+.sr-totals {
+  margin: 0 0 var(--space-2);
+  color: var(--ink-primary);
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+
+/* ---------- ไฟฟ้า ---------- */
+.sr-energy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sr-energy p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sr-energy-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.sr-energy-value b {
+  font-size: var(--text-stat);
+  line-height: 1.25;
+  color: var(--ink-primary);
+}
+
+/* ---------- รับเวร ---------- */
+.sr-handover {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.sr-handover-note {
+  margin: 0;
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+.sr-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.sr-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  font: inherit;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.sr-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.sr-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+  font-size: var(--text-sm);
+}
+
+/* ปุ่มทองใบเดียวของหน้า — การกระทำที่หน้านี้มีไว้ให้ทำ */
+.sr-receive {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--accent-gradient);
+  box-shadow: var(--shadow-raised-gold);
+  color: var(--ink-inverse);
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sr-receive:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+.sr-receive:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.sr-receive:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------- ข้อจำกัด ---------- */
+.sr-limits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+/* ---------- พิมพ์ / บันทึกเป็น PDF ----------
+   ใช้ตัวพิมพ์ของเบราว์เซอร์ ไม่เพิ่ม dependency (CLAUDE.md)
+   กระดานจัดเลย์เอาต์วางกล่องด้วย grid-row ที่สูงตายตัว — ตอนพิมพ์ต้องปล่อยให้ไหลต่อกันเป็นหน้า
+   ไม่งั้นกล่องที่สูงกว่ากระดาษจะถูกตัดครึ่ง และแถบเมนู/แถบบน/ปุ่มลอยจะไปอยู่ในกระดาษด้วย */
+.sr-print-head {
+  display: none;
+}
+
+@media print {
+  body:has(.sr-print-head) .app-bar,
+  body:has(.sr-print-head) .side,
+  body:has(.sr-print-head) .dock-stack,
+  body:has(.sr-print-head) .page-header,
+  body:has(.sr-print-head) .sr-nav,
+  body:has(.sr-print-head) .lb-move,
+  body:has(.sr-print-head) .lb-handle,
+  body:has(.sr-print-head) form.sr-handover,
+  body:has(.sr-print-head) .sr-receive,
+  body:has(.sr-print-head) .sr-field {
+    display: none !important;
+  }
+
+  body:has(.sr-print-head) {
+    background: none;
+  }
+
+  .sr-print-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  .sr-print-head b {
+    font-size: var(--text-xl);
+  }
+
+  /* ไหลต่อกันเป็นแถว — ตัวเลขสรุป 4 ใบเรียงแถวเดียว ไม่งั้นกินกระดาษไปครึ่งหน้า (เห็นจริงตอนตรวจ) */
+  body:has(.sr-print-head) .lb-board {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    height: auto !important;
+  }
+
+  body:has(.sr-print-head) .lb-block {
+    position: static !important;
+    transform: none !important;
+    width: 100%;
+    height: auto !important;
+    break-inside: avoid;
+  }
+
+  body:has(.sr-print-head) .lb-block:has(.stat-tile) {
+    width: calc((100% - 3 * var(--space-3)) / 4);
+  }
+
+  /* ไทล์แคบลงตอนพิมพ์ — แถบท้ายไทล์ปกติตัดเป็น "…" ซึ่งบนกระดาษอ่านต่อไม่ได้ ให้ขึ้นบรรทัดใหม่แทน */
+  body:has(.sr-print-head) .stat-tile-foot-stat {
+    overflow: visible;
+    white-space: normal;
+  }
+
+  body:has(.sr-print-head) .lb-body,
+  body:has(.sr-print-head) .lb-body > * {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body:has(.sr-print-head) .card,
+  body:has(.sr-print-head) .stat-tile {
+    box-shadow: none !important;
+  }
+}

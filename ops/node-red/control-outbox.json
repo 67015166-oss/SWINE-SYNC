@@ -1,0 +1,260 @@
+[
+  {
+    "id": "swinesync-control",
+    "type": "tab",
+    "label": "SWINE SYNC — ส่งคำสั่งไปตู้ควบคุม",
+    "disabled": true,
+    "info": "ดึงคำสั่งที่ค้างอยู่จาก API ของแดชบอร์ด แล้วส่งต่อให้ PLC ผ่าน MQTT\n\n★ แท็บนี้ **ปิดไว้ตั้งแต่ต้น** (disabled) เปิดเมื่อพร้อมเท่านั้น\n★ ต้องเติมตัวแปลงใน node 'แปลงเป็นภาษา PLC' ก่อน ไม่งั้นจะไม่ส่งอะไรออกไปเลย\n\nตั้งค่าที่ tab env: API_BASE และ OUTBOX_TOKEN",
+    "env": [
+      {
+        "name": "API_BASE",
+        "value": "http://100.102.230.64:3000",
+        "type": "str"
+      },
+      {
+        "name": "OUTBOX_TOKEN",
+        "value": "",
+        "type": "str"
+      }
+    ]
+  },
+  {
+    "id": "c-note",
+    "type": "comment",
+    "x": 150,
+    "y": 40,
+    "name": "อ่านก่อนเปิดใช้",
+    "info": "1. ตั้ง OUTBOX_TOKEN ให้ตรงกับ CONTROL_OUTBOX_TOKEN ใน .env ของกล่อง\n2. ตั้ง CONTROL_TRANSPORT=outbox ใน .env ของกล่อง\n3. เติมตัวแปลงใน node 'แปลงเป็นภาษา PLC'\n4. ตั้ง broker ของ node 'ส่งให้ PLC' ให้ชี้ broker ของฟาร์ม\n5. ค่อยเปิดแท็บนี้",
+    "z": "swinesync-control",
+    "wires": []
+  },
+  {
+    "id": "c-tick",
+    "type": "inject",
+    "x": 140,
+    "y": 100,
+    "name": "ทุก 5 วินาที",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "5",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "wires": [
+      [
+        "c-req"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-req",
+    "type": "function",
+    "x": 330,
+    "y": 100,
+    "name": "เตรียมคำขอ",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "func": "const base = env.get('API_BASE');\nconst token = env.get('OUTBOX_TOKEN');\n// ไม่ได้ตั้งกุญแจ = ไม่ต้องยิงให้เปลืองและให้ log ฝั่งกล่องรก\nif (!token) { node.status({fill:'grey',shape:'ring',text:'ยังไม่ได้ตั้ง OUTBOX_TOKEN'}); return null; }\nmsg.url = `${base}/api/control/outbox?limit=10`;\nmsg.method = 'GET';\nmsg.headers = { 'x-outbox-token': token };\nreturn msg;\n",
+    "wires": [
+      [
+        "c-fetch"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-fetch",
+    "type": "http request",
+    "x": 520,
+    "y": 100,
+    "name": "ขอคำสั่งที่ค้าง",
+    "method": "use",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": true,
+    "headers": [],
+    "wires": [
+      [
+        "c-check"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-check",
+    "type": "function",
+    "x": 710,
+    "y": 100,
+    "name": "ตรวจคำตอบ",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "func": "if (msg.statusCode !== 200) {\n  node.status({fill:'red',shape:'dot',text:`กล่องตอบ ${msg.statusCode}`});\n  node.warn(`ขอคำสั่งไม่สำเร็จ: ${msg.statusCode} ${JSON.stringify(msg.payload)}`);\n  return null;\n}\nconst list = msg.payload?.commands ?? [];\nnode.status({fill: list.length ? 'blue' : 'green', shape:'dot',\n             text: list.length ? `ค้าง ${list.length}` : 'ไม่มีคำสั่งค้าง'});\nif (list.length === 0) return null;\n// ★ ส่งทีละรายการ **ตามลำดับเดิม** — API เรียงเก่าก่อนใหม่มาให้แล้ว\n//   สลับลำดับเมื่อไร สั่ง 'เปิด' แล้ว 'ปิด' จะกลับด้านโดยไม่มีใครรู้\nreturn [list.map((c) => ({ payload: c }))];\n",
+    "wires": [
+      [
+        "c-map"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-map",
+    "type": "function",
+    "x": 330,
+    "y": 200,
+    "name": "แปลงเป็นภาษา PLC",
+    "outputs": 2,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "func": "// ═══════════════════════════════════════════════════════════════\n//  ★★★ ตรงนี้คือส่วนที่ต้องเติมเอง และห้ามเดา ★★★\n//\n//  เดาผิดแล้วโชคดีคือไม่มีอะไรเกิดขึ้น\n//  เดาผิดแล้วโชคร้ายคือพัดลมในโรงเรือนจริงหยุดหมุน\n//\n//  ต้องได้สเปกจากเจ้าของระบบสภาพแวดล้อมก่อนว่า\n//    · topic ที่ PLC ฟังอยู่คืออะไร\n//    · payload หน้าตาแบบไหน (JSON? ตัวเลขดิบ? สตริง?)\n//    · ความเร็วพัดลมใช้หน่วยอะไร (Hz? เปอร์เซ็นต์? ระดับ 1-5?)\n// ═══════════════════════════════════════════════════════════════\nconst c = msg.payload;   // {id, barnKey, deviceKind, deviceId, remoteAddr, action, hz}\n\nconst MAPPED = false;    // ← เปลี่ยนเป็น true เมื่อเติมด้านล่างเสร็จแล้ว\n\nif (!MAPPED) {\n  // ★ ยังไม่ได้ตั้งค่า = **ไม่ส่งอะไรออกไป** แล้วรายงานกลับว่าส่งไม่สำเร็จ\n  //   ปลอดภัยกว่าการส่งของมั่ว ๆ ไปให้ PLC และดีกว่าเงียบไปเฉย ๆ\n  node.status({fill:'yellow',shape:'ring',text:'ยังไม่ได้เติมตัวแปลง'});\n  return [null, { payload: { id: c.id, ok: false,\n           detail: 'Node-RED ยังไม่ได้ตั้งค่าตัวแปลงไปเป็นภาษา PLC' } }];\n}\n\n// ---- เติมตรงนี้ ----------------------------------------------\n// ตัวอย่างโครง (ตัวเลขและชื่อ topic เป็นของสมมติ ห้ามใช้จริงก่อนยืนยัน)\n//   msg.topic = c.remoteAddr || `farm/kpp/${c.barnKey}/${c.deviceId}`;\n//   msg.payload = { cmd: c.action, hz: c.hz };\n// --------------------------------------------------------------\n\nmsg._cmdId = c.id;       // เก็บไว้ตอบกลับ\nnode.status({fill:'blue',shape:'dot',text:`ส่ง ${c.deviceId} ${c.action}`});\nreturn [msg, null];\n",
+    "wires": [
+      [
+        "c-send",
+        "c-ok"
+      ],
+      [
+        "c-ack"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-send",
+    "type": "mqtt out",
+    "x": 600,
+    "y": 180,
+    "name": "ส่งให้ PLC",
+    "topic": "",
+    "qos": "1",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "c-broker",
+    "z": "swinesync-control",
+    "wires": []
+  },
+  {
+    "id": "c-ok",
+    "type": "function",
+    "x": 600,
+    "y": 240,
+    "name": "ส่งแล้ว",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "func": "return { payload: { id: msg._cmdId, ok: true,\n         detail: `ส่งเข้า topic ${msg.topic} แล้ว` } };\n",
+    "wires": [
+      [
+        "c-ack"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-ack",
+    "type": "function",
+    "x": 790,
+    "y": 200,
+    "name": "เตรียมรายงานผล",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "func": "const base = env.get('API_BASE');\nconst token = env.get('OUTBOX_TOKEN');\nconst { id, ...body } = msg.payload;\nmsg.url = `${base}/api/control/outbox/${id}/ack`;\nmsg.method = 'POST';\nmsg.headers = { 'x-outbox-token': token, 'content-type': 'application/json' };\nmsg.payload = body;\nreturn msg;\n",
+    "wires": [
+      [
+        "c-ackreq"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-ackreq",
+    "type": "http request",
+    "x": 980,
+    "y": 200,
+    "name": "รายงานผลกลับ",
+    "method": "use",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": true,
+    "headers": [],
+    "wires": [
+      [
+        "c-debug"
+      ]
+    ],
+    "z": "swinesync-control"
+  },
+  {
+    "id": "c-debug",
+    "type": "debug",
+    "x": 1170,
+    "y": 200,
+    "name": "ผลการรายงาน",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "z": "swinesync-control",
+    "wires": []
+  },
+  {
+    "id": "c-broker",
+    "type": "mqtt-broker",
+    "name": "broker ของฟาร์ม (ต้องตั้งเอง)",
+    "broker": "",
+    "port": "1883",
+    "clientid": "swinesync-control",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  }
+]

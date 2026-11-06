@@ -1,0 +1,1164 @@
+/* สไตล์ของชุด UI components กลาง — ใช้ token จาก tokens.css เท่านั้น */
+
+/* ---------- PageHeader ---------- */
+.page-header {
+  margin-bottom: var(--space-6);
+}
+
+/* หัวหน้าที่มีปุ่มระดับหน้า — ชื่อหน้าอยู่ซ้าย ปุ่มชิดขวาในบรรทัดเดียวกัน
+   จอแคบให้ปุ่มตกลงมาอยู่ใต้ชื่อหน้าเต็มความกว้าง (ไม่บีบชื่อหน้าจนตัดคำ) */
+.page-header.has-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+}
+
+.page-header-text {
+  min-width: 0;
+}
+
+.page-header h1 {
+  margin-bottom: var(--space-1);
+}
+
+/* แถบตัวเลขสรุปเล็ก ๆ ที่อยู่ในหัวหน้า (หน้าฟาร์มทั้งหมด / โรงเรือนในฟาร์ม)
+   เดิมเป็นการ์ดใบใหญ่ใต้หัวหน้า ซึ่งกินพื้นที่ทั้งแถบทั้งที่มีแค่ตัวเลขไม่กี่ตัว
+   ➜ ย่อมาอยู่บรรทัดเดียวกับชื่อหน้า อ่านจบในแวบเดียวและคืนพื้นที่ให้เนื้อหาจริง */
+/* แถบตัวเลขสรุปเล็ก ๆ ที่อยู่ในหัวหน้า (หน้าฟาร์มทั้งหมด / โรงเรือนในฟาร์ม)
+   เดิมเป็นการ์ดใบใหญ่ใต้หัวหน้า ซึ่งกินพื้นที่ทั้งแถบทั้งที่มีแค่ตัวเลขไม่กี่ตัว
+   ➜ ย่อมาอยู่บรรทัดเดียวกับชื่อหน้า อ่านจบในแวบเดียวและคืนพื้นที่ให้เนื้อหาจริง
+
+   เคยคั่นแต่ละตัวเลขด้วยเส้นบาง ๆ เส้นเดียว ซึ่งจาง (โปร่งแสง 12%) และบางเกินกว่าจะ
+   แบ่งสายตาได้จริง ตัวเลขสี่-ห้าตัวเลยอ่านต่อกันเป็นพืด
+   ➜ เปลี่ยนเป็นกล่องแยกใบ มีพื้นหลังและขอบของตัวเอง ทุกใบกว้างเท่ากันด้วย flex-basis
+      สายตาจึงแยก "หนึ่งเรื่องหนึ่งกล่อง" ได้ทันทีโดยไม่ต้องอ่านข้อความ
+      (ผลพลอยได้: ไม่ต้องใช้ทริกครอบ-แล้วตัดเส้นคั่นของใบที่ขึ้นต้นแถวอีกต่อไป) */
+/* ★★ กริดคอลัมน์เท่ากัน ไม่ใช่ `flex-wrap` (5 พ.ย. 2569)
+   `flex-wrap` ทำให้ใบที่เหลือตกไปอยู่ลำพังเป็นแถวละใบ — เจอจริงในหน้าฟาร์มทั้งหมด
+   สี่ใบแตกเป็น 3+1 แล้วใบสุดท้ายลอยอยู่มุมขวาคนเดียว ดูเหมือนของหลุด
+   กริดแบ่งคอลัมน์เท่ากันเสมอ ตกบรรทัดก็ยังกว้างเท่าเพื่อนและเรียงตรงแนวกัน */
+.head-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+  gap: var(--space-2);
+  /* กินที่ว่างที่เหลือของหัวหน้า — ได้สองอย่าง: ป้ายกำกับยาว ๆ ไม่ต้องตัดบรรทัด
+     (กล่องจึงเตี้ยลงและสูงเท่ากันหมด) และช่องโหว่กลางหัวหน้าหายไปด้วย */
+  flex: 1 1 auto;
+  min-width: 0;
+  /* ★ แต่ห้ามกว้างไม่จำกัด จอกว้างมาก ๆ ตัวเลขจะลอยห่างกันจนอ่านเป็นคนละเรื่อง
+     ชนเพดานเมื่อไรให้ชิดขวาเหมือนเดิม (ที่เดิมของปุ่มจัดเลย์เอาต์)
+     ★★ วัดจากของจริง: ป้ายที่ยาวที่สุดตอนนี้คือ "โรงเรือนทั้งหมด" ต้องการกล่องกว้าง 144px
+       ค่านี้ให้กล่องละ 146px สี่ใบจึงอยู่บรรทัดเดียวครบ **อย่าลดลงโดยไม่วัดใหม่**
+     ★ ตอนวัดต้องโคลนป้ายไปไว้**ในกล่องจริง** ไม่ใช่ใน body — ไม่งั้นจะไม่ได้ขนาด
+       ตัวอักษรของ `.head-stat dt` แล้ววัดได้น้อยกว่าความจริง (พลาดมาแล้วรอบหนึ่ง) */
+  max-width: 38rem;
+  margin-left: auto;
+}
+
+.head-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-2);
+  /* ★ ความกว้างมาจากคอลัมน์ของกริดแม่ ไม่ได้กำหนดที่ใบนี้อีกแล้ว
+     `min-width: 0` ยังต้องมี — ไม่งั้นใบที่ป้ายกำกับยาว (เช่น "การแจ้งเตือนรวม")
+     จะดันคอลัมน์ให้กว้างกว่าเพื่อน แล้วกริดก็ไม่เท่ากันอยู่ดี */
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.head-stat dt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  /* ป้ายกำกับยาวให้ตกบรรทัดในกล่องได้ ดีกว่าดันกล่องให้กว้างกว่าเพื่อน
+     (ทุกใบในแถวเดียวกันจะสูงเท่ากันเองอยู่แล้วเพราะ flex ยืดให้) */
+}
+
+.head-stat dt svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+.head-stat dd {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.head-stat dd b {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.page-header-subtitle {
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* กล่องสรุป (StatTile) ไม่มีวงกลมไอคอนแล้ว — ผู้ใช้สั่งเอาออกทั้งแอป
+   สไตล์ลูกกลมประจำหมวด (.stat-tile-head > .icon-chip และคลาสสี .icon-chip.is-blue/-critical/-climate)
+   ถูกลบทิ้งพร้อมกันเพราะไม่มีใครใช้แล้ว — สีประจำหมวดย้ายไปทาทั้งใบผ่าน .stat-tile.is-tint-* แทน
+   (.icon-chip ตัวหลักยังใช้อยู่ที่หัวการ์ด/ป๊อบอัพ อย่าลบ) */
+
+/* ---------- แถบสรุปท้ายไทล์ ---------- */
+.stat-tile-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding: var(--space-2) var(--space-3);
+  /* ขอบใสความหนาเท่ากับแถบที่เป็นปุ่ม (.stat-tile-pick) — แถบทุกใบจึงสูงเท่ากันเป๊ะ */
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.stat-tile-foot.is-blue {
+  background: var(--seq-100);
+  color: var(--seq-700);
+}
+
+.stat-tile-foot.is-critical {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.stat-tile-foot.is-gold {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.stat-tile-foot-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-tile-foot-stat svg {
+  flex-shrink: 0;
+}
+
+/* ป้ายบอกทาง ไม่ใช่ลิงก์ซ้อนลิงก์ — ทั้งไทล์เป็นลิงก์อยู่แล้ว */
+.stat-tile-foot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+  flex-shrink: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stat-tile-foot-link svg {
+  flex-shrink: 0;
+}
+
+/* ---------- กรอบไอคอน (icon chip) — ใช้หน้าหัวการ์ดและใน StatTile ---------- */
+.icon-chip {
+  /* สีประจำหมวดของชิป — ใบที่ไม่ระบุหมวดใช้สีทองของแบรนด์ (คลาส is-* ทับค่านี้ได้) */
+  --chip-tone: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-chip);
+  height: var(--icon-chip);
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.icon-chip.is-sm {
+  width: 32px;
+  height: 32px;
+}
+
+/* ---------- Card ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-5) var(--space-6);
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.card-headings {
+  display: block;
+  min-width: 0;
+}
+
+.card-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.card-subtitle {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  margin-top: var(--space-1);
+}
+
+/* ลิงก์ท้ายการ์ด — ดันไปชิดล่างเสมอ การ์ดในแถวเดียวกันจะได้เรียงตรงกัน */
+.card-action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.card-action:first-child {
+  border-top: 0;
+}
+
+.card-action-arrow {
+  margin-left: auto;
+}
+
+/* ---------- StatTile ---------- */
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* ไทล์แนวนอน — โครงตามแบบหน้าแรก:
+     แถว 1  วงกลมไอคอนสี + (ชื่อกล่อง / ตัวเลขใหญ่)
+     แถว 2  คำอธิบายเต็มความกว้าง (ใต้ไอคอน)
+     แถว 3  แถบสรุปพื้นอ่อน: ตัวเลขย่อยซ้าย · "ดูรายละเอียด ›" ขวา
+   ทุกแถวจองความสูงไว้ ทุกใบในแถวเดียวกันจึงบรรทัดตรงกันเป๊ะ */
+.stat-tile.is-row {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+}
+
+/* กระดานจัดเลย์เอาต์บังคับให้เนื้อหาในไทล์อยู่กึ่งกลางแนวตั้ง (board.css) ซึ่งทำให้ลูกทุกตัว
+   "ไม่ยืดเต็มความกว้าง" ➜ แถบท้ายกล่องกว้างตามข้อความจนล้นขอบใน (เกินได้ถึง 12px)
+   บังคับให้ยืดเต็มกรอบเนื้อหาเสมอ แถบจึงตรงกับขอบในของการ์ดพอดีทุกใบ */
+.stat-tile.is-row .stat-tile-foot {
+  align-self: stretch;
+}
+
+/* ด้วยเหตุผลเดียวกัน: พอเอาวงกลมไอคอนออก หัวกล่องเหลือกว้างเท่าข้อความ
+   แล้วโดนกระดานจัดกึ่งกลางจนหัวข้อกับตัวเลขเยื้องเข้ามากลางการ์ด (วัดได้ 44px)
+   ➜ ยืดเต็มกรอบเนื้อหาเหมือนแถบท้าย ทุกบรรทัดจึงชิดขอบในเดียวกันทั้งใบ */
+.stat-tile.is-row .stat-tile-head,
+.stat-tile.is-row .stat-tile-delta {
+  align-self: stretch;
+}
+
+.stat-tile-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.stat-tile.is-row .stat-tile-body {
+  display: grid;
+  /* จองความสูงของแถวคำอธิบายไว้ 2 บรรทัด — บางใบมีคำอธิบายบรรทัดเดียว ถ้าไม่จองไว้
+     เนื้อหาของใบนั้นเตี้ยกว่าเพื่อน พอจัดกึ่งกลางแนวตั้งแล้วหัวข้อ/ตัวเลขจะเลื่อนไม่ตรงกัน */
+  grid-template-rows:
+    minmax(calc(var(--text-lg) * 1.5), auto)
+    minmax(calc(var(--text-stat) * 1.4), auto);
+  /* ทุกบรรทัดเกาะขอบบนของแถวตัวเอง — ถ้าจัดกึ่งกลาง ใบที่ข้อความสั้นกว่า (1 บรรทัด)
+     จะลอยอยู่กลางแถวที่จองไว้ 2 บรรทัด แล้วบรรทัดแรกของแต่ละใบไม่ตรงกัน */
+  align-items: start;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* หัวกล่องของไทล์แนวนอนใช้ขนาดเดียวกับแบบแนวตั้ง — ทุกกล่องหัวเท่ากันหมด */
+.stat-tile.is-row .stat-tile-label {
+  font-size: var(--text-lg);
+}
+
+/* ---------- กล่องสรุปของหน้าภาพรวม: ไม่มีวงกลมไอคอนแล้ว ----------
+   ผู้ใช้สั่งเอาไอคอนออกและให้ "เด่น ๆ" ➜ ที่ว่างจากวงกลม 64px ยกให้หัวข้อกับตัวเลขทั้งหมด
+   ใหญ่กว่ากล่องสรุปของหน้าอื่นโดยตั้งใจ เพราะหน้านี้ต้องอ่านจบจากระยะไกล
+   (หน้าอื่นที่ยังใช้ไทล์แนวนอน เช่นหน้าอุณหภูมิทุกฟาร์ม ยังมีไอคอนและขนาดเดิม) */
+.lb-board[data-board="overview"] .stat-tile.is-row .stat-tile-label {
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+}
+
+.lb-board[data-board="overview"] .stat-tile.is-row .stat-tile-value {
+  font-size: calc(var(--text-stat) * 1.18);
+  font-weight: 800;
+  /* ตัวเลขใหญ่ระดับนี้ช่องไฟดูโปร่งเกินไป บีบเข้าหน่อยให้เป็นก้อนเดียว */
+  letter-spacing: -0.02em;
+}
+
+.lb-board[data-board="overview"] .stat-tile.is-row .stat-tile-unit {
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.lb-board[data-board="overview"] .stat-tile.is-row .stat-tile-delta {
+  font-size: var(--text-base);
+}
+
+/* แถวที่จองไว้ต้องโตตามขนาดใหม่ ไม่งั้นบรรทัดของแต่ละใบจะไม่ตรงกัน */
+.lb-board[data-board="overview"] .stat-tile.is-row .stat-tile-body {
+  grid-template-rows:
+    minmax(calc(var(--text-xl) * 1.5), auto)
+    minmax(calc(var(--text-stat) * 1.65), auto);
+}
+
+/* ---------- กล่องสรุปแบบเล็กของหน้ากล้อง ----------
+   ผู้ใช้สั่งว่า "ไม่ต้องใหญ่ ขอเล็ก ๆ พอ" — หน้ากล้องพระเอกคือผนังภาพ
+   ตัวเลขสี่ใบนี้เป็นข้อมูลประกอบ ไม่ควรกินความสูงเท่ากล่องสรุปของหน้าภาพรวม
+   (ลดขนาดตัวอักษร + ระยะขอบใน แล้วลดความสูงกล่องในเลย์เอาต์ตั้งต้นให้พอดีกัน) */
+.lb-board[data-board="cameras"] .stat-tile,
+.lb-board[data-board="cameras:barn"] .stat-tile {
+  padding: var(--space-3) var(--space-4);
+  /* นูนสามมิติ: ไล่สีอ่อนลงจากบนลงล่างให้ผิวโค้ง + เส้นสว่างบนสุด (มากับ --shadow-3d)
+     + เงาหลายชั้นใต้กล่อง — ใช้ token ล้วน ไม่มีค่าสีตรง ๆ ตามกติกาโปรเจกต์ */
+  border-color: var(--border-strong);
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-tint) 100%);
+  /* ซ้อนสองชุด: --shadow-raised ให้ "ขอบล่างหนา" แบบวัตถุที่ยกตัวขึ้นมาจริง ๆ
+     ส่วน --shadow-3d ให้เงาฟุ้งไกล ๆ ใต้กล่อง — ใช้อย่างเดียวจะได้แค่ลอย ไม่ได้นูน */
+  box-shadow: var(--shadow-raised), var(--shadow-3d);
+}
+
+/* ตัวเลขคือพระเอกของกล่อง ให้เข้มกว่าตัวอื่นชัด ๆ */
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-value,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-value {
+  color: var(--ink-primary);
+}
+
+.lb-board[data-board="cameras"] .stat-tile.is-row,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row {
+  gap: var(--space-1);
+}
+
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-label,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+/* ตัวเลขคือสิ่งที่ต้องเห็นก่อนเพื่อน — ใหญ่กว่าหัวข้อเท่าตัวและหนาเต็มที่
+   (ยังพอดีกล่องเตี้ย 104px เพราะหัวข้อกับตัวเลขอยู่บรรทัดเดียวกันแล้ว) */
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-value,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-value {
+  font-size: calc(var(--text-2xl) * 1.08);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* หัวข้อใช้สีประจำกล่อง — บอกหมวดด้วยสีตั้งแต่ยังไม่ทันอ่าน */
+.lb-board[data-board="cameras"] .stat-tile.is-tint .stat-tile-label,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-tint .stat-tile-label {
+  color: color-mix(in srgb, var(--tile-tone) 72%, var(--ink-primary));
+}
+
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-unit,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-unit {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-delta,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-delta {
+  font-size: var(--text-sm);
+}
+
+/* ---------- เก็บที่ว่าง: หัวข้อกับตัวเลขอยู่บรรทัดเดียวกัน ----------
+   ผู้ใช้บอกว่า "กล่องดูโล่งไป ไม่อยากให้เปลืองพื้นที่เปล่า ๆ"
+   ของเดิมวางหัวข้อไว้บรรทัดบน ตัวเลขบรรทัดล่าง ➜ ครึ่งขวาของกล่องว่างทั้งแถบ
+   เปลี่ยนเป็นสองคอลัมน์: หัวข้อชิดซ้าย · ตัวเลขชิดขวา นั่งบรรทัดฐานเดียวกัน
+   กล่องจึงเตี้ยลงหนึ่งบรรทัดและเต็มตาทั้งใบ */
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-body,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-body {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto;
+  align-items: baseline;
+  column-gap: var(--space-3);
+}
+
+/* ตัวเลขห้ามตกบรรทัด — ตกเมื่อไรความสูงกล่องจะไม่เท่ากันทั้งแถว */
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-value,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-value {
+  white-space: nowrap;
+}
+
+/* หัวข้อยาวกว่าที่มี ตัดบรรทัดได้ 2 บรรทัด แล้วค่อยตัดด้วย … */
+.lb-board[data-board="cameras"] .stat-tile.is-row .stat-tile-label,
+.lb-board[data-board="cameras:barn"] .stat-tile.is-row .stat-tile-label {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ไทล์ที่กดได้ (ใช้เป็นตัวกรอง) — หน้าตาเท่าการ์ดปกติ แต่นูนขึ้นตอน hover */
+.stat-tile-button {
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.stat-tile-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-float);
+  border-color: var(--border-strong);
+}
+
+.stat-tile-button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- ไทล์ที่มีปุ่มรองอยู่ในใบเดียวกัน ----------
+   กดที่ตัวไทล์ = ไปหน้าปลายทาง (ลิงก์เป็นแผ่นใสคลุมทั้งใบ)
+   กดปุ่มรอง = เปิดป๊อบอัพเลือกฟาร์ม — ปุ่มลอยอยู่เหนือแผ่นใสจึงไม่ไปโดนลิงก์
+   (ทำแบบนี้แทนการเอาปุ่มไปซ้อนในลิงก์ ซึ่งเป็น HTML ที่ไม่ถูกต้อง) */
+.stat-tile.has-cover {
+  position: relative;
+}
+
+.stat-tile-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.stat-tile-cover:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ปุ่มรอง — แถบท้ายกล่อง หน้าตาเดียวกับแถบสรุป (.stat-tile-foot) แต่กดได้
+   ลอยอยู่เหนือแผ่นลิงก์ด้วย z-index จึงกดแยกกันได้: กดที่อื่น = ไปหน้ารวม · กดแถบนี้ = ป๊อบอัพ */
+.stat-tile-pick {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border: 1px dashed currentColor;
+  font-family: var(--font-sans);
+  text-align: left;
+  transition: transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.stat-tile-pick svg {
+  flex-shrink: 0;
+}
+
+.stat-tile-pick:hover {
+  transform: translateY(-1px);
+  border-style: solid;
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.stat-tile-pick:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* กล่องสรุปบนกระดานเรียงจากขอบบนเท่ากันทุกใบ (เนื้อหาจองความสูงของทุกแถวไว้แล้ว) */
+.lb-body > .stat-tile.is-row {
+  align-items: stretch;
+}
+
+/* จอที่กล่องสรุปแคบลง (< 1280px) — ชื่อกล่องยาว ๆ ตกเป็น 2 บรรทัดบางใบ ไม่ตกบางใบ
+   ➜ จองแถวหัวกล่องไว้ 2 บรรทัดให้ทุกใบเท่ากัน ตัวเลขและบรรทัดล่างจึงยังตรงกันเป๊ะ */
+@media (max-width: 1279px) {
+  /* จอที่กล่องสรุปแคบลง — ชื่อกล่องยาว ๆ ตกเป็น 2 บรรทัดบางใบ ไม่ตกบางใบ
+     ➜ จองแถวหัวกล่องไว้ 2 บรรทัดให้ทุกใบเท่ากัน ตัวเลขและบรรทัดล่างจึงยังตรงกันเป๊ะ */
+  .lb-board[data-board="overview"] .stat-tile.is-row .stat-tile-body {
+    grid-template-rows:
+      minmax(calc(var(--text-xl) * 3), auto)
+      minmax(calc(var(--text-stat) * 1.5), auto);
+  }
+
+  /* กล่องแคบลงแต่ตัวเลขยังใหญ่ — ลดขนาดตัวเลขลงหน่อยไม่ให้ล้นขอบการ์ด */
+  .lb-board[data-board="overview"] .stat-tile.is-row .stat-tile-value {
+    font-size: var(--text-stat);
+  }
+
+  /* แถบท้ายกล่องแคบตามการ์ด — ซ่อนคำว่า "ดูรายละเอียด" เหลือลูกศร และย่อตัวหนังสือลงหนึ่งขั้น
+     ตัวเลขย่อยทางซ้ายจึงยังอ่านครบ ไม่โดนตัดกลางคำ */
+  .lb-board[data-board="overview"] .stat-tile-foot-word {
+    display: none;
+  }
+
+  .lb-board[data-board="overview"] .stat-tile-foot {
+    padding-inline: var(--space-2);
+    font-size: var(--text-xs);
+  }
+}
+
+.stat-tile-button.is-active {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.stat-tile-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.stat-tile-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* ชื่อกล่อง + ป้ายบอกที่มาของข้อมูล เรียงบรรทัดเดียวกันถ้าพอ ไม่พอให้ป้ายตกบรรทัดใหม่
+   (ไม่ใช้ nowrap เพราะบนจอแคบชื่อกล่องยาว ๆ กับป้ายจะเบียดกันจนอ่านไม่ออก) */
+.stat-tile-labels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* หัวกล่อง (ชื่อตัวชี้วัด) — ใหญ่และเข้มพอให้อ่านจบในแวบเดียว และเท่ากันทุกกล่อง */
+.stat-tile-label {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.stat-tile-value {
+  white-space: nowrap;
+  /* flex + baseline: ตัวเลขกับหน่วยนั่งบนเส้นเดียวกันโดยไม่เกิดกล่องบรรทัดซ้อน
+     (แบบ inline เดิมทำให้หน่วยภาษาไทยดันความสูงจนตัวเลขโดนตัดขอบบน) */
+  display: flex;
+  align-items: baseline;
+  font-size: var(--text-stat);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+/* ข้อความแทนตัวเลข (ไทล์ที่เป็นทางเข้าอย่างเดียว) — ขนาดปกติ ไม่ใช่ตัวเลขใหญ่ */
+.stat-tile-hint {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.stat-tile-unit {
+  line-height: 1.5;
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--ink-secondary);
+  margin-left: var(--space-1);
+}
+
+.stat-tile-delta {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.stat-tile-delta.is-good {
+  color: var(--status-good-text);
+}
+
+.stat-tile-delta.is-bad {
+  color: var(--status-critical-text);
+}
+
+.stat-tile-delta.is-neutral {
+  color: var(--ink-secondary);
+}
+
+/* ---------- StatusBadge ---------- */
+/* ป้ายสถานะ — ขนาดและตำแหน่งต้องเหมือนกันทุกที่ในแอป (ผู้ใช้แจ้ง 1 ก.ย. 2569)
+   สูง 32px · ตัวหนังสือ --text-sm · ระยะใน 4/12px เท่ากันหมด ห้ามหน้าไหนตั้งใหม่
+   (ที่มีอยู่ตอนนี้มีแต่การจัดตำแหน่ง เช่น margin-left: auto — ขนาดไม่มีใครทับ) */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  /* ข้อความอยู่กลางป้ายเสมอ ไม่ว่าใครจะยืดป้ายให้กว้างเท่าไร */
+  justify-content: center;
+  gap: var(--space-1);
+  /* **ห้ามล้นกรอบของพ่อแม่** — การ์ดพัดลมในหน้าสภาพแวดล้อมกว้าง 118px
+     แต่ป้าย "ไม่มีสัญญาณ" กว้าง 120px จึงโผล่พ้นขอบการ์ดทั้งซ้ายและขวา */
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  /* **ห้ามยืดสูงตามพี่น้องในแถว** — ในกล่อง flex/grid ที่ไม่ได้ตั้ง align-items ไว้
+     ป้ายจะยืดเต็มความสูงของแถว (เจอที่ .hd-bar-pct หน้าสุขภาพสุกร สูง 34px
+     ทั้งที่ที่อื่นสูง 32px) ➜ ตรึงให้อยู่กึ่งกลางเสมอ ขนาดและตำแหน่งจะได้เท่ากันทุกที่ */
+  align-self: center;
+}
+
+/* **ไอคอนห้ามถูกบีบ** — ป้ายสถานะต้องมีทั้งไอคอนและข้อความเสมอ ห้ามสื่อด้วยสีอย่างเดียว
+   (กติกาใน CLAUDE.md) ในกล่องที่แคบกว่าป้าย ไอคอนเคยถูกบีบจนกว้าง **0px**
+   เหลือแต่ข้อความกับสีพื้น ซึ่งผิดกติกาข้อนั้นตรง ๆ โดยไม่มีใครเห็น
+   ➜ ถ้ากล่องแคบเกินไป ให้ไปขยายกล่อง อย่าปล่อยให้ไอคอนหาย */
+.status-badge svg {
+  flex-shrink: 0;
+}
+
+.status-badge.is-good {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.status-badge.is-warning {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+}
+
+.status-badge.is-serious {
+  background: var(--status-serious-bg);
+  color: var(--status-serious-text);
+}
+
+.status-badge.is-critical {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.status-badge.is-offline {
+  background: var(--status-offline-bg);
+  color: var(--status-offline-text);
+}
+
+/* ---------- แถบนำทาง (breadcrumb) ----------
+   ใช้ร่วมกันทุกหน้าที่มีหัวเรื่องแบบเดียวกัน — หน้าฟาร์มทั้งหมดกับหน้าโรงเรือน
+   **ทั้งสองหน้าต้องมีแถบนี้เหมือนกัน** ไม่งั้นหัวเรื่องของหน้าที่ไม่มีจะสูงขึ้นไป 24px
+   แล้วปุ่มกับแถบสรุปจะกระโดดเวลาสลับสองหน้าไปมา */
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.crumbs a {
+  color: var(--ink-secondary);
+  font-weight: 600;
+}
+
+.crumbs a:hover {
+  color: var(--accent-strong);
+}
+
+.crumbs svg {
+  color: var(--ink-muted);
+}
+
+.crumbs [aria-current] {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+/* บล็อกเต็มความกว้างที่วางเรียงลงมาเป็นชั้น ๆ
+   (กล่องแถว .tile-grid/.card-grid ถูกแทนด้วยกระดานจัดเลย์เอาต์แล้ว — ดู components/board/) */
+.stack-block {
+  margin-bottom: var(--space-6);
+}
+
+/* ---------- ตารางที่กว้างเกินจอ — ให้เลื่อนในตัวเอง ห้ามดันทั้งหน้าให้ scroll ---------- */
+/* ---------- ปุ่มเฟือง (components/ui/SettingsButton.jsx) ----------
+   หน้าตาเดียวกันทุกโครงหน้า จึงอยู่ที่นี่ ไม่ใช่ในไฟล์ของแต่ละเลย์เอาต์ */
+.gear-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  transition: transform 0.2s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.gear-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  /* เฟืองหมุนตอน hover — ลูกเล่นเดียวของปุ่มนี้ ปิดได้ที่ "ลดการเคลื่อนไหว" ในหน้าตั้งค่า */
+  transform: rotate(45deg);
+}
+
+.gear-btn.is-current {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.gear-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- legend ที่เราวาดเอง (components/ui/ChartLegend.jsx) ---------- */
+.chart-legend {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.chart-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.chart-legend-dot {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  border-radius: 999px;
+}
+
+/* ---------- legend ของกราฟ (Recharts) ----------
+   Recharts ทาสี series ลงบนข้อความ legend มาให้เอง แต่กติกาใน docs/DESIGN.md บอกว่า
+   "ตัวหนังสือห้ามใส่สี series" — ให้จุดสีข้างหน้าเป็นตัวบอก series แทน
+   Recharts ใส่สีมาเป็น inline style จึงต้องใช้ !important เขียนทับ (ที่เดียวในแอป) */
+.recharts-legend-item-text {
+  color: var(--ink-secondary) !important;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+  min-width: 620px;
+}
+
+.table-scroll td,
+.table-scroll th {
+  white-space: nowrap;
+}
+
+/* ---------- รายการแจ้งเตือน ---------- */
+.alert-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.alert-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  margin: 0 calc(var(--space-3) * -1);
+  border-radius: var(--radius-md);
+  color: var(--ink-secondary);
+}
+
+.alert-row:hover {
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+}
+
+.alert-message {
+  font-size: var(--text-base);
+}
+
+.alert-time {
+  grid-column: 2;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ---------- ปุ่มย้อนกลับ (BackButton) ----------
+   อยู่ที่ส่วนหัวของทุกโครงหน้า จึงต้องหน้าตาเดียวกันทุกที่
+   เป็นลูกศรอย่างเดียว: วงกลม 40×40 เท่าวงแหวนโลโก้ที่อยู่ข้างกัน จะได้สูงตรงกันพอดี
+   (ขนาดตรึงไว้เป็นพิกเซล ไม่ใช้ padding เพราะปุ่มต้องกลมเป๊ะไม่ว่าไอคอนจะเปลี่ยนขนาด) */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  color: var(--ink-secondary);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.back-btn:hover {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.back-btn:active {
+  transform: translateY(2px);
+}
+
+.back-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ลูกศรของไอคอน chevron ชี้ไปทางขวา จึงต้องหมุนให้ชี้ย้อนกลับ */
+.back-btn-icon {
+  transform: rotate(180deg);
+}
+
+/* ---------- ปุ่มกลับหน้าแรก (components/ui/HomeButton.jsx) ----------
+   หน้าตาเดียวกับปุ่มย้อนกลับ เพราะอยู่ข้างกันและเป็นการนำทางเหมือนกัน
+   ต่างกันที่ไอคอน: ลูกศร = ถอยหนึ่งก้าว · บ้าน = กระโดดกลับจุดตั้งต้น */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: transform 0.12s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.home-btn svg {
+  flex-shrink: 0;
+}
+
+.home-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.home-btn:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.home-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* จอแคบเหลือแค่ไอคอนบ้าน — title กับไอคอนบอกความหมายได้อยู่แล้ว */
+@media (max-width: 899px) {
+  .home-btn-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+/* จอมือถือ: ไม่มีตัวหนังสือในปุ่มแล้ว แต่ยังกว้าง 52px เพราะเป็นแคปซูลที่เผื่อที่ให้คำว่า
+   "หน้าแรก" อยู่ — กลายเป็นปุ่มไอคอนที่กว้างกว่าเพื่อนบนแถบเดียวกันโดยไม่มีเหตุผล
+   ย่อเป็นวงกลม 40×40 เท่าปุ่มย้อนกลับที่อยู่ติดกัน — **เป้านิ้วเท่าเดิม ไม่ได้เล็กลง**
+   ตัดแต่ที่ว่างของคำที่ซ่อนไปแล้ว 12px ที่ได้คืนเป็นส่วนหนึ่งของที่ที่ทำให้แถบบน
+   ไม่ล้นจอที่ความกว้าง 375px (ดูเหตุผลเต็มที่ .app-bar ใน layout/AppLayout.css)
+   ปุ่มนี้อยู่บนแถบบนของทุกโครงหน้า จึงย่อพร้อมกันหมด ไม่ใช่เฉพาะโครงเดียว */
+@media (max-width: 480px) {
+  .home-btn {
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+  }
+}
+
+/* ---------- กล่องสรุปสีอ่อนเรืองแสง (prop `tone` ของ StatTile) ----------
+   ตั้งแต่เอาวงกลมไอคอนออก สีประจำหมวดย้ายมาทาทั้งใบแทน:
+   พื้นไล่สีอ่อนจากบนลงล่าง + ขอบสีเดียวกัน + เงาสามมิติ + แสงเรืองสีหมวดใต้กล่อง
+   ทุกสีผสมจาก token ด้วย color-mix จึงเปลี่ยนตามโหมดสีเองทั้งชุด
+   (ตัวหนังสือยังอยู่บนพื้นที่อ่อนมาก ๆ คอนทราสต์จึงไม่ตก) */
+.stat-tile.is-tint {
+  --tile-tone: var(--accent);
+  /* ต้องมี เพื่อให้เส้นสันขอบบน (::before) เกาะขอบการ์ดใบนี้ ไม่ใช่ใบอื่นที่อยู่นอกกว่า */
+  position: relative;
+  background-image: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--tile-tone) 15%, var(--bg-surface)) 0%,
+    color-mix(in srgb, var(--tile-tone) 5%, var(--bg-surface)) 46%,
+    var(--bg-surface) 100%
+  );
+  border-color: color-mix(in srgb, var(--tile-tone) 34%, var(--border));
+  box-shadow: var(--shadow-3d),
+    0 0 0 1px color-mix(in srgb, var(--tile-tone) 12%, transparent),
+    0 10px 26px color-mix(in srgb, var(--tile-tone) 20%, transparent);
+}
+
+/* เส้นสีเข้มบาง ๆ ที่ขอบบน — ทำให้กล่องดูเป็นแผ่นหนามีสัน ไม่ใช่พื้นสีแบน */
+.stat-tile.is-tint::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--tile-tone) 62%, transparent),
+    transparent
+  );
+}
+
+/* ชี้แล้วเรืองแรงขึ้นและลอยสูงขึ้น (เฉพาะใบที่กดได้) */
+.stat-tile.is-tint.stat-tile-button:hover,
+.stat-tile.is-tint.stat-tile-button:focus-within {
+  border-color: color-mix(in srgb, var(--tile-tone) 55%, var(--border));
+  box-shadow: var(--shadow-3d-hover),
+    0 0 0 1px color-mix(in srgb, var(--tile-tone) 22%, transparent),
+    0 16px 36px color-mix(in srgb, var(--tile-tone) 32%, transparent);
+}
+
+.stat-tile.is-tint-blue {
+  --tile-tone: var(--seq-400);
+}
+
+.stat-tile.is-tint-critical {
+  --tile-tone: var(--status-critical);
+}
+
+.stat-tile.is-tint-climate {
+  --tile-tone: var(--green);
+}
+
+.stat-tile.is-tint-gold {
+  --tile-tone: var(--accent-bright);
+}
+
+/* ================= แถบบอกสิทธิ์ (AdminNote) =================
+   วางเหนือกลุ่มควบคุมที่ถูกปิดเพราะสิทธิ์ไม่ถึง — ไม่ใช่ป้ายสถานะของข้อมูล
+   จึงใช้โทนกลาง ๆ (พื้นจม + ขอบปกติ) ไม่ใช่สีเตือน สิ่งนี้ไม่ใช่ความผิดปกติของฟาร์ม */
+.admin-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.admin-note .icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--ink-muted);
+}
+
+.admin-note b {
+  color: var(--ink-primary);
+}
+
+/* ปุ่ม/ช่องที่ปิดเพราะสิทธิ์ไม่ถึง — หรี่ลงแต่ยังอ่านออก (ไม่ใช่จางจนหาไม่เจอ)
+   และเปลี่ยนเคอร์เซอร์เป็น not-allowed เพื่อบอกตั้งแต่ยังไม่ทันกด */
+.is-locked,
+button.is-locked,
+.is-locked:hover {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ---------- DataSourceBadge ---------- */
+/* ป้ายบอกที่มาของข้อมูล — ตั้งใจให้เบากว่า StatusBadge เพราะไม่ใช่สถานะของฟาร์ม
+   แต่เป็นข้อมูลกำกับว่าเลขที่เห็นเชื่อได้แค่ไหน */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.source-badge.is-live {
+  background: var(--green-tint);
+  border-color: var(--green);
+  color: var(--green-strong);
+}
+
+.source-badge.is-demo {
+  background: var(--bg-sunken);
+  color: var(--ink-secondary);
+}
+
+/* ผสมกัน — เบากว่า is-live แต่เด่นกว่า is-demo เพราะเป็นตัวเลขที่ "บางส่วนเชื่อได้"
+   ใช้โทนทองของแบรนด์ ไม่ใช่สีเตือน เพราะไม่ใช่ความผิดพลาด แค่ต้องอ่านให้ระวัง */
+.source-badge.is-mixed {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+/* บันทึกในเครื่องนี้ — คนกรอกเองจริง (ไม่ใช่ของสมมติ) แต่ยังไม่เข้าระบบกลาง
+   จึงเบากว่า is-mixed ชั้นหนึ่ง: มีกรอบให้เห็นว่าไม่ใช่ของตัวอย่าง แต่ไม่ใช้สีแบรนด์ */
+.source-badge.is-local {
+  background: var(--bg-sunken);
+  border-color: var(--border-strong);
+  color: var(--ink-secondary);
+}
+
+.source-badge.is-compact {
+  padding: var(--space-1);
+}
+
+/* ---------- คำอธิบายป้ายบอกที่มาของข้อมูล ----------
+   ไม่ใช่กล่องเตือน (ไม่ได้มีอะไรพัง) จึงเป็นบรรทัดข้อความเบา ๆ ไม่ใช่การ์ด
+   แต่ต้องอ่านออกจริง — ใช้ ink-secondary ไม่ใช่สีจาง ๆ ที่คนเลื่อนผ่าน */
+.source-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.source-note svg {
+  flex-shrink: 0;
+  /* ไอคอนนั่งบนบรรทัดแรกพอดี ไม่ลอยขึ้นไปเหนือข้อความ */
+  margin-top: 0.15em;
+  color: var(--accent);
+}
+
+/* ---------- แถบเตือนเมื่อต่อหลังบ้านไม่ได้ ---------- */
+/* หลังบ้านล่ม = ฟาร์มที่มีเซนเซอร์จริงหายไปจากรายการเงียบ ๆ
+   ถ้าไม่บอก คนดูจะนึกว่าฟาร์มนั้นถูกลบ ไม่ใช่ว่าระบบต่อไม่ติด */
+.live-offline-note {
+  display: flex;
+  /* ไม่ตัดแถว — ข้อความยาวต้องตัดบรรทัดข้างไอคอน ไม่ใช่ปล่อยไอคอนค้างอยู่บรรทัดบนคนเดียว */
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--status-warning);
+  border-radius: var(--radius-lg);
+  background: var(--status-warning-bg);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--status-warning-text);
+}
+
+.live-offline-note svg {
+  flex-shrink: 0;
+}
+
+/* ---------- ปุ่ม "คำอธิบาย" (components/ui/NotesToggle.jsx) ----------
+   การ์ดที่มีตัวเลขเยอะจะรกทันทีถ้าโชว์บรรทัดอธิบายใต้ทุกค่าพร้อมกัน
+   ซ่อนไว้ก่อนแล้วให้กดกางเมื่อต้องการ — ตัวเลขกับป้ายสถานะยังอยู่เสมอ */
+
+.notes-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.notes-toggle:hover {
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.notes-toggle.is-on {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.notes-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ปุ่มวงกลม Voice AI บนแถบบน (`.va-dot`) ถูกถอดออกแล้ว — ผู้ใช้สั่งให้ย้ายทั้งปุ่ม
+   ไปอยู่บนแถบลอยล่างจอ (16 ก.ย. 2569) หน้าตาปุ่มชุดใหม่อยู่ใน components/dock/dock.css */
+
+

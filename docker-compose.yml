@@ -1,0 +1,236 @@
+# SWINE SYNC — ระบบหลังบ้าน (ดูเหตุผลการออกแบบใน docs/BACKEND.md ข้อ 13)
+#
+# ยังไม่ครบตามเอกสาร — ตอนนี้มี db + api + bridge + web
+# ที่ยังไม่มี: minio (ภาพกล้อง) · auth
+#
+# **ทุกบริการตั้ง restart: unless-stopped** — Docker Desktop เปิดเมื่อไหร่ ทุกอย่างขึ้นเอง
+# ส่วน Node-RED ไม่ได้อยู่ในนี้ (รันตรงบนเครื่อง) มี LaunchAgent คุมให้แทน
+# ดู docs/RUNBOOK.md หัวข้อ "ทำให้ระบบเปิดเองตลอดเวลา"
+#
+# หมายเหตุ: InfluxDB ที่ Node-RED เขียนอยู่ **ไม่ได้อยู่ใน compose นี้**
+# มันเป็น container ที่รันแยกอยู่แล้ว เราแค่อ่านผ่าน host.docker.internal
+
+services:
+  db:
+    image: timescale/timescaledb-ha:pg16
+    container_name: swine-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      # ทุกอย่างในระบบนี้คิดเป็นเวลาไทย — ตั้งที่ฐานด้วยกันลืม
+      TZ: Asia/Bangkok
+    ports:
+      # **ผูกกับ 127.0.0.1 เท่านั้น** — ของเดิมเขียน "5432:5432" ซึ่ง Docker แปลว่า 0.0.0.0
+      # ฐานข้อมูลจึงต่อได้จากทุกเครื่องในวงแลน (ทดสอบแล้วต่อติดจริง 1 ก.ย. 2569)
+      # ไม่มีใครนอกเครื่องนี้ต้องต่อฐานข้อมูลตรง ๆ — api อยู่ในเครือข่ายของ Docker ต่อผ่าน db:5432 เอง
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/home/postgres/pgdata/data
+    healthcheck:
+      # ไม่มีอันนี้ api จะขึ้นก่อน db พร้อมแล้วตายทันที (ข้อ 13.1 ของ BACKEND.md)
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: ./server
+    container_name: swine-api
+    restart: unless-stopped
+    # migration รันตอนบูตเสมอ — `docker compose up` แล้วต้องใช้งานได้เลย
+    command: sh -c "npm run migrate up && node src/index.js"
+    environment:
+      NODE_ENV: production
+      TZ: Asia/Bangkok
+      # ═══ ฐานข้อมูลอยู่ที่ไหน ═══
+      # ค่าตั้งต้น = ฐานในเครื่องนี้ · ตั้ง REMOTE_DATABASE_URL ใน .env เพื่อชี้ไปฐานเครื่องอื่น
+      # 24 ก.ย. 2569 ย้ายฐานจริงไปอยู่กล่อง box-mew ที่เปิดตลอด เครื่องนี้เหลือหน้าที่ส่งข้อมูลเซนเซอร์เข้าไป
+      # (ดู docs/RUNBOOK.md หัวข้อ "ย้ายระบบไปกล่องที่เปิดตลอด")
+      DATABASE_URL: ${REMOTE_DATABASE_URL:-postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}}
+      API_PORT: 3000
+      COMPRESS_AFTER_DAYS: ${COMPRESS_AFTER_DAYS:-7}
+      RAW_RETENTION_DAYS: ${RAW_RETENTION_DAYS:-90}
+      # AI ของฟาร์ม — กุญแจอยู่ที่ api เท่านั้น หน้าเว็บไม่เคยเห็นค่านี้
+      CPF_AI_URL: ${CPF_AI_URL:-https://ota.plotnexuslab.com/ai/api}
+      CPF_AI_API_KEY: ${CPF_AI_API_KEY:-}
+      CPF_AI_USER_ID: ${CPF_AI_USER_ID:-}
+      CPF_AI_USER_MAP: ${CPF_AI_USER_MAP:-}
+      CPF_AI_LEVEL: ${CPF_AI_LEVEL:-1}
+      # ระบบวอยซ์ของอีกทีม (Farmy) — บัญชีอยู่ที่ api เท่านั้น เหตุผลในหัว modules/farmy/route.js
+      FARMY_URL: ${FARMY_URL:-https://fern.plotnexuslab.com}
+      FARMY_USERNAME: ${FARMY_USERNAME:-}
+      FARMY_PASSWORD: ${FARMY_PASSWORD:-}
+      # ส่งสรุป/แจ้งเตือนเข้า LINE OA (T1.275) — กุญแจอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น
+      # LINE_DRY_RUN=1 คือโหมดซ้อม (ค่าตั้งต้น) ประกอบข้อความและลง log แต่ไม่ส่งออกจริง
+      LINE_CHANNEL_ACCESS_TOKEN: ${LINE_CHANNEL_ACCESS_TOKEN:-}
+      # ใช้ตรวจลายเซ็นของข้อความที่ LINE ยิงเข้ามาที่ /api/line/webhook (T1.276)
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET:-}
+      LINE_TARGET: ${LINE_TARGET:-broadcast}
+      LINE_DRY_RUN: ${LINE_DRY_RUN:-1}
+      LINE_NOTIFY: ${LINE_NOTIFY:-1}
+      LINE_DAILY_AT: ${LINE_DAILY_AT:-07:30}
+      LINE_MAX_PER_DAY: ${LINE_MAX_PER_DAY:-20}
+      LINE_ALERT_MAX_AGE_MIN: ${LINE_ALERT_MAX_AGE_MIN:-60}
+      LINE_ALERT_LEVELS: ${LINE_ALERT_LEVELS:-critical,serious,warning}
+      LINE_ALERT_COOLDOWN_HOURS: ${LINE_ALERT_COOLDOWN_HOURS:-12}
+      DASHBOARD_URL: ${DASHBOARD_URL:-}
+      # บัญชีผู้ดูแลระบบคนแรก — ใช้ครั้งเดียวตอน `npm run seed:admin`
+      # (ไม่มีค่าตั้งต้นให้โดยตั้งใจ ดูเหตุผลใน server/src/db/seed/admin.js)
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_DISPLAY_NAME: ${ADMIN_DISPLAY_NAME:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      # ทางกู้คืนเมื่อลืมรหัสแอดมิน — ส่งค่าตอนรันคำสั่งเท่านั้น ไม่ต้องเก็บใน .env
+      #   docker compose exec -e RESET_USER=admin -e RESET_PASSWORD='รหัสใหม่' api npm run reset:password
+      RESET_USER: ${RESET_USER:-}
+      RESET_PASSWORD: ${RESET_PASSWORD:-}
+      # ═══ ส่งคำสั่งไปตู้ควบคุม/PLC (T1.284 · T1.310) ═══
+      # hold   = ตรวจครบทุกด่านแล้วเก็บเข้าคิว ไม่ส่งไปไหน (ค่าตั้งต้น · ปลอดภัยที่สุด)
+      # outbox = เปิดกล่องขาออกให้ Node-RED มาดึงไป publish ให้ PLC เอง
+      #          ★ ต้องตั้ง CONTROL_OUTBOX_TOKEN ด้วย ไม่งั้นเส้นทางนั้นปิดสนิท (503)
+      # mqtt/http = ให้ API เป็นคน publish เอง — **ยังไม่ได้เขียนตัวส่ง** (ตอบ 501)
+      #             ต้องได้ topic/payload จากเจ้าของระบบก่อน ห้ามเดาเอง
+      #
+      # ★ สองบรรทัดนี้เคยตกหล่น — ตั้งค่าใน .env แล้วคอนเทนเนอร์ไม่เห็น
+      #   รีสตาร์ตแล้วยังเป็น hold เหมือนเดิมโดยไม่มีอะไรบอกว่าทำไม
+      CONTROL_TRANSPORT: ${CONTROL_TRANSPORT:-hold}
+      CONTROL_OUTBOX_TOKEN: ${CONTROL_OUTBOX_TOKEN:-}
+      # โดเมนของหน้าเว็บที่วางแยกไว้คนละที่กับ API (คั่นด้วยจุลภาค)
+      # ปกติเว้นว่าง — หน้าเว็บกับ API อยู่โดเมนเดียวกันผ่าน nginx จึงไม่ต้องใช้ CORS
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      # ที่วางภาพนิ่งคำทำนายที่ห้องแล็บเขียนไว้ (weather/lab/predict.py)
+      MODEL_SNAPSHOT_DIR: /app/model-snapshots
+    volumes:
+      # ═══ อ่านอย่างเดียว และเป็น "ไฟล์" ไม่ใช่ "ฐานข้อมูล" โดยตั้งใจ ═══
+      # คลังโมเดลใน weather/ แยกขาดจากแดชบอร์ด (คนละ compose คนละฐาน) เพื่อให้
+      # ล้างคลังทิ้งได้โดยไม่กระทบของจริง ถ้า api ต่อ wx-db ตรง ๆ ความแยกขาดนั้นหายไป
+      # ผูกเป็นโฟลเดอร์อ่านอย่างเดียวแทน — ปิดคลังทั้งก้อนแล้วหน้าเว็บยังแสดงคำทำนาย
+      # ครั้งล่าสุดได้ พร้อมบอกว่าเก่ากี่นาที
+      - ./weather/lab/models:/app/model-snapshots:ro
+    ports:
+      # **ผูกกับ 127.0.0.1 เท่านั้น** ด้วยเหตุผลเดียวกับ db — หลังบ้านยังไม่มี auth
+      # (docs/RUNBOOK.md เตือนไว้เองสี่จุดว่าห้ามเปิดพอร์ตนี้ออกนอกเครื่อง)
+      # หน้าเว็บไม่ได้เรียกพอร์ตนี้ตรง ๆ อยู่แล้ว — เรียก /api ที่ web:80 แล้ว nginx ส่งต่อ
+      # ไปที่ api:3000 ผ่านเครือข่ายของ Docker ปิดพอร์ตนี้จึงไม่กระทบการใช้งานจากมือถือ
+      - "127.0.0.1:${API_PORT:-3000}:3000"
+    depends_on:
+      db: { condition: service_healthy }
+
+  bridge:
+    build: ./server
+    container_name: swine-bridge
+    restart: unless-stopped
+    command: node src/bridge/index.js
+    environment:
+      NODE_ENV: production
+      TZ: Asia/Bangkok
+      # ═══ ฐานข้อมูลอยู่ที่ไหน ═══
+      # ค่าตั้งต้น = ฐานในเครื่องนี้ · ตั้ง REMOTE_DATABASE_URL ใน .env เพื่อชี้ไปฐานเครื่องอื่น
+      # 24 ก.ย. 2569 ย้ายฐานจริงไปอยู่กล่อง box-mew ที่เปิดตลอด เครื่องนี้เหลือหน้าที่ส่งข้อมูลเซนเซอร์เข้าไป
+      # (ดู docs/RUNBOOK.md หัวข้อ "ย้ายระบบไปกล่องที่เปิดตลอด")
+      DATABASE_URL: ${REMOTE_DATABASE_URL:-postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}}
+      INFLUX_URL: ${INFLUX_URL}
+      INFLUX_ORG: ${INFLUX_ORG}
+      INFLUX_BUCKET: ${INFLUX_BUCKET}
+      INFLUX_MEASUREMENT: ${INFLUX_MEASUREMENT}
+      INFLUX_TOKEN: ${INFLUX_TOKEN}
+      BRIDGE_INTERVAL_SEC: ${BRIDGE_INTERVAL_SEC:-30}
+      BRIDGE_BACKFILL_DAYS: ${BRIDGE_BACKFILL_DAYS:-60}
+      # บทบาทของสะพาน — full (ค่าตั้งต้น) · sync (อ่าน Influx เท่านั้น) · alerts (คิดเหตุ+ส่งไลน์)
+      # ตั้ง sync บนเครื่องนี้เมื่อย้ายฐานไปอยู่กล่อง box-mew แล้ว ดู docs/RUNBOOK.md
+      BRIDGE_ROLE: ${BRIDGE_ROLE:-full}
+      # ส่งสรุป/แจ้งเตือนเข้า LINE OA (T1.275) — กุญแจอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น
+      # LINE_DRY_RUN=1 คือโหมดซ้อม (ค่าตั้งต้น) ประกอบข้อความและลง log แต่ไม่ส่งออกจริง
+      LINE_CHANNEL_ACCESS_TOKEN: ${LINE_CHANNEL_ACCESS_TOKEN:-}
+      # ใช้ตรวจลายเซ็นของข้อความที่ LINE ยิงเข้ามาที่ /api/line/webhook (T1.276)
+      LINE_CHANNEL_SECRET: ${LINE_CHANNEL_SECRET:-}
+      LINE_TARGET: ${LINE_TARGET:-broadcast}
+      LINE_DRY_RUN: ${LINE_DRY_RUN:-1}
+      LINE_NOTIFY: ${LINE_NOTIFY:-1}
+      LINE_DAILY_AT: ${LINE_DAILY_AT:-07:30}
+      LINE_MAX_PER_DAY: ${LINE_MAX_PER_DAY:-20}
+      LINE_ALERT_MAX_AGE_MIN: ${LINE_ALERT_MAX_AGE_MIN:-60}
+      LINE_ALERT_LEVELS: ${LINE_ALERT_LEVELS:-critical,serious,warning}
+      LINE_ALERT_COOLDOWN_HOURS: ${LINE_ALERT_COOLDOWN_HOURS:-12}
+      DASHBOARD_URL: ${DASHBOARD_URL:-}
+      # ═══ ตัวเฝ้าระวังว่าเครื่องหลักยังอยู่ไหม (T1.285) ═══
+      # ตั้ง PRIMARY_HEALTH_URL บน **เครื่องที่ไม่ใช่เครื่องหลัก** เท่านั้น
+      # ไม่ตั้ง = ไม่ทำงาน (เครื่องหลักไม่ต้องเฝ้าตัวเอง)
+      # ไม่ใช้ฐานข้อมูลเลย จึงยังเตือนได้ตอนฐานล่ม ซึ่งเป็นตอนที่ต้องการมันที่สุด
+      PRIMARY_HEALTH_URL: ${PRIMARY_HEALTH_URL:-}
+      PRIMARY_NAME: ${PRIMARY_NAME:-เครื่องหลัก}
+      PRIMARY_CHECK_MIN: ${PRIMARY_CHECK_MIN:-5}
+      # ดับยาวแล้วเตือนซ้ำทุกกี่นาที — 1440 = วันละครั้ง
+      PRIMARY_REMIND_MIN: ${PRIMARY_REMIND_MIN:-1440}
+      # สวิตช์ของตัวเฝ้าเอง — จงใจแยกจาก LINE_NOTIFY (เหตุผลอยู่ใน watchdog/primary.js)
+      PRIMARY_WATCH_NOTIFY: ${PRIMARY_WATCH_NOTIFY:-1}
+      # ใครมีสิทธิ์เปิดเครื่องหลัก — ข้อความแจ้งเตือนจะบอกให้ไปแจ้งคนนี้ ไม่ใช่ให้ไปกดเอง
+      PRIMARY_OWNER: ${PRIMARY_OWNER:-}
+      # ตัวเฝ้า "ข้อมูลยังไหลอยู่ไหม" (T1.295) — ทำงานบนเครื่องที่อ่าน InfluxDB ได้เท่านั้น
+      FLOW_MAX_AGE_MIN: ${FLOW_MAX_AGE_MIN:-30}
+      FLOW_CHECK_MIN: ${FLOW_CHECK_MIN:-5}
+      FLOW_REMIND_MIN: ${FLOW_REMIND_MIN:-1440}
+      FLOW_WATCH_NOTIFY: ${FLOW_WATCH_NOTIFY:-0}
+      FLOW_STATE_FILE: /state/dataflow-watch.json
+      # วัดที่ว่างของ **ดิสก์เครื่องจริง** ผ่านโฟลเดอร์ที่ผูกมา — ใน container `/` เป็นดิสก์ของ Docker
+      FLOW_DISK_PATH: ${FLOW_DISK_PATH:-/hostdisk}
+      FLOW_MIN_DISK_PCT: ${FLOW_MIN_DISK_PCT:-5}
+      PRIMARY_STATE_FILE: /state/primary-watch.json
+    volumes:
+      # สถานะของตัวเฝ้าต้องอยู่รอดตอน container รีสตาร์ต ไม่งั้นจะเตือนซ้ำทุกครั้งที่ deploy
+      - bridge_state:/state
+      # อ่านอย่างเดียว ใช้วัดที่ว่างของดิสก์เครื่องเท่านั้น (ไม่มีความลับในโฟลเดอร์นี้)
+      - ./docs:/hostdisk:ro
+    extra_hosts:
+      # ให้ container เรียก InfluxDB ที่รันอยู่บนเครื่อง Mac ได้
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      # รอ api ก่อนเพราะ migration รันที่นั่น — ตารางต้องมีก่อนถึงจะเขียนได้
+      db: { condition: service_healthy }
+      api: { condition: service_started }
+
+  sim:
+    # ตัวจำลองเซนเซอร์ — ไม่ขึ้นเองพร้อมตัวอื่น ต้องสั่งด้วย profile
+    #   เปิด: docker compose --profile sim up -d sim
+    #   ปิด: docker compose stop sim
+    # เขียนลง "ฟาร์มจำลอง (ทดสอบระบบ)" เท่านั้น ไม่แตะข้อมูลของฟาร์มจริง
+    profiles: ["sim"]
+    build: ./server
+    container_name: swine-sim
+    restart: unless-stopped
+    command: node src/sim/index.js
+    environment:
+      NODE_ENV: production
+      TZ: Asia/Bangkok
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SIM_INTERVAL_SEC: ${SIM_INTERVAL_SEC:-30}
+    depends_on:
+      db: { condition: service_healthy }
+      api: { condition: service_started }
+
+  web:
+    # หน้าเว็บที่ build แล้ว เสิร์ฟด้วย nginx — ไม่ต้องมีคนกด `npm run dev` อีกต่อไป
+    # แก้โค้ดแล้วต้อง `docker compose up -d --build web` ถึงจะเห็นของใหม่
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    container_name: swine-web
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+      # https สำหรับสาธิตจากมือถือ/เครื่องอื่น — เบราว์เซอร์ให้ใช้ไมโครโฟนกับกล้อง
+      # เฉพาะหน้าที่เป็น https หรือ localhost เท่านั้น (ดู web/server.js)
+      - "${HTTPS_PORT:-8443}:443"
+    volumes:
+      # ใบรับรองที่เราออกเอง สร้างด้วย `sh ops/make-cert.sh` — gitignore กันไว้แล้ว
+      # โฟลเดอร์ว่าง = ไม่มี https เฉย ๆ คอนเทนเนอร์ยังขึ้นปกติ
+      - ./ops/certs:/app/certs:ro
+    depends_on:
+      api: { condition: service_started }
+
+volumes:
+  # named volume — ไม่มีอันนี้ `docker compose down -v` ทีเดียวข้อมูลหายเกลี้ยง
+  db-data:
+  # สถานะของตัวเฝ้าเครื่องหลัก (T1.285) — เล็กมาก แต่ถ้าหายจะเตือนซ้ำทุกครั้งที่ deploy
+  bridge_state:

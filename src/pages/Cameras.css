@@ -1,0 +1,509 @@
+/* หน้ากล้อง AI ทุกฟาร์ม (pages/Cameras.jsx)
+   สีและระยะทั้งหมดมาจาก tokens.css — ห้ามเขียน hex หรือขนาดฟอนต์ตรงนี้ */
+
+/* ---------- แถบกรอง (ฟาร์ม | รูปแบบ) ---------- */
+.cm-bars {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.cm-views {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ---------- ปุ่มมุมขวาบนของหัวหน้า (ไปหน้าภายในโรงเรือน) ---------- */
+.cm-head-link {
+  display: inline-flex;
+  /* ในการ์ด "ไม่พบโรงเรือน" ตัวมันอยู่ในกล่องแนวตั้งที่ยืดลูกเต็มความกว้าง — บังคับให้พอดีเนื้อหา */
+  width: fit-content;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  color: var(--ink-primary);
+  transition: transform 0.12s ease, border-color 0.15s ease;
+}
+
+.cm-head-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-bright);
+  color: var(--ink-primary);
+}
+
+.cm-head-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.cm-head-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.cm-head-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cm-head-text span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.cm-head-text b {
+  font-size: var(--text-base);
+  font-weight: 800;
+}
+
+/* ---------- ปุ่มเลือกฟาร์ม (เปิดป๊อบอัพ) ---------- */
+.cm-scope {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  text-align: start;
+  color: var(--ink-primary);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.15s ease;
+}
+
+.cm-scope:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-bright);
+}
+
+.cm-scope:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.cm-scope:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.cm-scope-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.cm-scope-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cm-scope-text span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.cm-scope-text b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+/* ตัวเลขย่อของฟาร์มที่เลือกอยู่ — จอแคบซ่อนไป เหลือชื่อฟาร์มอย่างเดียวก็พอ */
+.cm-scope-meta {
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.cm-scope-arrow {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+/* ---------- รายการฟาร์มในป๊อบอัพ ---------- */
+.cm-opts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.cm-opt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.cm-opt:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-tint);
+}
+
+.cm-opt.is-on {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+}
+
+/* โฟกัสอยู่ที่ input ที่ซ่อนไว้ กรอบจึงต้องวาดที่ตัว label แทน ไม่งั้นคีย์บอร์ดมองไม่เห็นว่าอยู่ตรงไหน */
+.cm-opt:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cm-opt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  margin-right: auto;
+}
+
+.cm-opt-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cm-opt-meta {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.cm-opt-meta em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--status-bad-text);
+}
+
+.cm-opt-check {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  color: var(--accent-strong);
+}
+
+.cm-opt.is-on .cm-opt-check {
+  border-color: var(--accent-bright);
+  background: var(--accent-bright);
+  color: var(--ink-inverse);
+}
+
+/* ปุ่มสลับมุมมองมีสองอันคู่กันเสมอ ห้ามแยกคนละบรรทัด (อ่านเป็นสวิตช์คู่ไม่ออก) */
+.cm-views {
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+/* กลุ่มเครื่องมือฝั่งขวา: สลับมุมมอง + เลือกจำนวนจอ
+   margin-left: auto จำเป็น — เวลากลุ่มนี้ตกลงบรรทัดใหม่ flex จะวางไว้ชิดซ้ายของบรรทัด
+   ทั้งที่ทั้งหน้าออกแบบให้เครื่องมืออยู่ขวาเสมอ */
+.cm-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2) var(--space-4);
+  margin-left: auto;
+  /* ห้ามใส่ flex-shrink: 0 — จอแคบจะดันกลุ่มปุ่มทะลุขอบขวาแทนที่จะให้สองกลุ่มตกคนละบรรทัด */
+  min-width: 0;
+}
+
+.cm-grids {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-sunken);
+}
+
+.cm-grids-icon {
+  flex-shrink: 0;
+  margin: 0 var(--space-1);
+  color: var(--ink-muted);
+}
+
+.cm-grid {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.cm-grid:hover {
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.cm-grid.is-on {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.cm-grid:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cm-view {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.cm-view:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.cm-view.is-on {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.cm-view:focus-visible,
+.cm-shot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- ผนังกล้อง ---------- */
+/* จำนวนคอลัมน์มาจากปุ่ม 1×1 / 2×2 / 3×3 / 4×4 (ส่งมาเป็น --cm-cols จาก Cameras.jsx)
+   จอแคบลดจำนวนคอลัมน์ให้เองด้านล่าง — ค่าที่ผู้ใช้เลือกยังอยู่ พอกลับไปจอกว้างก็ได้เท่าเดิม */
+.cm-wall {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cm-cols, 4), minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+/* จอเดียว: กว้างเต็มจอแล้วภาพจะสูงเกินหน้าจอ — จำกัดความกว้างแล้วจัดกลางแทน */
+.cm-wall[data-cols="1"] {
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.cm-shot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  /* ใบกล้องนูนสามมิติชุดเดียวกับกล่องสรุปด้านบน ทั้งหน้าจึงเป็นภาษาเดียวกัน */
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-tint) 100%);
+  box-shadow: var(--shadow-raised), var(--shadow-3d);
+  color: var(--ink-primary);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+/* ลิงก์เท่านั้นที่ลอยขึ้นตอนชี้ — ใบที่ไม่มีภาพกดไม่ได้ จึงต้องไม่ทำท่าว่ากดได้ */
+a.cm-shot:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-bright);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+a.cm-shot:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.cm-frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--scene-metal);
+}
+
+.cm-view {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* แถบผลการนับทับขอบล่างของภาพ — โครงเดียวกับหน้าภายในโรงเรือน */
+.cm-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: linear-gradient(to top, rgb(var(--scrim-rgb) / 0.88), rgb(var(--scrim-rgb) / 0));
+  color: var(--ink-on-scrim);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.cm-bar svg {
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.cm-bar b {
+  margin-left: auto;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--accent-bright);
+}
+
+.cm-bar em {
+  font-style: normal;
+  font-size: var(--text-sm);
+}
+
+/* ป้ายบอกว่าโรงเรือนนี้ยังมีกล้องตัวอื่นอีก (มุมมองรายโรงเรือน) */
+.cm-more {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  background: rgb(var(--scrim-rgb) / 0.62);
+  color: var(--ink-on-scrim);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+/* ใบที่ไม่มีภาพ — พื้นจม ไอคอนกล้องจาง ๆ พร้อมป้ายบอกสาเหตุ */
+.cm-frame-off {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-2);
+  background: var(--bg-sunken);
+  box-shadow: var(--shadow-well);
+  color: var(--ink-muted);
+}
+
+.cm-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 0 var(--space-1) var(--space-1);
+}
+
+.cm-meta b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cm-meta span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  overflow-wrap: anywhere;
+}
+
+a.cm-shot:hover .cm-meta b {
+  color: var(--accent-strong);
+}
+
+/* จอแคบ: 4×4 หรือ 3×3 จะเหลือใบละไม่ถึง 200px จนกรอบตรวจจับในภาพดูไม่ออก
+   จึงตัดเป็นเรียงตามที่ว่างจริงแทน แล้วเหลือคอลัมน์เดียวบนมือถือ */
+@media (max-width: 1100px) {
+  .cm-wall {
+    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  }
+
+  .cm-wall[data-cols="1"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .cm-wall {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* ปุ่มเลือกฟาร์มเหลือชื่อฟาร์มอย่างเดียว — ตัวเลขซ้ำกับกล่องสรุปด้านบนอยู่แล้ว */
+  .cm-scope-meta {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-shot,
+  a.cm-shot:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* เหตุผลใต้ป้าย "ไม่มีสัญญาณ" ของกล้องจริง — ต้องอ่านออกบนพื้นกรอบที่มืดกว่าการ์ดทั่วไป
+   (กล้องตัวอย่างไม่มีบรรทัดนี้ เพราะเหตุผลของมันคือ "ยังไม่ได้ติดกล้อง" ซึ่งอยู่บนป้ายแล้ว) */
+.cm-why {
+  margin-top: var(--space-2);
+  max-width: 90%;
+  color: var(--text-soft);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  text-align: center;
+}

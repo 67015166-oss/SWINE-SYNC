@@ -1,0 +1,185 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ผิวกระดาน — แผงควบคุมอุตสาหกรรม + กระจกฝ้า + นูนนุ่ม + ฮอโลแกรม
+   (T1.357 หน้าภาพรวม · T1.361 ขยายมาหน้าการแจ้งเตือน)
+
+   ★★ **เพิ่มหน้าใหม่ให้เติมที่ `lib/layout/skin.js` ที่เดียว** ไม่ต้องแตะไฟล์นี้
+      ที่นี่เล็งคลาส `.is-skinned` ที่กระดานติดให้เอง ไม่ได้เล็ง `data-board` ทีละหน้า
+      (ถ้าเล็งทีละหน้า ทุกกฎในไฟล์นี้จะต้องต่อรายชื่อหน้าเพิ่มทุกกฎ — พลาดกฎเดียว
+      หน้าใหม่จะได้ผิวไม่ครบแล้วไม่มีอะไรฟ้อง)
+
+   ★★ เป็น "ผิว" ไม่ใช่ "โหมดสี" — แตะเฉพาะพื้นผิว ขอบ และเงา
+      **ไม่แตะสีตัวหนังสือ สีสถานะ และสีกราฟเลยสักตัว** คอนทราสต์ของทุกโหมด
+      จึงเท่าเดิมทุกประการ และ test/modes.test.js ยังผ่านเหมือนเดิม
+
+   ★ ปรับตามโหมดสีที่ผู้ใช้เลือกเอง: โหมดสว่างได้กระจกฝ้าบนพื้นครีม
+     โหมดมืดได้กระจกเข้มขอบเรืองแสง — มาจาก token ชุดเดียวกัน ไม่ได้เขียนสองชุด
+
+   ★ ของประดับทุกชิ้นเป็น pseudo-element ที่ `aria-hidden` โดยธรรมชาติ
+     และตัดทิ้งหมดเมื่อผู้ใช้ปิดการเคลื่อนไหว — ไม่มีชิ้นไหนแบกความหมาย
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ───── ชั้นล่างสุด: แสงออโรรา ─────
+   ตรึงอยู่กับที่และอยู่ใต้ทุกอย่างด้วย z-index ติดลบ
+   ★ เป็น `position: fixed` จึงหลุดจากกริดของกระดาน ไม่ไปกินช่องของกล่องใบไหน */
+.lb-board.is-skinned::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* ★ เหลือแค่ออโรรา — เคยใส่ตารางไว้ตรงนี้ด้วย แต่พอมีภาพฟาร์มเป็นพื้นหลัง
+     เส้นตารางจมหายไปหมดและกลายเป็นสัญญาณรบกวนเปล่า ๆ
+     ตารางจึงย้ายไปอยู่บน "กระจก" ของแผงฮีโร่แทน ซึ่งเป็นพื้นเรียบพอให้มองเห็น */
+  /* ★ เข้มกว่าตอนอยู่หน้าภาพรวมโดยตั้งใจ — หน้าที่ไม่มีภาพฟาร์มเป็นพื้นหลัง
+     กระจกจะไม่มีอะไรให้มองทะลุเลย แล้วการ์ดจะกลายเป็นการ์ดขาวธรรมดา
+     ตัวเลขนี้วัดจากการมองจริงบนหน้าที่ไม่มีภาพ ไม่ใช่เดา */
+  background-image: radial-gradient(
+      58% 40% at 10% 2%,
+      color-mix(in srgb, var(--accent-bright) 26%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      52% 38% at 94% 94%,
+      color-mix(in srgb, var(--series-1) 20%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      44% 32% at 78% 12%,
+      color-mix(in srgb, var(--pink-soft) 12%, transparent),
+      transparent 72%
+    );
+}
+
+/* ───── กล่องสรุป: กระจก + นูนนุ่ม ─────
+   เจาะจงที่กระดานของหน้านี้เท่านั้น หน้าอื่นที่ใช้ StatTile จึงไม่เปลี่ยนตาม */
+/* ★ หน้าภาพรวมใช้ `.stat-tile` ส่วนหน้าการแจ้งเตือนมีไทล์ของตัวเอง (`.al-kpi`)
+   เล็งทั้งสองชื่อตรงนี้ที่เดียว ดีกว่าไปก๊อปกฎทั้งชุดไปไว้ในไฟล์ของแต่ละหน้า */
+.lb-board.is-skinned .stat-tile,
+.lb-board.is-skinned .al-kpi {
+  position: relative;
+  border-color: var(--glass-edge);
+  /* ★ ขีดมุมสี่เส้นแบบหน้าปัดเครื่องจักร วาดด้วย background-image ไม่ใช้ element เพิ่ม
+     (pseudo ทั้งสองตัวถูกใช้ไปแล้ว: ::before = แถบฮอโลแกรม · ::after = แสงกวาด)
+     วางในระยะขอบของกล่องพอดี จึงไม่ชนกับตัวหนังสือแม้ตอนขยายขนาดตัวอักษร 150% */
+  background-image: linear-gradient(var(--holo-tick) 0 0),
+    linear-gradient(var(--holo-tick) 0 0), linear-gradient(var(--holo-tick) 0 0),
+    linear-gradient(var(--holo-tick) 0 0), var(--glass-bg);
+  background-size: 18px 2px, 2px 18px, 18px 2px, 2px 18px, 100% 100%;
+  background-position: 10px 10px, 10px 10px, right 10px bottom 10px,
+    right 10px bottom 10px, 0 0;
+  background-repeat: no-repeat;
+  /* ขอบในบาง ๆ คือสิ่งที่ทำให้ตาอ่านว่า "แผ่นกระจก" ไม่ใช่ "กล่องโปร่ง" */
+  box-shadow: inset 0 0 0 1px var(--glass-rim), var(--glass-shadow), var(--neu-raise);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  overflow: hidden;
+}
+
+/* แถบสะท้อนบาง ๆ ที่ขอบบนของทุกใบ — ตัวที่ทำให้ดูเป็น "แผ่นกระจก" ไม่ใช่กล่องทึบ */
+.lb-board.is-skinned .stat-tile::before,
+.lb-board.is-skinned .al-kpi::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background-image: var(--holo-rim);
+  pointer-events: none;
+}
+
+/* แสงกวาดตอนชี้ — วิ่งครั้งเดียวจบ ไม่วิ่งวน เพราะของที่ขยับตลอดเวลา
+   จะดึงสายตาออกจากตัวเลข ซึ่งเป็นสิ่งเดียวที่หน้านี้มีไว้ให้อ่าน */
+.lb-board.is-skinned .stat-tile::after,
+.lb-board.is-skinned .al-kpi::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--holo-sheen);
+  opacity: 0;
+  transform: translateX(-60%);
+  pointer-events: none;
+}
+
+.lb-board.is-skinned .lb-block:not(.is-moving) .stat-tile:hover::after,
+.lb-board.is-skinned .lb-block:not(.is-moving) .al-kpi:hover::after {
+  animation: ov-holo-sweep 0.75s ease-out;
+}
+
+@keyframes ov-holo-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-60%);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(60%);
+  }
+}
+
+/* ชี้แล้วขอบติดสีแบรนด์เหมือนเดิม แต่เงาเป็นเงากระจกที่ลึกขึ้น ไม่ใช่เงาทึบ */
+.lb-board.is-skinned .lb-block:not(.is-moving) .stat-tile:hover,
+.lb-board.is-skinned .lb-block:not(.is-moving) .al-kpi:hover {
+  box-shadow: inset 0 0 0 1px var(--glass-rim), var(--glass-shadow-hover),
+    var(--neu-raise);
+}
+
+/* วงกลมไอคอนในกล่อง — ให้ดูเป็นปุ่มนูนนุ่มแบบแผงควบคุม */
+.lb-board.is-skinned .stat-tile .icon-chip {
+  box-shadow: var(--shadow-3d-chip), var(--neu-raise);
+}
+
+/* ───── การ์ดแผนที่บนกระดานเดียวกัน ─────
+   ★★ ต้อง :not(.stat-tile) — กล่องสรุปก็มีคลาส `card` ติดมาด้วย
+   กฎนี้อยู่ท้ายไฟล์และน้ำหนักเท่ากัน ถ้าไม่กันไว้มันจะเขียนทับพื้นของกล่องสรุป
+   ด้วย `background` แบบย่อ แล้วขีดมุมที่วาดไว้ด้วย background-image หายเกลี้ยง
+   (เจอจริงตอนตรวจหน้าจอ — ขีดมุมไม่ขึ้นเลยทั้งที่กฎถูกต้องทุกอย่าง) */
+.lb-board.is-skinned .card:not(.stat-tile) {
+  border-color: var(--glass-edge);
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+}
+
+/* ───── จอแคบ: ตัดของหนักออก ─────
+   backdrop-filter บนการ์ดหลายใบพร้อมกันกินแรงเครื่องจริงบนมือถือ
+   และตารางถี่ ๆ บนจอเล็กอ่านยากกว่าเดิม */
+@media (max-width: 899px) {
+  .lb-board.is-skinned::before {
+    background-image: radial-gradient(
+      70% 40% at 50% 0%,
+      color-mix(in srgb, var(--accent-bright) 10%, transparent),
+      transparent 72%
+    );
+  }
+
+  /* ★ ทึบขึ้นด้วยการเขียนทับ **token** ไม่ใช่เขียนทับ `background` ของแต่ละกล่อง
+     เพราะ `background` แบบย่อจะล้างขีดมุมที่วาดด้วย background-image ไปด้วย
+     แก้ที่ token ที่เดียว ขีดมุมและแถบฮอโลแกรมจึงยังอยู่ครบบนจอแคบ */
+  .lb-board.is-skinned {
+    --glass-bg: linear-gradient(
+      150deg,
+      rgb(var(--surface-rgb) / 0.96),
+      rgb(var(--surface-rgb) / 0.9)
+    );
+  }
+
+  .lb-board.is-skinned .stat-tile,
+  .lb-board.is-skinned .al-kpi,
+  .lb-board.is-skinned .card:not(.stat-tile) {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ───── ปิดการเคลื่อนไหว / เครื่องที่ขอให้ลดการเคลื่อนไหว ─────
+   ★ ของประดับตัดทิ้งไปเลย ไม่ต้องมีทางสำรอง — ไม่มีชิ้นไหนแบกความหมาย */
+@media (prefers-reduced-motion: reduce) {
+  .lb-board.is-skinned .stat-tile::after,
+  .lb-board.is-skinned .al-kpi::after,
+  .lb-board.is-skinned::before {
+    display: none;
+  }
+}

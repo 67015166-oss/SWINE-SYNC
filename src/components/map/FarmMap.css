@@ -1,0 +1,414 @@
+/* แผนที่ฟาร์ม — ใช้ token จาก tokens.css เท่านั้น */
+
+.farm-map {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.farm-map-frame {
+  position: relative;
+  height: var(--map-h);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--map-bg);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none; /* ให้ลากแผนที่ด้วยนิ้วได้ ไม่ใช่เลื่อนหน้าเพจ */
+  user-select: none;
+}
+
+.farm-map-frame:active {
+  cursor: grabbing;
+}
+
+/* โหมดเลือกจุด (ในป๊อบอัพเพิ่ม/แก้ไขฟาร์ม) — เปลี่ยนเคอร์เซอร์ให้รู้ว่าคลิกวางหมุดได้
+   แต่ตอนกดค้างลากยังเป็นมือจับเหมือนเดิม เพราะการลากยังเลื่อนแผนที่อยู่ */
+.farm-map.is-picking .farm-map-frame {
+  cursor: crosshair;
+}
+
+.farm-map.is-picking .farm-map-frame:active {
+  cursor: grabbing;
+}
+
+/* ---------- ชั้น tile ---------- */
+.farm-map-tiles {
+  position: absolute;
+  inset: 0;
+}
+
+.farm-map-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* 256px คือขนาดมาตรฐานของ raster tile ต้องตรงกับ TILE_SIZE ใน FarmMap.jsx */
+  width: 256px;
+  height: 256px;
+  max-width: none;
+  pointer-events: none;
+}
+
+/* ---------- หมุดฟาร์ม ---------- */
+/* ตัวหมุดเป็นกล่องขนาด 0 วางตรงพิกัดพอดี แล้วให้ลูก ๆ วางตัวรอบ ๆ จุดนั้น
+   (ทำแบบนี้เพื่อให้สลับป้ายชื่อไปทางซ้ายได้โดยหมุดไม่ขยับ) */
+.farm-marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.farm-marker.is-good {
+  color: var(--status-good);
+}
+
+.farm-marker.is-warning {
+  color: var(--status-warning);
+}
+
+.farm-marker.is-offline {
+  color: var(--status-offline);
+}
+
+.farm-marker.is-selected {
+  z-index: 3;
+}
+
+/* ปลายหมุดชี้ตรงพิกัด: เยื้องซ้ายครึ่งความกว้าง ยกขึ้นเต็มความสูง */
+.farm-marker-pin {
+  position: absolute;
+  left: -13px;
+  top: -34px;
+  /* base.css ตั้ง svg { max-width: 100% } ไว้ — ตัวแม่กว้าง 0 จะบีบหมุดจนหาย */
+  max-width: none;
+  filter: var(--shadow-pin);
+  transition: transform 0.12s ease-out;
+  transform-origin: 50% 100%;
+}
+
+.farm-marker:hover .farm-marker-pin,
+.farm-marker:focus-visible .farm-marker-pin,
+.farm-marker.is-selected .farm-marker-pin {
+  transform: scale(1.15);
+}
+
+/* ---------- หมุดกลุ่ม (ฟาร์มที่อยู่ใกล้กันจนหมุดทับกัน) ---------- */
+.farm-marker-cluster {
+  /* วงกลม 34px → จุดกึ่งกลางต้องตรงพิกัดเฉลี่ยของกลุ่ม */
+  position: absolute;
+  left: -17px;
+  top: -17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--bg-surface);
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: var(--shadow-float);
+  transition: transform 0.12s ease-out;
+}
+
+/* ตัวเลขต้องอยู่ในลูก เพราะพื้นวงกลมใช้ currentColor (สีสถานะ) ของตัวแม่ */
+.farm-marker-cluster-num {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bg-surface);
+}
+
+.farm-marker.is-cluster:hover .farm-marker-cluster,
+.farm-marker.is-cluster:focus-visible .farm-marker-cluster {
+  transform: scale(1.12);
+}
+
+.farm-marker-label {
+  position: absolute;
+  /* ป้ายอยู่ระดับหัวหมุด (สูงจากพิกัด 22px) ไม่ใช่กลางหมุด */
+  top: -22px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 200px;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+/* ป้ายชื่อวางขวาหรือซ้ายของหมุด — เลือกอัตโนมัติจากการชนกันใน placeLabels() */
+.farm-marker.label-right .farm-marker-label {
+  left: 21px;
+}
+
+.farm-marker.label-left .farm-marker-label {
+  right: 21px;
+}
+
+/* กลุ่มเป็นวงกลมที่มีจุดกึ่งกลางตรงพิกัด ป้ายจึงอยู่ระดับเดียวกับพิกัดพอดี */
+.farm-marker.is-cluster .farm-marker-label {
+  top: 0;
+}
+
+.farm-marker-sub {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+.farm-marker.is-selected .farm-marker-label {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-float);
+}
+
+/* ---------- ปุ่มซูม ---------- */
+.farm-map-zoom {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.farm-map-zoom button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  background: none;
+  font-size: var(--text-lg);
+  line-height: 1;
+  color: var(--ink-secondary);
+}
+
+.farm-map-zoom button + button {
+  border-top: 1px solid var(--border);
+}
+
+.farm-map-zoom button:hover:not(:disabled) {
+  background: var(--bg-tint);
+}
+
+.farm-map-zoom button:disabled {
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+/* ---------- เครดิตแผนที่ (ต้องมีเสมอตามเงื่อนไขผู้ให้บริการ tile) ---------- */
+.farm-map-credit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  margin: 0;
+  padding: 2px var(--space-2);
+  border-top-left-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.farm-map-hint {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ============================================================
+   การ์ดแผนที่: แผนที่ซ้าย + แถบสรุป/รายละเอียดขวา
+   ============================================================ */
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--map-rail-w);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.map-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-page);
+}
+
+.map-rail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.map-rail-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.map-rail-close {
+  flex-shrink: 0;
+  padding: 0 var(--space-1);
+  border: 0;
+  background: none;
+  font-size: var(--text-base);
+  color: var(--ink-muted);
+}
+
+.map-rail-close:hover {
+  color: var(--ink-primary);
+}
+
+/* ---------- แถบสรุปสถานะ ---------- */
+.map-rail-total {
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.map-rail-total b {
+  font-size: var(--text-stat);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ink-primary);
+  margin-right: var(--space-1);
+}
+
+.map-rail-legend {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.map-rail-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+  border-bottom: 1px solid var(--grid-line);
+}
+
+.map-rail-legend li:last-child {
+  border-bottom: 0;
+}
+
+.map-rail-legend b {
+  margin-left: auto;
+  font-size: var(--text-lg);
+  color: var(--ink-primary);
+}
+
+.map-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.map-legend-dot.is-good {
+  background: var(--status-good);
+}
+
+.map-legend-dot.is-warning {
+  background: var(--status-warning);
+}
+
+.map-legend-dot.is-offline {
+  background: var(--status-offline);
+}
+
+.map-rail-note {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ---------- รายละเอียดฟาร์มที่เลือก ---------- */
+.map-rail-facts {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.map-rail-facts > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--grid-line);
+}
+
+.map-rail-facts > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.map-rail-facts dt {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.map-rail-facts dd {
+  font-size: var(--text-base);
+  font-weight: 600;
+  text-align: right;
+}
+
+.map-rail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 600;
+}
+
+/* ---------- จอแคบ ---------- */
+@media (max-width: 899px) {
+  .map-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* จอแคบ: ป้ายชื่อบนแผนที่เยอะเกินไป แสดงเฉพาะหมุดที่เลือก */
+@media (max-width: 700px) {
+  .farm-map-frame {
+    height: 320px;
+  }
+
+  .farm-marker-label {
+    display: none;
+  }
+
+  .farm-marker.is-selected .farm-marker-label {
+    display: flex;
+  }
+}

@@ -1,0 +1,135 @@
+/* Base styles — reset เบา ๆ + ค่าตั้งต้นของทั้งแอป */
+@import "./tokens.css";
+/* ต้องมาหลัง tokens.css เสมอ — ไฟล์นี้เขียนทับ token ชุดสีตามโหมดที่เลือก */
+@import "./modes.css";
+/* ท้ายสุด — เขียนทับขนาดตัวอักษร/ระยะห่างตามที่ผู้ใช้ตั้งไว้ในหน้าตั้งค่า */
+@import "./settings.css";
+/* ผิวกระดาน (กระจกฝ้า/ฮอโลแกรม) — ต้องมาหลัง settings เพราะอ้าง token ที่สามไฟล์บนตั้งไว้
+   และต้องอยู่ที่นี่ไม่ใช่ในไฟล์ของหน้าใดหน้าหนึ่ง เพราะทุกหน้าที่ติดผิวต้องได้ไปด้วย
+   (เคยอยู่ใน pages/Overview.css ซึ่งหน้าอื่นไม่ได้ import จึงไม่มีผล) */
+@import "./skin.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--ink-primary);
+  -webkit-font-smoothing: antialiased;
+
+  /* แสงอุ่นจาง ๆ สองจุดหลังเนื้อหา — ให้พื้นไม่แบนตาย
+     ใช้ที่นี่ที่เดียว ห้ามเอา gradient ไปทำพื้นการ์ด */
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(60rem 32rem at 88% -6%, var(--glow-gold), transparent 60%),
+    radial-gradient(52rem 30rem at 4% 104%, var(--glow-warm), transparent 62%);
+  background-attachment: fixed;
+}
+
+/* ฟอนต์ Noto Sans Thai มีระยะเหนือ-ใต้ตัวอักษรมาก (สระบน + วรรณยุกต์ + สระล่าง)
+   วัดแล้วต้องการ line-height อย่างน้อย 1.5 ไม่งั้นขอบบน-ล่างของตัวอักษรถูกตัด
+   และบรรทัดที่ติดกันจะชนกัน — ห้ามใช้ต่ำกว่า 1.5 กับข้อความภาษาไทย */
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: var(--text-2xl);
+}
+
+h2 {
+  font-size: var(--text-xl);
+}
+
+h3 {
+  font-size: var(--text-lg);
+}
+
+p {
+  color: var(--ink-secondary);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-strong);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ตารางข้อมูล — ตัวเลขชิดขวาและเรียงตรงกันเสมอ */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--grid-line);
+}
+
+td.num,
+th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ข้อความสำหรับโปรแกรมอ่านหน้าจอเท่านั้น (ไม่แสดงบนจอ) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ข้อความระหว่างดาวน์โหลดไฟล์ของหน้าที่แบ่งออกไป (Suspense ใน App.jsx)
+   ปกติเห็นไม่ถึงเสี้ยววินาที — มีไว้กันจอขาวตอนเน็ตช้าเท่านั้น */
+.app-loading {
+  padding: var(--space-8);
+  text-align: center;
+  font-size: var(--text-base);
+  color: var(--ink-muted);
+}

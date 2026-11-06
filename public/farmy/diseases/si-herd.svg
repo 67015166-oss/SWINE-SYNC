@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">การระบาดในคอก</title><desc id="dsc">ภาพวาดสุกรหลายตัวในคอกเดียวกันไอพร้อมกัน แสดงการลามเร็วภายในหนึ่งถึงสามวัน</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="200" cy="244" rx="164" ry="16" fill="#e6dcd4"/>
+  <g transform="translate(96 186) scale(.74)">
+    <ellipse cx="0" cy="0" rx="86" ry="44" fill="#f2c3b4" stroke="#9b7268" stroke-width="3"/>
+    <ellipse cx="90" cy="-18" rx="38" ry="33" fill="#f2c3b4" stroke="#9b7268" stroke-width="3"/>
+    <path d="M72 -50 q-14 -26 8 -30 q20 -2 18 22" fill="#f2c3b4" stroke="#9b7268" stroke-width="3"/>
+    <ellipse cx="124" cy="-10" rx="14" ry="12" fill="#dda596" stroke="#9b7268" stroke-width="3"/>
+    <path d="M94 -28 q10 4 18 0" fill="none" stroke="#9b7268" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M-60 26 q10 20 28 16 M4 30 q12 18 30 12" fill="none" stroke="#9b7268" stroke-width="10" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(250 200) scale(.86)">
+    <ellipse cx="0" cy="0" rx="86" ry="44" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+    <ellipse cx="90" cy="-18" rx="38" ry="33" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+    <path d="M72 -50 q-14 -26 8 -30 q20 -2 18 22" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+    <ellipse cx="124" cy="-10" rx="14" ry="12" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+    <path d="M94 -28 q10 4 18 0" fill="none" stroke="#9b7268" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-60 26 q10 20 28 16 M4 30 q12 18 30 12" fill="none" stroke="#9b7268" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <g stroke="#c0392b" stroke-width="3" stroke-linecap="round" fill="none" opacity=".85">
+    <path d="M208 156 q14 6 24 0"/><path d="M214 172 q16 6 26 0"/>
+    <path d="M372 172 q-14 6 -24 0" transform="translate(-10 0)"/>
+  </g>
+  <text x="200" y="62" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="19" font-weight="600" fill="#c0392b">ไอพร้อมกันเกือบทั้งคอก</text>
+  <text x="200" y="88" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="15" fill="#5b4a44">ลามเร็วภายใน 1–3 วัน</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">ไอทั้งคอก ลามเร็ว</text>
+</svg>

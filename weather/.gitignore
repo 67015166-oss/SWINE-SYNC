@@ -1,0 +1,6 @@
+# ไฟล์ข้อมูลและโมเดล — ใหญ่และสร้างใหม่ได้ ไม่ต้องเข้า git
+lab/exports/*
+!lab/exports/.gitkeep
+lab/models/*
+!lab/models/.gitkeep
+lab/notebooks/.ipynb_checkpoints/

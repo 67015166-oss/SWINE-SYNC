@@ -1,0 +1,607 @@
+/* หน้า "จำนวนสุกรทั้งหมด" (/dashboard/pigs)
+   แบนเนอร์ยอดรวม + การ์ดประเภทสุกร + โดนัท/แถบสัดส่วน
+   สีประจำประเภทใช้ SERIES ตาม DESIGN.md และผูกกับประเภทถาวร */
+
+/* ---------- โครงหน้า (อยู่ใน AppLayout จึงต้องคุมระยะห่างเอง) ---------- */
+.pt-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* แถวบนสุด: ชื่อหน้า (ซ้าย) + ตัวกรอง (ขวา) อยู่บรรทัดเดียวกัน
+   ถ้าจอแคบจนไม่พอ ตัวกรองจะตกลงไปแถวล่างทั้งก้อน ไม่ใช่แตกเป็นชิ้น ๆ */
+.pt-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-5);
+  /* เว้นก่อนถึงเนื้อหาให้มากกว่าช่องไฟระหว่างกล่องทั่วไป —
+     หัวหน้ากับกระดานเป็นคนละชั้นกัน ระยะเท่ากันจะดูเหมือนเป็นก้อนเดียว */
+  margin-bottom: var(--space-2);
+}
+
+.pt-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  /* ยอมให้หดได้เพื่อให้ตัวกรองอยู่แถวเดียวกันได้นานที่สุด */
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.pt-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.pt-subtitle {
+  margin-top: var(--space-2);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ---------- แถบตัวกรอง ---------- */
+.pt-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  /* ช่องไฟระหว่างช่องเลือกฟาร์มกับกลุ่มปุ่มช่วงเวลา ต้องกว้างกว่าช่องไฟ "ในกลุ่ม" (space-2)
+     ไม่งั้นทั้งแถวดูเป็นปุ่มพรืดเดียวกันหมด แยกไม่ออกว่าอันไหนคุมอะไร */
+  gap: var(--space-3) var(--space-4);
+  flex: 0 1 auto;
+}
+
+.pt-farm-select select {
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--accent-bright);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  box-shadow: var(--shadow-3d-chip);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent-strong);
+  cursor: pointer;
+}
+
+.pt-range {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.pt-range-btn {
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.pt-range-btn:hover {
+  transform: translateY(-2px);
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.pt-range-btn.is-active {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.pt-farm-select select:focus-visible,
+.pt-range-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- แบนเนอร์ยอดรวม ---------- */
+.pt-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-6) 0 var(--space-6) var(--space-7);
+  border: 1px solid var(--accent-bright);
+  border-radius: var(--radius-xl);
+  background: var(--accent-tint);
+  box-shadow: var(--shadow-3d);
+  overflow: hidden;
+}
+
+.pt-banner-label {
+  /* ป้าย "ข้อมูลจริง/ตัวอย่าง" เกาะท้ายหัวข้อ — ต้องอ่านคู่กับตัวเลขเสมอ (T1.331) */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.pt-banner-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.pt-banner-value b {
+  font-size: var(--text-hero);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--accent);
+  text-shadow:
+    0 2px 0 rgb(var(--surface-rgb) / 0.9),
+    0 6px 14px rgb(var(--shadow-rgb) / 0.18);
+}
+
+.pt-banner-value em {
+  font-size: var(--text-xl);
+  font-style: normal;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.pt-banner-note {
+  margin-top: var(--space-2);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.pt-banner-photo {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center 60%;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+/* ---------- การ์ดประเภทสุกร ---------- */
+.pt-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: var(--space-5);
+}
+
+/* การ์ดในแถวเดียวกันสูงเท่ากันเสมอ (ตัวการ์ดคือลิงก์ที่อยู่ใน li) */
+.pt-grid > li {
+  display: flex;
+}
+
+.pt-grid > li > .pt-card {
+  flex: 1;
+}
+
+.pt-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* การ์ดทั้งใบเป็นลิงก์ไปหน้ารายละเอียด — สีตัวอักษรต้องไม่กลายเป็นสีลิงก์ */
+.pt-card,
+.pt-card:hover {
+  color: var(--ink-primary);
+}
+
+.pt-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+.pt-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.pt-card:hover .pt-card-more {
+  background: var(--accent);
+  color: var(--ink-inverse);
+}
+
+/* แถบท้ายการ์ด บอกว่ากดเข้าไปดูรายละเอียดได้ */
+.pt-card-more {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.pt-card-more-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pt-card-head h2 {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.pt-card-count {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.pt-card-count b {
+  font-size: var(--text-stat);
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.pt-card-count em {
+  font-size: var(--text-base);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.pt-photo {
+  display: block;
+  width: 100%;
+  height: 168px;
+  object-fit: cover;
+  object-position: center 58%;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.pt-tag {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.pt-tag b {
+  display: block;
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.pt-tag-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.pt-donut {
+  display: grid;
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.pt-donut-chart {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+}
+
+.pt-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.pt-donut-center b {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.pt-donut-center em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.pt-donut-legend {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.pt-donut-legend li {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.pt-legend-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-primary);
+}
+
+.pt-donut-legend b {
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.pt-legend-unit {
+  display: none;
+}
+
+.pt-legend-pct {
+  min-width: 56px;
+  text-align: right;
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.pt-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  transform: translateY(1px);
+}
+
+.pt-bar {
+  display: flex;
+  height: 34px;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.pt-bar-seg {
+  min-width: 0;
+}
+
+.pt-bar-legend {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.pt-bar-legend li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--border);
+  min-width: 0;
+}
+
+.pt-bar-legend li:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.pt-bar-legend b {
+  font-size: var(--text-xl);
+  font-weight: 800;
+}
+
+.pt-bar-name {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.pt-bar-count {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ---------- สีประจำประเภท (ผูกถาวร ห้ามสลับ) ---------- */
+.pt-dot.is-s1,
+.pt-bar-seg.is-s1 {
+  background: var(--series-1);
+}
+
+.pt-dot.is-s4,
+.pt-bar-seg.is-s4 {
+  background: var(--series-4);
+}
+
+.pt-dot.is-s5,
+.pt-bar-seg.is-s5 {
+  background: var(--series-5);
+}
+
+.pt-dot.is-s6,
+.pt-bar-seg.is-s6 {
+  background: var(--series-6);
+}
+
+.pt-card.is-s1 .pt-card-count b,
+.pt-bar-legend li.is-s1 b {
+  color: var(--seq-550);
+}
+
+.pt-card.is-s4 .pt-card-count b,
+.pt-bar-legend li.is-s4 b {
+  color: var(--status-good-text);
+}
+
+.pt-card.is-s5 .pt-card-count b,
+.pt-bar-legend li.is-s5 b {
+  color: var(--series-5);
+}
+
+.pt-card.is-s6 .pt-card-count b,
+.pt-bar-legend li.is-s6 b {
+  color: var(--status-critical-text);
+}
+
+.pt-card.is-s1 .pt-tag-icon {
+  background: var(--seq-100);
+  color: var(--seq-550);
+}
+
+.pt-card.is-s4 .pt-tag-icon {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.pt-card.is-s5 .pt-tag-icon {
+  background: var(--accent-tint);
+  color: var(--series-5);
+}
+
+.pt-card.is-s6 .pt-tag-icon {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.pt-card.is-s1 {
+  border-bottom: 3px solid var(--series-1);
+}
+
+.pt-card.is-s4 {
+  border-bottom: 3px solid var(--series-4);
+}
+
+.pt-card.is-s5 {
+  border-bottom: 3px solid var(--series-5);
+}
+
+.pt-card.is-s6 {
+  border-bottom: 3px solid var(--series-6);
+}
+
+/* ---------- ตาราง ---------- */
+.pt-table th {
+  background: var(--bg-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.pt-table tr.is-active {
+  background: var(--accent-tint);
+}
+
+.pt-table tfoot td,
+.pt-table tfoot th {
+  border-top: 1px solid var(--border-strong);
+  background: var(--bg-sunken);
+}
+
+/* ---------- จอแคบ ---------- */
+@media (max-width: 1500px) {
+  .pt-donut {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .pt-donut-chart {
+    max-width: 260px;
+  }
+
+  .pt-donut-legend {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .pt-banner {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--space-5);
+  }
+
+  .pt-banner-photo {
+    height: 180px;
+    border-radius: var(--radius-lg);
+  }
+
+  .pt-donut {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 899px) {
+  .pt-filters {
+    justify-content: flex-start;
+  }
+
+  .pt-banner-value b {
+    font-size: var(--text-stat);
+  }
+}
+
+/* แถวปุ่มใต้การ์ดประเภทสุกร — อยู่นอกการ์ด เพราะทั้งการ์ดเป็นลิงก์
+   จัดกึ่งกลางให้ตรงกับการ์ดด้านบน และเว้นบน ๆ ไม่ให้ติดขอบการ์ด */
+.pt-card-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* ================= ยอดจริงในแบนเนอร์ (T1.331) =================
+   แยกตามขั้นการเลี้ยงของโรงเรือน — บรรทัดเดียวใต้ตัวเลขหลัก ไม่ใช่กล่องใหม่
+   (เดิม T1.330 ทำเป็นกล่องแยก แล้วกลายเป็นเลขตอบคำถามเดียวกันสองที่ในหน้าเดียว) */
+
+.pt-banner-stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.pt-banner-stages b {
+  color: var(--ink-primary);
+}

@@ -1,0 +1,1402 @@
+/* การ์ดของหน้า "ระบบควบคุมสภาพแวดล้อม" — เทียบภายนอก/ภายใน · ควบคุมอุปกรณ์ ·
+   ระบบไฟฟ้า · ผังเซนเซอร์
+   ทุกสีมาจาก token จึงเปลี่ยนตามโหมดโทนสีที่ผู้ใช้เลือกเองทั้งหมด
+   บุคลิก "แผงควบคุม" มาจากโครงและตัวเลข ไม่ใช่จากการเปลี่ยนสีแบรนด์ */
+
+/* ================= หัวการ์ดแบบเดียวกันทุกใบในหน้านี้ ================= */
+.ec-head,
+.eq-head,
+.el-head,
+.sm-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.ec-head h3,
+.eq-head h3,
+.el-head h3,
+.sm-head h3 {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ชื่อภาษาอังกฤษต่อท้ายหัวข้อ — ตัวพิมพ์ใหญ่ห่าง ๆ ให้ดูเป็นชื่อระบบ ไม่ใช่ประโยค */
+.ec-head-en,
+.el-head-en {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+}
+
+.ec-head-note {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ปิดคำอธิบายอยู่ — ซ่อนบรรทัดที่มา/สูตรใต้ค่าแต่ละตัว (ตัวเลขกับป้ายสถานะยังอยู่)
+   ดู components/ui/NotesToggle.jsx */
+.el-stats.is-plain .el-stat-note {
+  display: none;
+}
+
+/* ปุ่มคำอธิบายกินหน้าที่ "ดันไปชิดขวา" แทน ป้ายอ่านค่าจึงเหลือแค่ระยะห่างปกติ */
+.el-head .notes-toggle + .ec-live {
+  margin-left: 0;
+}
+
+/* ป้าย "ข้อมูลตัวอย่าง" ที่มาแทนป้ายกำลังส่งค่า — ชิดขวาตำแหน่งเดียวกัน */
+.ec-source {
+  margin-left: auto;
+}
+
+/* ป้าย "กำลังส่งค่า" — จุดกลม + ข้อความ (ไม่ได้สื่อด้วยสีอย่างเดียว) */
+.ec-live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--status-good-bg);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--status-good-text);
+  white-space: nowrap;
+}
+
+.ec-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--status-good);
+}
+
+.ec-live.is-off {
+  background: var(--status-offline-bg);
+  color: var(--status-offline-text);
+}
+
+.ec-live.is-off .ec-live-dot {
+  background: var(--status-offline);
+}
+
+/* ================= ภายนอก vs ภายใน ================= */
+.ec-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: var(--space-5);
+}
+
+.ec-metrics {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.ec-metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+}
+
+.ec-metric-label {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ตัวเลขกับหน่วยนั่งเส้นฐานเดียวกัน ไม่งั้นหน่วยจะลอย */
+.ec-metric-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.ec-metric-value b {
+  font-size: var(--text-stat);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.ec-metric-value em {
+  font-size: var(--text-base);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.ec-metric-diff {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+/* ค่าที่ค้างไว้เมื่อเซนเซอร์เงียบ — ตัวเลขยังอ่านได้ แต่ต้องไม่อ่านเหมือนค่าสด */
+.ec-metric.is-held .ec-metric-value {
+  opacity: 0.62;
+}
+
+.ec-metric-held {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+/* ลูกศรบอกแค่ทิศ "มากกว่า/น้อยกว่า" ไม่ได้แปลว่าดีหรือแย่ จึงใช้สีหมึกกลาง ๆ */
+.ec-metric-arrow {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+.ec-metric-diff.is-up .ec-metric-arrow {
+  transform: rotate(-90deg);
+}
+
+.ec-metric-diff.is-down .ec-metric-arrow {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 639px) {
+  .ec-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ================= ควบคุมอุปกรณ์ ================= */
+.eq-mode {
+  margin-left: auto;
+  padding: var(--space-1) var(--space-4);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.eq-mode.is-off {
+  border-color: var(--border-strong);
+  color: var(--ink-muted);
+}
+
+/* แถบเลือกก่อนถึงรายการอุปกรณ์ (หน้าที่คุมหลายโรงเรือน) — คั่นด้วยเส้นให้เห็นว่า
+   ส่วนบนคือ "กำลังสั่งหลังไหน" ส่วนล่างคือ "อุปกรณ์ของหลังนั้น" */
+.eq-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.eq-group + .eq-group {
+  margin-top: var(--space-6);
+}
+
+.eq-group-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.eq-group-head b {
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.eq-group-head svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+.eq-group-count {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+/* การ์ดพัดลมกว้างเท่าเดิม (ขั้นต่ำ 94px ➜ การ์ดจริงราว 118px)
+   ผู้ใช้ขอให้คงขนาดกล่องไว้แล้วไปย่อป้ายที่ล้นแทน (1 ก.ย. 2569)
+   — เคยลองขยายเป็น 138px เพื่อให้ป้ายเต็มขนาดพอดี แต่การ์ดโตขึ้นจนเสียหน้าตาเดิม */
+.eq-fans {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(94px, 100%), 1fr));
+  gap: var(--space-2);
+}
+
+.eq-fan {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+/* ป้ายสถานะในการ์ดพัดลม — **ย่อเฉพาะที่นี่ที่เดียว**
+   การ์ดกว้าง 118px เหลือที่ข้างใน 100px ส่วนป้ายขนาดมาตรฐาน ("ไม่มีสัญญาณ")
+   ต้องการ 124px จึงล้นออกนอกการ์ดข้างละ 12px
+   ผู้ใช้ขอให้คงขนาดการ์ดไว้แล้วย่อป้ายลงแทน (1 ก.ย. 2569)
+
+   ย่อแค่ตัวหนังสือกับระยะใน **ไอคอนยังเป็น 15px เท่าที่อื่น** เพราะไอคอนคือสิ่งที่
+   ทำให้สถานะอ่านออกโดยไม่ต้องพึ่งสี (กติกาใน CLAUDE.md) ย่อไปด้วยไม่ได้
+   วัดจากของจริง: 13px + ระยะใน 4px ➜ กว้าง 97px พอดีใน 100px (เหลือ 3px)
+   **ที่อื่นทั้งแอปยังใช้ขนาดมาตรฐานเหมือนเดิม** (ดู .status-badge ใน ui.css) */
+/* ป้ายในการ์ดพัดลมกับผังเซนเซอร์ **ตกบรรทัดได้** ต่างจากป้ายที่อื่นในแอปที่บังคับบรรทัดเดียว
+   สองที่นี้เป็นตารางช่องเล็กที่ความกว้างขึ้นกับความกว้างการ์ดซึ่งผู้ใช้ลากย่อได้
+   ที่จอ 1050px ช่องพัดลมเหลือ 94px ป้าย "ไม่มีสัญญาณ" ต้องการ 83px แต่ได้ 77px
+   และช่องเซนเซอร์ป้าย "อุณหภูมิไม่มีสัญญาณ" ขาดไป 14px — ตัวหนังสือทะลุออกนอกเม็ดยา
+   ตกบรรทัดแล้วป้ายสูงขึ้นหนึ่งบรรทัด แต่ยังอ่านครบ ดีกว่าตัวหนังสือล้นกรอบ
+   (ตัดด้วย ellipsis ไม่ได้ — กติกาบอกว่าสถานะต้องอ่านออกครบ ห้ามตัดทิ้ง) */
+.eq-fan .status-badge,
+.sm-node .status-badge {
+  white-space: normal;
+  text-align: center;
+}
+
+.eq-fan .status-badge {
+  padding: var(--space-1);
+  font-size: var(--text-xs);
+}
+
+.eq-fan-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  color: var(--ink-muted);
+}
+
+/* พัดลมที่เดินอยู่หมุนช้า ๆ ให้เห็นว่า "ยังทำงาน" โดยไม่ต้องอ่านตัวเลข */
+.eq-fan.is-on .eq-fan-icon,
+.eq-fan.is-warn .eq-fan-icon {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.eq-fan.is-on .eq-fan-icon svg,
+.eq-fan.is-warn .eq-fan-icon svg {
+  animation: eq-spin 2.4s linear infinite;
+}
+
+@keyframes eq-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq-fan-icon svg {
+    animation: none !important;
+  }
+}
+
+.eq-fan-name {
+  font-size: var(--text-base);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-primary);
+}
+
+.eq-fan-read {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+/* คำสั่งล่าสุดของอุปกรณ์ตัวนั้น — บรรทัดเล็กใต้สวิตช์
+   เป็นข้อมูลที่กล่องรู้จริง ต่างจากสถานะการทำงานที่ยังไม่รู้ (T1.336) */
+.eq-fan-last,
+.eq-pump-last {
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.eq-fan-last {
+  text-wrap: balance;
+}
+
+/* ★ ตัวสั่งอยู่ล่างสุดของใบเสมอ — บางใบมีบรรทัด "สั่งล่าสุด" บางใบไม่มี
+   ถ้าไม่ดันลงล่าง สวิตช์กับปุ่มของแต่ละใบจะอยู่คนละความสูงกันทั้งแถว
+   (เหตุผลเดียวกับ min-height ของ .eq-pump-name) */
+.eq-fan .eq-switch,
+.eq-pump-btn {
+  margin-top: auto;
+}
+
+/* ชิปกลาง ๆ สำหรับ "หยุด" — หยุดไม่ใช่ความผิดปกติ จึงไม่ใช้ป้ายสถานะ */
+.eq-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+/* ---------- สวิตช์เปิด/ปิด ---------- */
+.eq-switch {
+  width: 52px;
+  height: 30px;
+  padding: 3px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  transition: background 0.16s ease, border-color 0.16s ease;
+}
+
+.eq-switch-knob {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  transition: transform 0.16s ease;
+}
+
+.eq-switch[aria-checked="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.eq-switch[aria-checked="true"] .eq-switch-knob {
+  transform: translateX(22px);
+}
+
+.eq-switch:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.eq-switch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- ปั๊มน้ำ ---------- */
+.eq-pumps {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  /* 150px ทำให้ปั๊มสามตัวยังเรียงแถวเดียวได้ในคอลัมน์แคบ (การ์ดกว้าง ~520px)
+     ถ้ากว้างกว่านี้ปั๊มตัวที่สามจะตกลงไปแถวสอง แล้วการ์ดสูงขึ้นเกือบ 200px */
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.eq-pump {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+/* กันไว้สองบรรทัดเสมอ — ชื่อปั๊มยาวไม่เท่ากัน ("PUMP 1 · น้ำดื่ม" บรรทัดเดียว
+   ส่วน "PUMP 2 · ระบบน้ำหล่อเย็น" สองบรรทัด) ถ้าปล่อยตามเนื้อหา ป้ายสถานะ
+   ตัวเลข และบรรทัดวัตต์ของใบที่ชื่อสั้นจะลอยสูงกว่าเพื่อน 25px ทั้งแถว
+   min-height ไม่ใช่ height — ชื่อที่ยาวเกินสองบรรทัดยังดันการ์ดได้ ดีกว่าตัดชื่ออุปกรณ์ทิ้ง */
+.eq-pump-name {
+  min-height: 3em;
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.eq-pump-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.eq-pump-value b {
+  font-size: var(--text-stat);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+/* ไม่มีค่าให้แสดง — ขีดกลางที่ขนาดตัวเลขสถิติอ่านเป็นแถบทึบ ไม่ใช่ "ว่าง" */
+.eq-pump-value b.is-dash {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.eq-pump-value em {
+  font-size: var(--text-base);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.eq-pump-meta {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.eq-pump-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: auto;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-primary);
+  transition: transform 0.12s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.eq-pump-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.eq-pump-btn:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.eq-pump-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.eq-pump-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.eq-note,
+.sm-note,
+.sm-flow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+/* ค่าที่ด่านความปลอดภัยใช้ตัดสิน — แถบจมใต้ข้อความนำ อ่านเป็นข้อเท็จจริง ไม่ใช่คำเตือน
+   (เกณฑ์เดียวกับที่หลังบ้านใช้ ดู server/src/control/limits.js) */
+.eq-gate-now {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: var(--space-1) 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.eq-gate-now svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+/* ข้อความนำที่อยู่ใต้หัวการ์ด (ไม่ใช่บรรทัดปิดท้าย) จึงไม่ต้องเว้นบนเยอะ */
+.eq-note.is-lead {
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-1);
+}
+
+.eq-note svg,
+.sm-note svg,
+.sm-flow svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--ink-muted);
+}
+
+/* ================= ระบบไฟฟ้า ================= */
+
+/* ค่าหลักสี่ตัว — 130px ทำให้คอลัมน์แคบ (เช่นแถวล่างของหน้าสภาพแวดล้อม กว้าง ~290px)
+   ยังลงได้ 2×2 แทนที่จะเรียงลงเป็นสี่ชั้น ซึ่งทำให้การ์ดสูงขึ้นเท่าตัว */
+/* การ์ดระบบไฟฟ้า — ตั้งเป็น container เพื่อให้กล่องค่าข้างในวัดจาก "ความกว้างของการ์ด"
+   ไม่ใช่ความกว้างของจอ **การ์ดนี้ผู้ใช้ลากย่อ/ขยายเองได้บนกระดานจัดเลย์เอาต์**
+   ความกว้างจริงจึงไม่ผูกกับขนาดจอเลย — media query จะตัดสินผิดทันทีที่ผู้ใช้ลากย่อ
+   (ที่แรกในโปรเจกต์ที่ใช้ container query ถ้ามีที่อื่นเจอปัญหาเดียวกันให้ใช้วิธีนี้) */
+.el-card {
+  container-type: inline-size;
+  container-name: elcard;
+}
+
+/* แรงดันไฟ · กระแสเฉลี่ยต่อเฟส · กำลังไฟ · ความถี่ — **อยู่แถวเดียวกันเสมอ**
+   (ผู้ใช้สั่ง 1 ก.ย. 2569) ของเดิมเป็น auto-fit ขั้นต่ำ 130px พอการ์ดกว้าง 546px
+   จึงได้แค่ 3 คอลัมน์ ความถี่ตกไปอยู่บรรทัดสอง
+
+   ใช้ `grid-auto-flow: column` ไม่ใช่ `repeat(4, 1fr)` เพราะ **ความถี่มีเฉพาะโรงเรือน
+   ที่อ่านจากมิเตอร์จริง** ค่าจำลองมีแค่สามช่อง — repeat(4) จะเหลือช่องว่างค้างไว้หนึ่งช่อง */
+.el-stats {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+/* การ์ดแคบกว่านี้ สี่ช่องจะเหลือช่องละ ~90px ซึ่งป้าย "กระแสเฉลี่ยต่อเฟส"
+   ตัดบรรทัดจนอ่านไม่ออก — ปล่อยให้ไหลลงบรรทัดใหม่ตามเดิม */
+@container elcard (max-width: 430px) {
+  .el-stats {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+  }
+}
+
+.el-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+}
+
+/* เหตุผลเดียวกับ .eq-pump-name — "กระแสเฉลี่ยต่อเฟส" ตัดสองบรรทัด
+   ส่วน "แรงดันไฟ" "กำลังไฟ" "ความถี่" บรรทัดเดียว ตัวเลขใหญ่ของช่องกระแส
+   จึงต่ำกว่าอีกสามช่อง 24px ทั้งที่อยู่แถวเดียวกัน */
+.el-stat-label {
+  min-height: 3em;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.el-stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+/* ตัวเลขย่อ/ขยายตาม **ความกว้างของการ์ด** (cqi) ไม่ใช่ความกว้างของจอ (vw)
+   เพราะสี่ช่องอยู่แถวเดียวกันแล้ว ช่องละ ~115px เมื่อการ์ดกว้าง 546px
+   ของเดิม 2.4vw ให้ 34.6px ซึ่ง "223.74 V" ล้นกรอบไป 26px
+   5cqi ให้ 24.8px พอดีทุกช่อง (5.4cqi เริ่มล้น 1px — วัดจากของจริง)
+   ผู้ใช้ลากการ์ดให้กว้างขึ้นเมื่อไร ตัวเลขก็โตตามจนถึงเพดาน --text-stat เหมือนเดิม */
+.el-stat-value b {
+  font-size: clamp(var(--text-lg), 5cqi, var(--text-stat));
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.el-stat-value em {
+  font-size: var(--text-base);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.el-stat-note {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.el-section {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.el-circuits {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.el-circuit {
+  display: grid;
+  grid-template-columns: minmax(60px, 88px) minmax(0, 1fr) 72px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.el-circuit-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ink-secondary);
+}
+
+.el-circuit-track {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  overflow: hidden;
+}
+
+/* แถบทุกเส้นสีเดียวกัน เพราะนี่คือ "ปริมาณ" ไม่ใช่การแยกประเภท */
+.el-circuit-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--seq-400);
+}
+
+.el-circuit-amp {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-align: right;
+  color: var(--ink-primary);
+}
+
+/* หน่วยและค่าไฟ — บรรทัดละรายการ (ป้ายซ้าย ตัวเลขขวา) กะทัดรัดพอสำหรับคอลัมน์แคบ
+   และยังอ่านเทียบกันในแนวตั้งได้ง่ายกว่ากล่องสามใบเรียงกัน */
+.el-totals {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.el-totals li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+}
+
+.el-totals li > span:first-child {
+  margin-right: auto;
+}
+
+.el-totals span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.el-totals b {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.el-totals em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  color: var(--ink-muted);
+}
+
+.el-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--status-offline-bg);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--status-offline-text);
+}
+
+.el-empty svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 639px) {
+  .el-circuit {
+    grid-template-columns: minmax(0, 1fr) 82px;
+  }
+
+  .el-circuit-track {
+    grid-column: 1 / -1;
+    order: 2;
+  }
+}
+
+/* ================= ผังเซนเซอร์ ================= */
+
+/* พื้นกระดาษกราฟจาง ๆ — ให้ความรู้สึกเป็นแบบแปลนโดยไม่ต้องเปลี่ยนสีแบรนด์
+   เส้นตารางใช้ --grid-line ตัวเดียวกับกริดในกราฟ จึงจางเท่ากันทุกโหมดสี */
+.sm-plan {
+  padding: var(--space-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-chart);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.sm-zones {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.sm-zones li {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.sm-zones b {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-secondary);
+}
+
+.sm-zones span {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+/* ---------- แนวพัดลม ---------- */
+.sm-duct {
+  position: relative;
+  padding: var(--space-4) 0;
+}
+
+.sm-duct-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed var(--border-strong);
+}
+
+.sm-fans {
+  position: relative;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.sm-fan {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.sm-fan-dot {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--ink-muted);
+}
+
+.sm-fan.is-on .sm-fan-dot,
+.sm-fan.is-warn .sm-fan-dot {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ไม่รู้ว่าเดินอยู่หรือหยุด (กล่องไม่ส่งค่ากลับ) — เส้นประแปลว่า "ยังไม่ยืนยัน"
+   ชุดเดียวกับที่ปั๊มใช้อยู่แล้ว ผังจึงสื่อความไม่แน่นอนด้วยรูปแบบเดียวกันทั้งใบ
+   (สถานะจริงยังอ่านจากข้อความใน sr-only และจากการ์ดควบคุม ไม่ได้สื่อด้วยเส้นอย่างเดียว) */
+.sm-fan.is-unknown .sm-fan-dot {
+  border-style: dashed;
+}
+
+.sm-fan-name {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+/* ---------- จุดวัด ---------- */
+.sm-nodes {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  /* ★ จำนวนคอลัมน์ตามจำนวนจุดที่มีจริง ไม่ตรึงไว้ที่ 4
+     ผังของข้อมูลตัวอย่างมี 4 โซน แต่ของกล่องที่กำแพงเพชรมี 3 จุด
+     ตรึงไว้ 4 แล้วจะเหลือช่องว่างค้างหนึ่งช่องเหมือนผังขาดไปจุดหนึ่ง */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.sm-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+/* จุดที่ไม่ส่งค่า — จมลงไปกับพื้นการ์ด ไม่ใช่นูนขึ้นมาเท่าจุดที่ยังวัดได้
+   (ยังมีป้าย "ไม่ส่งค่า" กำกับอยู่ด้วย ไม่ได้สื่อด้วยสีอย่างเดียว) */
+.sm-node.is-silent {
+  background: var(--bg-sunken);
+  box-shadow: none;
+}
+
+.sm-node-num {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--accent-bright);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  font-size: var(--text-base);
+  font-weight: 800;
+  /* --accent-strong ไม่ใช่ --accent — ตัวเลขนี้เป็น "ตัวหนังสือ" ต้องผ่าน 4.5:1
+     ส่วน --accent บนพื้น --accent-tint ถือเป็นไอคอนในกรอบ จึงคุมไว้แค่ 3:1
+     (ดู RULES ใน test/modes.test.js) วัดบนหน้าจริงแล้วโหมด cream ได้ 4.23 ไม่ผ่าน
+     ขอบวงกลมใช้ --accent-bright ต่อไปได้ เพราะเป็นเส้นขอบ = กราฟิก */
+  color: var(--accent-strong);
+}
+
+.sm-node-zone {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.sm-node-read {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  line-height: 1.5;
+}
+
+.sm-node-read b {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.sm-node-read span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.sm-node-gas {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.sm-node-gas.is-high {
+  border-color: var(--status-warning);
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+}
+
+/* ---------- ปั๊มท้ายโรงเรือน ---------- */
+.sm-pumps {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.sm-pump {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 74px;
+  padding: var(--space-3);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  line-height: 1.5;
+}
+
+.sm-pump.is-on {
+  border-style: solid;
+  border-color: var(--accent);
+}
+
+/* "ไม่รู้สถานะ" จางกว่า "หยุดอยู่" — หยุดอยู่คือคำตอบ ไม่รู้คือยังไม่มีคำตอบ */
+.sm-pump.is-unknown {
+  border-color: var(--border);
+  background: var(--bg-sunken);
+}
+
+.sm-pump b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--ink-primary);
+}
+
+.sm-pump span {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+/* จุดวัดนอกอาคาร — อยู่นอกผังในเล้า จึงเป็นแถวเดี่ยวใต้ผัง ไม่ใช่การ์ดในกริด */
+.sm-outdoor {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--space-4);
+}
+
+.sm-outdoor li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  font-size: var(--text-sm);
+}
+
+.sm-outdoor svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+.sm-outdoor b {
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.sm-outdoor span {
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+@media (max-width: 899px) {
+  .sm-zones,
+  .sm-nodes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* จอแคบ: หัวโซนซ้ำกับป้ายในจุดวัดอยู่แล้ว ตัดออกให้ผังสั้นลง */
+  .sm-zones {
+    display: none;
+  }
+
+  .sm-pumps {
+    justify-content: flex-start;
+  }
+}
+
+/* ================= การ์ดดัชนีความเครียดความร้อน (ThiCard.jsx) =================
+   ย้ายมาจากหน้า Climate ตอนที่หน้าสภาพแวดล้อมรวมต้องใช้การ์ดเดียวกัน
+   คลาสจึงไม่ขึ้นต้นด้วย cl- อีกต่อไป (ไม่ได้เป็นของหน้าใดหน้าหนึ่งแล้ว) */
+.thi-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.thi-value b {
+  font-size: var(--text-stat);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.thi-scale {
+  margin-top: var(--space-4);
+}
+
+.thi-bar {
+  position: relative;
+  display: flex;
+  height: 18px;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.thi-seg {
+  min-width: 0;
+}
+
+.thi-seg.is-good {
+  background: var(--status-good);
+}
+
+.thi-seg.is-warning {
+  background: var(--status-warning);
+}
+
+.thi-seg.is-serious {
+  background: var(--status-serious);
+}
+
+.thi-seg.is-critical {
+  background: var(--status-critical);
+}
+
+/* หมุดบอกตำแหน่งค่าปัจจุบันบนแถบระดับ */
+.thi-mark {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 6px;
+  transform: translateX(-3px);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 2px var(--ink-primary);
+}
+
+/* สี่ระดับควรอยู่แถวเดียวให้เห็นว่าไล่จากเบาไปหนัก — 100px คือความกว้างที่ยังพอ
+   วางชื่อระดับกับช่วงตัวเลขได้ครบ ทำให้แถวเดียวรอดถึงจอ ~1024px (การ์ดกว้าง ~460px) */
+.thi-legend {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100px, 100%), 1fr));
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.thi-legend li {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.thi-legend li.is-current {
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.thi-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thi-range {
+  grid-column: 2;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.thi-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.thi-dot.is-good {
+  background: var(--status-good);
+}
+
+.thi-dot.is-warning {
+  background: var(--status-warning);
+}
+
+.thi-dot.is-serious {
+  background: var(--status-serious);
+}
+
+.thi-dot.is-critical {
+  background: var(--status-critical);
+}
+
+.thi-text {
+  margin-top: var(--space-4);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+/* แถวข้อมูลปิดท้ายการ์ด — ดันไปชิดล่างเสมอ ขอบล่างของการ์ดคู่กันจะได้ตรงกัน */
+.thi-facts {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+.thi-facts li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.thi-facts b {
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+
+
+/* คำอธิบายว่าทำไมบางช่องในการ์ดไฟฟ้าเป็นขีดกลาง —
+   ขีดกลางแปลว่า "มิเตอร์ไม่ได้วัดค่านั้น" ไม่ใช่ "ระบบอ่านค่าไม่ได้" */
+.el-partial {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--status-warning);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+}
+
+.el-partial svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--status-warning);
+}
+
+/* ================= กราฟเส้นเล็กในการ์ดโรงเรือน (BarnSpark.jsx) =================
+   สองกราฟเรียงกัน อันละหนึ่งเส้นหนึ่งแกน — ห้ามรวมเป็นกราฟเดียวสองแกน
+   (เหตุผลเต็มอยู่หัวไฟล์ BarnSpark.jsx) */
+.barn-spark {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.bs-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+/* จอแคบให้ซ้อนกันแทนที่จะบีบจนเส้นอ่านไม่ออก */
+.bs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.bs-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.bs-label {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+.bs-now {
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+.bs-now b {
+  font-size: var(--text-sm);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.bs-chart {
+  margin-top: 2px;
+}
+
+/* ไม่มีข้อมูล — ต้องมีทั้งไอคอนและข้อความ ห้ามสื่อด้วยสีอย่างเดียว */
+.bs-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+/* ── แถบผลของด่านความปลอดภัยของคำสั่ง (T1.284) ─────────────────────────────
+   สามโทน = สามสิ่งที่ต้องทำต่อ ไม่ใช่สามระดับความรุนแรง
+     is-ask   เหลือง  หลังบ้านถามกลับ — ตั้งใจแล้วกดยืนยันได้
+     is-stop  แดง     ห้าม — ไม่มีปุ่มยืนยันให้กด ต้องไปแก้ที่เหตุ
+     is-done  เขียว   รับคำสั่งแล้ว (ข้อความบอกต่อว่าไปถึงไหน ไม่ได้เขียนว่าสำเร็จ)
+   ตามกติกา DESIGN.md: มีไอคอนกับข้อความเสมอ ห้ามสื่อด้วยสีอย่างเดียว */
+.eq-gate {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
+}
+
+.eq-gate p {
+  flex: 1 1 220px;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.eq-gate svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.eq-gate.is-ask {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+}
+
+.eq-gate.is-stop {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.eq-gate.is-done {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.eq-gate-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* ปุ่มยืนยันต้องเด่นกว่าปุ่มไม่สั่ง แต่ห้ามเด่นกว่าข้อความเตือน —
+   คนควรอ่านเหตุผลก่อนตา จะได้ไม่กดยืนยันโดยไม่อ่าน */
+.eq-gate-go,
+.eq-gate-no {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.eq-gate-go {
+  border: 1px solid currentColor;
+  background: var(--bg-surface);
+  color: inherit;
+  font-weight: 600;
+}
+
+.eq-gate-no {
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.eq-gate-go:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* บรรทัดบอกอายุค่าในผังเซนเซอร์ — จุดที่ค่าเก่าเกิน 15 นาที */
+.sm-node-held {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs, var(--text-sm));
+  line-height: 1.5;
+  color: var(--ink-muted);
+}

@@ -1,0 +1,131 @@
+# ═══════════════════════════════════════════════════════════════════════
+#  คลังข้อมูลสำหรับเทรนโมเดลพยากรณ์อากาศ — แยกขาดจากระบบแดชบอร์ด
+#
+#  **ทำไมแยก compose ไม่รวมกับของแดชบอร์ด**
+#  งานสองอย่างนี้มีจังหวะชีวิตต่างกัน: แดชบอร์ดต้องเปิดตลอดเพื่อให้คนดู
+#  ส่วนที่นี่จะโดนปิด ๆ เปิด ๆ ตอนลองโมเดล และบางทีต้องล้างฐานเริ่มใหม่
+#  ถ้าอยู่ compose เดียวกัน วันที่เผลอ `down -v` เพื่อล้างคลังโมเดล
+#  จะลบฐานของแดชบอร์ดไปด้วยทั้งก้อน
+#
+#  ชื่อคอนเทนเนอร์ขึ้นต้นด้วย wx- ทั้งหมด (weather) จะได้ไม่ชนกับ swine-*
+#
+#  ═══ คำสั่งที่ใช้บ่อย ═══
+#    docker compose up -d --build          เปิด
+#    docker compose logs -f wx-collector   ดูว่าเก็บข้อมูลได้ไหม
+#    docker compose down                   ปิด (ข้อมูลยังอยู่)
+#    docker compose down -v                ปิดและ **ลบข้อมูลทั้งหมด**
+# ═══════════════════════════════════════════════════════════════════════
+
+services:
+  # ─────────────────────────────────────────────────────────────────────
+  #  ฐานข้อมูล — TimescaleDB (PostgreSQL + ส่วนเสริมสำหรับข้อมูลตามเวลา)
+  #
+  #  ใช้ image ตัวเดียวกับฐานของแดชบอร์ดโดยตั้งใจ จะได้ไม่ต้องดาวน์โหลด
+  #  image ใหม่ และเวลามีปัญหาก็ใช้ความรู้ชุดเดิมแก้ได้
+  # ─────────────────────────────────────────────────────────────────────
+  wx-db:
+    image: timescale/timescaledb-ha:pg16
+    container_name: wx-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${WX_DB_USER:-wx}
+      POSTGRES_PASSWORD: ${WX_DB_PASSWORD:-wx}
+      POSTGRES_DB: ${WX_DB_NAME:-wx}
+      TZ: Asia/Bangkok
+    ports:
+      # **ผูกกับ 127.0.0.1 เท่านั้น** — เขียน "5433:5432" เฉย ๆ Docker แปลว่า 0.0.0.0
+      # แล้วทุกเครื่องในวงแลนต่อฐานได้ (บทเรียนจากฐานของแดชบอร์ด ที่เคยเปิดโล่งแบบนั้นจริง)
+      # พอร์ต 5433 เพื่อไม่ให้ชนกับ swine-db ที่ใช้ 5432 อยู่แล้ว
+      - "127.0.0.1:${WX_DB_PORT:-5433}:5432"
+    volumes:
+      - wx-data:/home/postgres/pgdata/data
+    healthcheck:
+      # ขาดอันนี้ collector จะขึ้นก่อนฐานพร้อมแล้วตายทันที
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # ─────────────────────────────────────────────────────────────────────
+  #  ตัวเก็บข้อมูล — ดึงจากฐานแดชบอร์ด (กล่อง box-mew) + Open-Meteo ตลอดเวลา
+  # ─────────────────────────────────────────────────────────────────────
+  wx-collector:
+    build: ./collector
+    container_name: wx-collector
+    restart: unless-stopped
+    depends_on:
+      wx-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${WX_DB_USER:-wx}:${WX_DB_PASSWORD:-wx}@wx-db:5432/${WX_DB_NAME:-wx}
+      # PlotNexus ปิดไว้ตั้งแต่ 19 ต.ค. 2569 (กุญแจถูกถอนสิทธิ์ 11 ก.ย.)
+      # ตั้ง PLOTNEXUS_ENABLED=1 เมื่อพี่เลี้ยงเปิดสิทธิ์คืน แล้วมันจะเก็บคู่ขนานไปกับกล่อง
+      PLOTNEXUS_ENABLED: ${PLOTNEXUS_ENABLED:-0}
+      PLOTNEXUS_KEY: ${PLOTNEXUS_KEY:-}
+      PLOTNEXUS_SOURCE: ${PLOTNEXUS_SOURCE:-pig}
+      PLOTNEXUS_EVERY_SEC: ${PLOTNEXUS_EVERY_SEC:-60}
+      OPEN_METEO_EVERY_SEC: ${OPEN_METEO_EVERY_SEC:-900}
+      FARM_LAT: ${FARM_LAT:-16.4828}
+      FARM_LON: ${FARM_LON:-99.5222}
+      # ═══ แหล่งค่าเซนเซอร์หลักตั้งแต่ 19 ต.ค. 2569 ═══
+      # ฐานจริงอยู่บนกล่อง box-mew (ต่อผ่าน Tailscale เหมือนที่ swine-bridge ทำ)
+      # ถ้าชี้มาที่ฐานในเครื่อง (host.docker.internal) จะได้ของที่หยุดไหลตั้งแต่ 29 ก.ย.
+      # ตัวเดียวกันนี้ใช้ทั้งตอนเก็บสดและตอน backfill — ห้ามแยกเป็นสองค่า
+      SWINE_DB_URL: ${SWINE_DB_URL:-}
+      SWINE_EVERY_SEC: ${SWINE_EVERY_SEC:-60}
+    volumes:
+      # ที่วางไฟล์ CSV ที่โหลดมาจากเว็บพี่เลี้ยง — ตัว backfill อ่านจากที่นี่
+      # (โฟลเดอร์เดียวกับที่ wx-lab เห็น จึงวางไฟล์ทีเดียวใช้ได้ทั้งสองตัว)
+      - ./lab/exports:/work/exports
+    extra_hosts:
+      # Linux ไม่มี host.docker.internal ให้เองเหมือน Mac/Windows — บรรทัดนี้เติมให้
+      - "host.docker.internal:host-gateway"
+
+  # ─────────────────────────────────────────────────────────────────────
+  #  ที่ทำงานสำหรับเทรนโมเดล — JupyterLab + pandas + scikit-learn
+  #
+  #  ต่อฐานตรง ๆ ผ่านเครือข่ายของ Docker จึงไม่ต้อง export เป็นไฟล์ก่อน
+  #  (แต่ export ได้ถ้าอยากเอาไปเทรนที่อื่น — ดู README)
+  # ─────────────────────────────────────────────────────────────────────
+  wx-lab:
+    build: ./lab
+    container_name: wx-lab
+    restart: unless-stopped
+    depends_on:
+      wx-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${WX_DB_USER:-wx}:${WX_DB_PASSWORD:-wx}@wx-db:5432/${WX_DB_NAME:-wx}
+    # ปิดการถามรหัสตอนเข้า JupyterLab
+    # **ต้องสั่งผ่าน command แบบนี้เท่านั้น** — ตั้ง ENV JUPYTER_TOKEN="" เฉย ๆ ไม่พอ
+    # image รุ่นใหม่ถือว่าค่าว่างคือ "ไม่ได้ตั้ง" แล้วสุ่ม token ให้ แล้วเปิดหน้าเว็บ
+    # จะเด้งไปหน้า /login ทันที (เจอจริงตอนทดสอบ)
+    #
+    # ปลอดภัยเพราะพอร์ตผูกกับ 127.0.0.1 เท่านั้น เครื่องอื่นต่อไม่ได้อยู่แล้ว
+    # **ถ้าย้ายขึ้นเซิร์ฟเวอร์ที่คนอื่นเข้าถึงได้ ต้องเอาสองบรรทัดนี้ออกก่อน**
+    command: >
+      start-notebook.py
+      --IdentityProvider.token=''
+      --ServerApp.password=''
+    ports:
+      - "127.0.0.1:${WX_LAB_PORT:-8899}:8888"
+    volumes:
+      # ผูกกับเครื่องจริง — สมุดที่เขียนและโมเดลที่เทรนไว้จะไม่หายตอน build ใหม่
+      # image ของโครงการ Jupyter ใช้บ้านที่ /home/jovyan ไม่ใช่ /work
+      - ./lab/notebooks:/home/jovyan/work/notebooks
+      - ./lab/models:/home/jovyan/work/models
+      - ./lab/exports:/home/jovyan/work/exports
+      # สคริปต์เทรน — ผูกทั้งโฟลเดอร์ แก้บนเครื่องแล้วมีผลทันที ไม่ต้อง build ใหม่
+      # รันด้วย  docker compose exec wx-lab python /home/jovyan/scripts/baseline.py
+      #
+      # **ต้องผูกทั้งโฟลเดอร์ ห้ามผูกทีละไฟล์** — เครื่องมือแก้ไฟล์ส่วนใหญ่เขียนไฟล์ใหม่
+      # แล้ว rename ทับ ซึ่งเปลี่ยน inode ส่วน bind mount แบบไฟล์เดี่ยวบน Docker Desktop
+      # ยังชี้ inode เดิมค้างไว้ ในคอนเทนเนอร์จึงเห็นไฟล์เก่าที่ถูกตัดกลางคัน
+      # (เจอจริง: ในเครื่องเห็น 20,023 ไบต์ ในคอนเทนเนอร์เห็น 19,011 ไบต์
+      #  แล้ว Python ฟ้อง SyntaxError: Non-UTF-8 เพราะไฟล์ขาดกลางตัวอักษรไทย)
+      #
+      # (Dockerfile ยัง COPY ไว้ที่ work/ ด้วย เผื่อรัน image นี้ที่อื่นโดยไม่มีโฟลเดอร์ต้นทาง)
+      - ./lab:/home/jovyan/scripts:ro
+
+volumes:
+  wx-data:

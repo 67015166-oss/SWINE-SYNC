@@ -1,0 +1,2078 @@
+[
+    {
+        "id": "f2c63fcb43f34603",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3994de7ed05fe6e4",
+        "type": "tab",
+        "label": "Flow 4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c874ef49d770808e",
+        "type": "tab",
+        "label": "PRUK-work",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1146d39e6f61badb",
+        "type": "tab",
+        "label": "PRUK",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ded2916eabc87f1d",
+        "type": "group",
+        "z": "c874ef49d770808e",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "a547b781c8fa167b",
+            "8cb7f03e9a79c5b9",
+            "4c7ace8d83f727ed",
+            "9fe860c3326bbe85",
+            "dce44155cf7dc068",
+            "42ede015ebdca38e",
+            "798ad7b7a7229516",
+            "77ee160ead1d5cea",
+            "4a784430831ee1b7",
+            "b10a4e63b28fad27",
+            "701a9381ae620081",
+            "820e267458ad4d68",
+            "72024b6aa993e095",
+            "a463423e49dfc291",
+            "d4e9a78d5e9d767e",
+            "0d4af3ba95a89c58",
+            "61958a103870b141",
+            "78bcc49ef0d5e77e",
+            "c670c052c82a7f96",
+            "8f10d087fec28f21",
+            "4db497efec200490",
+            "6d1dc0201f458f9b",
+            "0831d33a8adb4083",
+            "a2a42bd8d224ce4b",
+            "a6b5ef410bb0f1e6",
+            "f7dbe5a235c77cbc",
+            "661b5f06bf28dc75",
+            "3f3dcedb1fee7789",
+            "0827d47582a544c5"
+        ],
+        "x": 4,
+        "y": 219,
+        "w": 1902,
+        "h": 902
+    },
+    {
+        "id": "8905b0acfa927fbb",
+        "type": "group",
+        "z": "1146d39e6f61badb",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "d5d81431b243ac45",
+            "5a792aa348b49c41",
+            "fb6cef89697bdf07",
+            "dca3e2aadae39f2c",
+            "9d995003ae0d5557",
+            "c3738b7920d02f03",
+            "5e2020f3b481166c",
+            "73b9ee8241d4829e",
+            "f264f99a8411b817",
+            "3b5d316069f1248b",
+            "54e58c6526eb99f7",
+            "19832d51424c1f0c",
+            "6f476ed9f0907ad3",
+            "eef1f057814cd5f6",
+            "4c17e93e576abc45",
+            "bda3918e06361464",
+            "94e5d35cd82b4a0f",
+            "59b480ba8b1a96d0",
+            "2ff4b5fdf3cb1705",
+            "5ce60e0d171aa97e",
+            "8a4c8ae7d38caf96",
+            "bc4a94d64aae9a3b",
+            "0723cdcd30d3545b",
+            "75f693de45e115e8",
+            "1c4ac8dd730e22bf",
+            "40684ff5a6314a53"
+        ],
+        "x": 4,
+        "y": 199,
+        "w": 1702,
+        "h": 562
+    },
+    {
+        "id": "73de67db50c6e03e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "swinesync-mac-73de67db",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 30,
+        "cleansession": false,
+        "autoUnsubscribe": false,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "3be0a38c80bd2f0c",
+        "type": "mqtt-broker",
+        "name": "Local MQTT",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "5188d1d6cb0df5f3",
+        "type": "ui_tab",
+        "name": "Smart Farm",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "7cb51a4facd84255",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "47a38602af3d7be2",
+        "type": "ui_group",
+        "name": "Sensors",
+        "tab": "5188d1d6cb0df5f3",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "cfa83ad2e4724d38",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "swinesync-mac-cfa83ad2",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 30,
+        "cleansession": false,
+        "autoUnsubscribe": false,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "45d27b5825a01344",
+        "type": "influxdb",
+        "hostname": "192.168.1.101",
+        "port": 8086,
+        "protocol": "http",
+        "database": "kampangphet",
+        "name": "Data Bases ",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "influx_config_fixed",
+        "type": "influxdb",
+        "hostname": "192.168.1.101",
+        "port": "8086",
+        "protocol": "http",
+        "database": "kampangphet",
+        "name": "InfluxDB Slangpun Fixed",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "",
+        "timeout": "",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "ae03bceae8c9a863",
+        "type": "ui_tab",
+        "name": "PRUK",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "c095e161d650dad4",
+        "type": "ui_group",
+        "name": "Pruk",
+        "tab": "ae03bceae8c9a863",
+        "order": 1,
+        "disp": true,
+        "width": "14",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "097c29cb388be7e8",
+        "type": "MySQLdatabase",
+        "name": "Swinefarm",
+        "host": "192.168.1.109",
+        "port": "3306",
+        "db": "pigfarm",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "7b12bf14a37b52d8",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "InfluxDB Local NEW",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "304c9625cc25c531",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "new",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "4d7d12925e672ad2",
+        "type": "mqtt in",
+        "z": "f2c63fcb43f34603",
+        "name": "",
+        "topic": "Pigfarm/sensor/Tempin",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "73de67db50c6e03e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 340,
+        "wires": [
+            [
+                "9005dc5658925a5d"
+            ]
+        ]
+    },
+    {
+        "id": "161b02269ce2b9bc",
+        "type": "debug",
+        "z": "f2c63fcb43f34603",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "9005dc5658925a5d",
+        "type": "function",
+        "z": "f2c63fcb43f34603",
+        "name": "function 1",
+        "func": "let text = `SS500_sensor_voltage_500000_229.5\nSS501_sensor_current_a_500001_0\nSS502_sensor_current_b_500002_0\nSS503_sensor_current_c_500003_0\nSS504_sensor_power_500004_0\nSS505_sensor_power_factor_500005_0\nSS506_sensor_frequency_500006_49.97\nSS507_sensor_kilowatt_hour_500007_0\nSS508_sensor_cost_thb_500008_0\nSS509_sensor_temperature_500010_26.4\nSS510_sensor_humidity_500011_51.7\nSS511_sensor_wind_speed_500013_0\nSS512_sensor_rssi_500015_-95\nSS513_sensor_rs485_error_500016_0\nSS514_sensor_buffer_pending_500017_0\nSS515_sensor_uptime_second_500018_350106\nSS516_sensor_firmware_2.0.0\nSS517_sensor_power_ok_true\nSS518_sensor_environment_ok_true\nSS519_sensor_wind_ok_true`;\n\nlet lines = text.split('\\n');\n\nlet data = {};\n\nlines.forEach(line => {\n\n    let lastIndex = line.lastIndexOf('_');\n\n    let key = line.substring(0, lastIndex);\n\n    let value = line.substring(lastIndex + 1);\n\n    // แปลงชนิดข้อมูล\n    if (value === \"true\") {\n        value = true;\n    }\n    else if (value === \"false\") {\n        value = false;\n    }\n    else if (!isNaN(value)) {\n        value = Number(value);\n    }\n\n    data[key] = value;\n});\n\nmsg.payload = data;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 360,
+        "wires": [
+            [
+                "161b02269ce2b9bc"
+            ]
+        ]
+    },
+    {
+        "id": "129a1aadaedc63f9",
+        "type": "function",
+        "z": "f2c63fcb43f34603",
+        "name": "function 2",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a926736d94c17b4d",
+        "type": "mqtt out",
+        "z": "f2c63fcb43f34603",
+        "name": "",
+        "topic": "moraumoo",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "73de67db50c6e03e",
+        "x": 830,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "a551f6fba7a274ef",
+        "type": "mqtt in",
+        "z": "f2c63fcb43f34603",
+        "name": "",
+        "topic": "Pigfarm/sensor/WindSpeed",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "73de67db50c6e03e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 440,
+        "wires": [
+            [
+                "9005dc5658925a5d"
+            ]
+        ]
+    },
+    {
+        "id": "f8abb0d1d6164fbe",
+        "type": "mqtt in",
+        "z": "f2c63fcb43f34603",
+        "name": "",
+        "topic": "Pigfarm/sensor/Tempout",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "73de67db50c6e03e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 520,
+        "wires": [
+            [
+                "9005dc5658925a5d"
+            ]
+        ]
+    },
+    {
+        "id": "e8cce4dd7ab5817e",
+        "type": "mqtt in",
+        "z": "f2c63fcb43f34603",
+        "name": "",
+        "topic": "Pigfarm/sensor/Humin",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "73de67db50c6e03e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 600,
+        "wires": [
+            [
+                "9005dc5658925a5d"
+            ]
+        ]
+    },
+    {
+        "id": "edb7b6f75eaa5f2e",
+        "type": "mqtt in",
+        "z": "f2c63fcb43f34603",
+        "name": "",
+        "topic": "Pigfarm/sensor/Humout",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "73de67db50c6e03e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 680,
+        "wires": [
+            [
+                "9005dc5658925a5d"
+            ]
+        ]
+    },
+    {
+        "id": "7193b2615944075c",
+        "type": "mqtt in",
+        "z": "c874ef49d770808e",
+        "name": "",
+        "topic": "NODE_02/energy_env/pruk",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "b6c4b9d1c121989e",
+                "efedbd32fe4f0f12",
+                "3805e0f472c9bf69"
+            ]
+        ]
+    },
+    {
+        "id": "b6c4b9d1c121989e",
+        "type": "ui_template",
+        "z": "c874ef49d770808e",
+        "group": "c095e161d650dad4",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<!DOCTYPE html>\n<html lang=\"th\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n    <title>NODE Dashboard</title>\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link\n        href=\"https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sarabun:wght@400;500;600&display=swap\"\n        rel=\"stylesheet\">\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js\"></script>\n    <style>\n        :root {\n            --c1: #0f172a;\n            --c2: #1e293b;\n            --c3: #334155;\n            --c4: #64748b;\n            --c5: #94a3b8;\n            --acc: #22d3ee;\n            --acc2: #a78bfa;\n            --acc3: #34d399;\n            --acc4: #fb923c;\n            --warn: #f87171;\n            --ok: #4ade80;\n            --border: rgba(148, 163, 184, 0.12);\n        }\n\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n        }\n\n        body {\n            background: var(--c1);\n            color: #e2e8f0;\n            font-family: 'Sarabun', sans-serif;\n            padding: 12px;\n        }\n\n        .topbar {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            margin-bottom: 14px;\n            padding: 10px 16px;\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n        }\n\n        .topbar-l {\n            display: flex;\n            align-items: center;\n            gap: 10px;\n        }\n\n        .node-id {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 15px;\n            font-weight: 600;\n            color: var(--acc);\n        }\n\n        .loc {\n            font-size: 12px;\n            color: var(--c5);\n            margin-top: 1px;\n        }\n\n        .status-dot {\n            width: 9px;\n            height: 9px;\n            border-radius: 50%;\n            background: var(--ok);\n            box-shadow: 0 0 6px var(--ok);\n            flex-shrink: 0;\n            transition: all .4s;\n        }\n\n        .ts-badge {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 11px;\n            color: var(--c5);\n            background: var(--c3);\n            padding: 3px 8px;\n            border-radius: 5px;\n        }\n\n        .fw {\n            font-size: 11px;\n            color: var(--c4);\n            margin-top: 2px;\n            text-align: right;\n        }\n\n        .section-title {\n            font-size: 11px;\n            color: var(--c4);\n            text-transform: uppercase;\n            letter-spacing: .08em;\n            margin-bottom: 7px;\n            padding-left: 2px;\n        }\n\n        .grid4 {\n            display: grid;\n            grid-template-columns: repeat(4, 1fr);\n            gap: 9px;\n            margin-bottom: 9px;\n        }\n\n        .grid3 {\n            display: grid;\n            grid-template-columns: repeat(3, 1fr);\n            gap: 9px;\n            margin-bottom: 9px;\n        }\n\n        .grid2 {\n            display: grid;\n            grid-template-columns: 1fr 1fr;\n            gap: 9px;\n            margin-bottom: 9px;\n        }\n\n        .card {\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n            padding: 11px 13px;\n        }\n\n        .card-label {\n            font-size: 11px;\n            color: var(--c4);\n            text-transform: uppercase;\n            letter-spacing: .06em;\n            margin-bottom: 4px;\n        }\n\n        .card-val {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 20px;\n            font-weight: 600;\n            color: #f1f5f9;\n        }\n\n        .card-unit {\n            font-size: 11px;\n            color: var(--c5);\n            margin-left: 3px;\n            font-weight: 400;\n        }\n\n        .card-accent {\n            border-left: 2px solid var(--acc);\n        }\n\n        .card-accent2 {\n            border-left: 2px solid var(--acc2);\n        }\n\n        .card-accent3 {\n            border-left: 2px solid var(--acc3);\n        }\n\n        .card-accent4 {\n            border-left: 2px solid var(--acc4);\n        }\n\n        .badge {\n            display: inline-block;\n            font-size: 10px;\n            padding: 3px 8px;\n            border-radius: 4px;\n            font-weight: 500;\n            margin-top: 4px;\n            transition: all .3s;\n        }\n\n        .badge-ok {\n            background: rgba(74, 222, 128, .15);\n            color: var(--ok);\n        }\n\n        .badge-err {\n            background: rgba(248, 113, 113, .15);\n            color: var(--warn);\n        }\n\n        .phase-row {\n            display: grid;\n            grid-template-columns: 1fr 1fr 1fr;\n            gap: 8px;\n        }\n\n        .phase-item {\n            text-align: center;\n            background: var(--c3);\n            border-radius: 7px;\n            padding: 8px;\n        }\n\n        .phase-label {\n            font-size: 10px;\n            color: var(--c4);\n            margin-bottom: 3px;\n        }\n\n        .phase-val {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 14px;\n            font-weight: 600;\n            color: #f1f5f9;\n        }\n\n        .rssi-bar {\n            height: 5px;\n            border-radius: 2px;\n            background: var(--c3);\n            width: 100%;\n            margin-top: 5px;\n            overflow: hidden;\n        }\n\n        .rssi-fill {\n            height: 100%;\n            border-radius: 2px;\n            background: var(--acc);\n            transition: width .5s;\n        }\n\n        .chart-card {\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n            padding: 13px;\n            margin-bottom: 9px;\n        }\n\n        .chart-header {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            margin-bottom: 9px;\n        }\n\n        .chart-title {\n            font-size: 13px;\n            color: #cbd5e1;\n            font-weight: 500;\n        }\n\n        .legend {\n            display: flex;\n            gap: 12px;\n        }\n\n        .leg-item {\n            display: flex;\n            align-items: center;\n            gap: 5px;\n            font-size: 11px;\n            color: var(--c5);\n        }\n\n        .leg-dot {\n            width: 8px;\n            height: 8px;\n            border-radius: 2px;\n            flex-shrink: 0;\n        }\n\n        .history-card {\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n            padding: 13px;\n        }\n\n        .history-title {\n            font-size: 13px;\n            color: #cbd5e1;\n            font-weight: 500;\n            margin-bottom: 10px;\n        }\n\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 11px;\n        }\n\n        th {\n            color: var(--c4);\n            font-weight: 500;\n            padding: 5px 7px;\n            text-align: left;\n            border-bottom: .5px solid var(--border);\n        }\n\n        td {\n            padding: 5px 7px;\n            color: #cbd5e1;\n            border-bottom: .5px solid rgba(148, 163, 184, 0.06);\n        }\n\n        tr:last-child td {\n            border-bottom: none;\n        }\n\n        td.ok {\n            color: var(--ok);\n        }\n\n        td.warn {\n            color: var(--warn);\n        }\n\n        @media(max-width:600px) {\n            .grid4 {\n                grid-template-columns: repeat(2, 1fr);\n            }\n\n            .grid3 {\n                grid-template-columns: 1fr 1fr;\n            }\n\n            th:nth-child(n+6),\n            td:nth-child(n+6) {\n                display: none;\n            }\n        }\n    </style>\n</head>\n\n<body>\n\n    <!-- ═══════════════════════════ TOPBAR ═══════════════════════════ -->\n    <div class=\"topbar\">\n        <div class=\"topbar-l\">\n            <div class=\"status-dot\" id=\"statusDot\"></div>\n            <div>\n                <div class=\"node-id\" id=\"nodeId\">--</div>\n                <div class=\"loc\" id=\"locLabel\">--</div>\n            </div>\n        </div>\n        <div>\n            <div class=\"ts-badge\" id=\"tsLabel\">--:--:--</div>\n            <div class=\"fw\" id=\"fwLabel\">fw --</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ POWER ════════════════════════════ -->\n    <div class=\"section-title\">Power</div>\n    <div class=\"grid4\">\n        <div class=\"card card-accent\">\n            <div class=\"card-label\">Voltage</div>\n            <div class=\"card-val\" id=\"vVal\">--<span class=\"card-unit\">V</span></div>\n        </div>\n        <div class=\"card card-accent2\">\n            <div class=\"card-label\">Power</div>\n            <div class=\"card-val\" id=\"pVal\">--<span class=\"card-unit\">W</span></div>\n        </div>\n        <div class=\"card card-accent3\">\n            <div class=\"card-label\">Frequency</div>\n            <div class=\"card-val\" id=\"fVal\">--<span class=\"card-unit\">Hz</span></div>\n        </div>\n        <div class=\"card card-accent4\">\n            <div class=\"card-label\">Power Factor</div>\n            <div class=\"card-val\" id=\"pfVal\">--</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ 3-PHASE ══════════════════════════ -->\n    <div class=\"section-title\">Current (3-phase)</div>\n    <div class=\"card\" style=\"margin-bottom:9px;\">\n        <div class=\"phase-row\">\n            <div class=\"phase-item\">\n                <div class=\"phase-label\">Phase A</div>\n                <div class=\"phase-val\" id=\"iaVal\">-- A</div>\n            </div>\n            <div class=\"phase-item\">\n                <div class=\"phase-label\">Phase B</div>\n                <div class=\"phase-val\" id=\"ibVal\">-- A</div>\n            </div>\n            <div class=\"phase-item\">\n                <div class=\"phase-label\">Phase C</div>\n                <div class=\"phase-val\" id=\"icVal\">-- A</div>\n            </div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ ENERGY ═══════════════════════════ -->\n    <div class=\"section-title\">Energy & Cost</div>\n    <div class=\"grid2\">\n        <div class=\"card card-accent3\">\n            <div class=\"card-label\">Energy</div>\n            <div class=\"card-val\" id=\"kwhVal\">--<span class=\"card-unit\">kWh</span></div>\n        </div>\n        <div class=\"card card-accent4\">\n            <div class=\"card-label\">Cost</div>\n            <div class=\"card-val\" id=\"costVal\">--<span class=\"card-unit\">฿</span></div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ ENV ═══════════════════════════════ -->\n    <div class=\"section-title\">Environment</div>\n    <div class=\"grid3\">\n        <div class=\"card card-accent\">\n            <div class=\"card-label\">Temperature</div>\n            <div class=\"card-val\" id=\"tempVal\">--<span class=\"card-unit\">°C</span></div>\n        </div>\n        <div class=\"card card-accent2\">\n            <div class=\"card-label\">Humidity</div>\n            <div class=\"card-val\" id=\"rhVal\">--<span class=\"card-unit\">%</span></div>\n        </div>\n        <div class=\"card card-accent3\">\n            <div class=\"card-label\">Wind</div>\n            <div class=\"card-val\" id=\"windVal\">--<span class=\"card-unit\">m/s</span></div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ STATUS ═══════════════════════════ -->\n    <div class=\"section-title\" style=\"margin-top:2px;\">Status</div>\n    <div class=\"grid3\">\n        <div class=\"card\">\n            <div class=\"card-label\">Power</div>\n            <div class=\"badge\" id=\"powerBadge\">--</div>\n        </div>\n        <div class=\"card\">\n            <div class=\"card-label\">Env</div>\n            <div class=\"badge\" id=\"envBadge\">--</div>\n        </div>\n        <div class=\"card\">\n            <div class=\"card-label\">Wind</div>\n            <div class=\"badge\" id=\"windBadge\">--</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ SYSTEM ═══════════════════════════ -->\n    <div class=\"section-title\">System</div>\n    <div class=\"grid2\">\n        <div class=\"card\">\n            <div class=\"card-label\">RSSI</div>\n            <div class=\"card-val\" id=\"rssiVal\">--<span class=\"card-unit\">dBm</span></div>\n            <div class=\"rssi-bar\">\n                <div class=\"rssi-fill\" id=\"rssiBar\" style=\"width:0%\"></div>\n            </div>\n        </div>\n        <div class=\"card\">\n            <div class=\"card-label\">Uptime</div>\n            <div class=\"card-val\" id=\"uptimeVal\" style=\"font-size:16px;\">--</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ CHARTS ═══════════════════════════ -->\n    <div class=\"chart-card\" style=\"margin-top:2px;\">\n        <div class=\"chart-header\">\n            <div class=\"chart-title\">Voltage & Power</div>\n            <div class=\"legend\">\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#22d3ee;\"></div>Voltage (V)\n                </div>\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#a78bfa;\"></div>Power (W)\n                </div>\n            </div>\n        </div>\n        <div style=\"position:relative;height:160px;\">\n            <canvas id=\"powerChart\" role=\"img\" aria-label=\"Voltage and power history line chart\"></canvas>\n        </div>\n    </div>\n\n    <div class=\"chart-card\">\n        <div class=\"chart-header\">\n            <div class=\"chart-title\">Temp & Humidity</div>\n            <div class=\"legend\">\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#fb923c;\"></div>Temp (°C)\n                </div>\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#34d399;\"></div>Humidity (%)\n                </div>\n            </div>\n        </div>\n        <div style=\"position:relative;height:160px;\">\n            <canvas id=\"envChart\" role=\"img\" aria-label=\"Temperature and humidity history line chart\"></canvas>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ HISTORY TABLE ════════════════════ -->\n    <div class=\"history-card\">\n        <div class=\"history-title\">ข้อมูลย้อนหลัง (50 รายการล่าสุด)</div>\n        <div style=\"overflow-x:auto;\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>เวลา</th>\n                        <th>V</th>\n                        <th>W</th>\n                        <th>Hz</th>\n                        <th>°C</th>\n                        <th>%RH</th>\n                        <th>kWh</th>\n                        <th>Status</th>\n                    </tr>\n                </thead>\n                <tbody id=\"histTable\"></tbody>\n            </table>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ SCRIPT ═══════════════════════════ -->\n    <script>\n        (function(scope) {\n    \n    const MAX_HIST = 50;\n    let history = [];\n    let pChart, eChart;\n    \n    const $ = id => document.getElementById(id);\n    \n    function num(v, def = 0) {\n        const n = Number(v);\n        return isNaN(n) ? def : n;\n    }\n    \n    function tsToTime(ts) {\n        return new Date(ts * 1000).toLocaleTimeString('th-TH');\n    }\n    \n    function uptimeFmt(s) {\n        s = num(s);\n        const h = Math.floor(s / 3600);\n        const m = Math.floor((s % 3600) / 60);\n        const sec = Math.floor(s % 60);\n        return h > 0 ? `${h}h ${m}m` : `${m}m ${sec}s`;\n    }\n    \n    function rssiPct(r) {\n        return Math.max(0, Math.min(100, ((r + 100) / 70) * 100));\n    }\n    \n    function setBadge(el, ok) {\n        el.className = 'badge ' + (ok ? 'badge-ok' : 'badge-err');\n        el.textContent = ok ? 'OK' : 'FAULT';\n    }\n    \n    /* ===== CHART ===== */\n    function initCharts() {\n    \n        pChart = new Chart($('powerChart'), {\n            type: 'line',\n            data: { labels: [], datasets: [\n                { label:'V', data:[], borderColor:'#22d3ee', yAxisID:'y' },\n                { label:'W', data:[], borderColor:'#a78bfa', yAxisID:'y2' }\n            ]},\n            options: { responsive:true, maintainAspectRatio:false }\n        });\n    \n        eChart = new Chart($('envChart'), {\n            type: 'line',\n            data: { labels: [], datasets: [\n                { label:'T', data:[], borderColor:'#fb923c', yAxisID:'y' },\n                { label:'RH', data:[], borderColor:'#34d399', yAxisID:'y2' }\n            ]},\n            options: { responsive:true, maintainAspectRatio:false }\n        });\n    }\n    \n    /* ===== RENDER ===== */\n    function render(d) {\n    \n        $('nodeId').textContent = d.node || '--';\n        $('locLabel').textContent = d.loc || '--';\n        $('tsLabel').textContent = tsToTime(d.ts || 0);\n        $('fwLabel').textContent = 'fw ' + (d.fw || '--');\n    \n        $('vVal').innerHTML = num(d.v).toFixed(1) + ' V';\n        $('pVal').innerHTML = num(d.p).toFixed(0) + ' W';\n        $('fVal').innerHTML = num(d.f).toFixed(2) + ' Hz';\n        $('pfVal').innerHTML = num(d.pf).toFixed(2);\n    \n        $('iaVal').textContent = num(d.ia).toFixed(2) + ' A';\n        $('ibVal').textContent = num(d.ib).toFixed(2) + ' A';\n        $('icVal').textContent = num(d.ic).toFixed(2) + ' A';\n    \n        $('kwhVal').innerHTML = num(d.kwh).toFixed(3) + ' kWh';\n        $('costVal').innerHTML = num(d.cost_thb).toFixed(2) + ' ฿';\n    \n        $('tempVal').innerHTML = num(d.temp).toFixed(1) + ' °C';\n        $('rhVal').innerHTML = num(d.rh).toFixed(1) + ' %';\n        $('windVal').innerHTML = num(d.wind).toFixed(1) + ' m/s';\n    \n        setBadge($('powerBadge'), d.power_ok);\n        setBadge($('envBadge'), d.env_ok);\n        setBadge($('windBadge'), d.wind_ok);\n    \n        const rssi = num(d.rssi, -100);\n        $('rssiVal').innerHTML = rssi + ' dBm';\n        $('rssiBar').style.width = rssiPct(rssi) + '%';\n    \n        $('uptimeVal').textContent = uptimeFmt(d.uptime_s);\n    \n        const dot = $('statusDot');\n        const ok = d.power_ok && d.env_ok && d.wind_ok;\n        dot.style.background = ok ? '#4ade80' : '#f87171';\n    }\n    \n    /* ===== UPDATE ===== */\n    function updateCharts() {\n        const labels = history.map(h => tsToTime(h.ts));\n    \n        pChart.data.labels = labels;\n        pChart.data.datasets[0].data = history.map(h => h.v);\n        pChart.data.datasets[1].data = history.map(h => h.p);\n        pChart.update();\n    \n        eChart.data.labels = labels;\n        eChart.data.datasets[0].data = history.map(h => h.temp);\n        eChart.data.datasets[1].data = history.map(h => h.rh);\n        eChart.update();\n    }\n    \n    function updateTable() {\n        $('histTable').innerHTML = history.slice().reverse().map(h => `\n            <tr>\n                <td>${tsToTime(h.ts)}</td>\n                <td>${h.v.toFixed(1)}</td>\n                <td>${h.p.toFixed(0)}</td>\n                <td>${h.f.toFixed(2)}</td>\n                <td>${h.temp.toFixed(1)}</td>\n                <td>${h.rh.toFixed(1)}</td>\n                <td>${h.kwh.toFixed(3)}</td>\n                <td>${h.power_ok ? 'OK':'FAULT'}</td>\n            </tr>\n        `).join('');\n    }\n    \n    /* ===== INGEST ===== */\n    function ingest(data) {\n    \n        if (typeof data === 'string') {\n            try { data = JSON.parse(data); } catch(e){ return; }\n        }\n    \n        history.push({\n            ts: num(data.ts),\n            v: num(data.v),\n            p: num(data.p),\n            f: num(data.f),\n            temp: num(data.temp),\n            rh: num(data.rh),\n            kwh: num(data.kwh),\n            power_ok: data.power_ok,\n            env_ok: data.env_ok,\n            wind_ok: data.wind_ok\n        });\n    \n        if (history.length > MAX_HIST) history.shift();\n    \n        render(data);\n        updateCharts();\n        updateTable();\n    }\n    \n    /* ===== INIT ===== */\n    setTimeout(initCharts, 300);\n    \n    /* ===== NODE-RED HOOK ===== */\n    scope.$watch('msg', function(msg) {\n        if (msg && msg.payload) {\n            ingest(msg.payload);\n        }\n    });\n    \n    })(scope);\n    </script>\n\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1a5c660765e75b29",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "name": "Standard Mqtt_model_climate_500_Kampangphet ",
+        "func": "const MEASUREMENT_NAME = flow.get(\"measurement\") || msg.measurement || \"kampangphet\";\n\nconst META = Object.assign({\n    country: \"thailand\",\n    plant: \"kampangphet_farm\",\n    plant_id: 5000,\n    area: \"kampangphet\"\n}, flow.get(\"farmMeta\") || {}, msg.meta || {});\n\nconst INFO = {\n    SS300:[\"°C\",\"Temperature\"], SS301:[\"%RH\",\"Humidity\"], SS302:[\"m/s\",\"Wind Speed\"], SS303:[\"dir\",\"Wind Direction\"], SS304:[\"W/m²\",\"Enegy_Intensity\"], SS305:[\"mm\",\"Rainfall\"], SS306:[\"mm\",\"Rainfall 24hr\"], SS307:[\"hPa\",\"Pressure\"],\n    SS400:[\"°C\",\"Temperature\"], SS401:[\"%RH\",\"Humidity\"], SS402:[\"m/s\",\"Wind Speed\"], SS403:[\"dir\",\"Wind Direction\"], SS404:[\"W/m²\",\"Enegy_Intensity\"], SS405:[\"mm\",\"Rainfall\"], SS406:[\"mm\",\"Rainfall 24hr\"], SS407:[\"hPa\",\"Pressure\"],\n    SS500:[\"V\",\"Voltage\"], SS501:[\"A\",\"Current A\"], SS502:[\"A\",\"Current B\"], SS503:[\"A\",\"Current C\"], SS504:[\"W\",\"Power\"], SS505:[\"\",\"Power Factor\"], SS506:[\"Hz\",\"Frequency\"], SS507:[\"kWh\",\"Kilowatt Hour\"], SS508:[\"THB\",\"Cost THB\"],\n    SS509:[\"°C\",\"Temperature\"], SS510:[\"%RH\",\"Humidity\"], SS511:[\"m/s\",\"Wind Speed\"], SS512:[\"dBm\",\"RSSI\"], SS513:[\"\",\"RS485 Error\"], SS514:[\"\",\"Buffer Pending\"], SS515:[\"s\",\"Uptime Second\"], SS516:[\"\",\"Firmware\"], SS517:[\"\",\"Power OK\"], SS518:[\"\",\"Environment OK\"], SS519:[\"\",\"Wind OK\"]\n};\n\nconst NODE02_MAP = {\n    v:\"SS500_sensor_voltage_500000\",\n    ia:\"SS501_sensor_current_a_500001\",\n    ib:\"SS502_sensor_current_b_500002\",\n    ic:\"SS503_sensor_current_c_500003\",\n    p:\"SS504_sensor_power_500004\",\n    pf:\"SS505_sensor_power_factor_500005\",\n    f:\"SS506_sensor_frequency_500006\",\n    kwh:\"SS507_sensor_kilowatt_hour_500007\",\n    cost_thb:\"SS508_sensor_cost_thb_500008\",\n    temp:\"SS509_sensor_temperature_500010\",\n    rh:\"SS510_sensor_humidity_500011\",\n    wind:\"SS511_sensor_wind_speed_500013\",\n    rssi:\"SS512_sensor_rssi_500015\",\n    rs485_err:\"SS513_sensor_rs485_error_500016\",\n    buf_pending:\"SS514_sensor_buffer_pending_500017\",\n    uptime_s:\"SS515_sensor_uptime_second_500018\",\n    fw:\"SS516_sensor_firmware_500019\",\n    power_ok:\"SS517_sensor_power_ok_500020\",\n    env_ok:\"SS518_sensor_environment_ok_500021\",\n    wind_ok:\"SS519_sensor_wind_ok_500022\"\n};\n\nfunction toMs(t) {\n    if (!t) return Date.now();\n\n    const s = String(t);\n\n    if (/^\\d+$/.test(s)) {\n        if (s.length >= 18) return Math.floor(Number(s) / 1e6);\n        if (s.length === 13) return Number(s);\n        if (s.length === 10) return Number(s) * 1000;\n    }\n\n    return new Date(t).getTime();\n}\n\nfunction timeTH(ms) {\n    const d = new Date(ms);\n    const p = n => String(n).padStart(2, \"0\");\n\n    const y = d.getFullYear();\n    const m = p(d.getMonth() + 1);\n    const da = p(d.getDate());\n    const h = p(d.getHours());\n    const mi = p(d.getMinutes());\n    const se = p(d.getSeconds());\n\n    return {\n        timestamp_th: `${y}-${m}-${da} ${h}:${mi}:${se}`,\n        date_th: `${y}-${m}-${da}`,\n        time_th: `${h}:${mi}:${se}`\n    };\n}\n\nfunction machine(sensorId) {\n    const s = String(sensorId);\n\n    if (s.startsWith(\"300\")) return [\"weathersensor\", \"model_weather_300\"];\n    if (s.startsWith(\"400\")) return [\"weathersensor\", \"model_weather_400\"];\n    if (s.startsWith(\"500\")) return [\"power_environment_sensor\", \"model_power_env_500\"];\n    if (s.startsWith(\"200\")) return [\"soilsensor\", \"model_soil\"];\n\n    return [\"unknown\", \"unknown_model\"];\n}\n\nfunction normalize(raw) {\n    if (raw && typeof raw === \"object\" && !Object.keys(raw).some(k => /^SS\\d+/.test(k))) {\n        const mapped = {};\n\n        for (const [src, key] of Object.entries(NODE02_MAP)) {\n            if (raw[src] !== undefined) {\n                mapped[key] = raw[src];\n            }\n        }\n\n        if (Object.keys(mapped).length) return mapped;\n    }\n\n    if (raw && typeof raw === \"object\") return raw;\n\n    if (typeof raw === \"string\") {\n        const m = raw.match(/^([^:]+?)\\s*:\\s*(.+)$/);\n        if (!m) return {};\n\n        return {\n            [m[1].trim()]: m[2].trim()\n        };\n    }\n\n    if (msg.topic && /^SS\\d+/.test(msg.topic)) {\n        return {\n            [msg.topic]: raw\n        };\n    }\n\n    return {};\n}\n\nconst raw = msg.payload;\nconst input = normalize(raw);\n\nconst timeMs = toMs(raw && raw.ts ? raw.ts : Date.now());\nconst t = timeTH(timeMs);\n\nconst outUI = [];\nconst outInflux = [];\n\nfor (const [key, rawValue] of Object.entries(input)) {\n    const prefix = (key.match(/^(SS\\d+)/) || [])[1];\n    const sensorId = (key.match(/(\\d{6})/) || [])[1];\n\n    if (!prefix || !sensorId || !INFO[prefix]) continue;\n\n    const [unit, label] = INFO[prefix];\n    const [machine_type, machine_name] = machine(sensorId);\n\n    const isNum =\n        typeof rawValue === \"number\" ||\n        /^-?\\d+(\\.\\d+)?$/.test(String(rawValue));\n\n    const isBool = typeof rawValue === \"boolean\";\n\n    const value = isNum ? Number(Number(rawValue).toFixed(2)) : null;\n\n    const text = isNum\n        ? value.toFixed(2)\n        : isBool\n            ? String(rawValue)\n            : String(rawValue).trim();\n\n    const value_text = unit ? `${text} ${unit}` : text;\n\n    const common = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        sensor_key: key,\n        sensor_id: sensorId,\n        label: label,\n        unit: unit,\n        value_text: value_text,\n\n        country: META.country,\n        plant: META.plant,\n        plant_id: META.plant_id,\n        area: META.area,\n\n        node: raw.node || \"\",\n        location: raw.loc || \"\",\n\n        machine_type: machine_type,\n        machine_name: machine_name\n    };\n\n    outUI.push({\n        payload: {\n            time: String(timeMs),\n            value: value,\n            ...common\n        }\n    });\n\n    const fields = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        value_text: value_text,\n        unit: unit,\n        label: label\n    };\n\n    if (isNum) {\n        fields.value = value;\n    } else if (isBool) {\n        fields.value_bool = rawValue;\n        fields.value_str = String(rawValue);\n    } else {\n        fields.value_str = String(rawValue).trim();\n    }\n\n    outInflux.push({\n        measurement: MEASUREMENT_NAME,\n\n        tags: {\n            sensor_key: key,\n            sensor_id: sensorId,\n\n            country: String(META.country),\n            plant: String(META.plant),\n            plant_id: String(META.plant_id),\n            area: String(META.area),\n\n            node: String(raw.node || \"\"),\n            location: String(raw.loc || \"\"),\n\n            machine_type: machine_type,\n            machine_name: machine_name\n        },\n\n        payload: fields,\n        timestamp: timeMs\n    });\n}\n\nreturn [outUI, outInflux];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 100,
+        "wires": [
+            [
+                "40e1e592755caf66"
+            ]
+        ]
+    },
+    {
+        "id": "efedbd32fe4f0f12",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "name": "Model 500_Kampangphet ",
+        "func": "const d = msg.payload;\n\nmsg.payload = {\n    \"SS500_sensor_voltage_500000\": d.v,\n    \"SS501_sensor_current_a_500001\": d.ia,\n    \"SS502_sensor_current_b_500002\": d.ib,\n    \"SS503_sensor_current_c_500003\": d.ic,\n    \"SS504_sensor_power_500004\": d.p,\n    \"SS505_sensor_power_factor_500005\": d.pf,\n    \"SS506_sensor_frequency_500006\": d.f,\n    \"SS507_sensor_kilowatt_hour_500007\": d.kwh,\n    \"SS508_sensor_cost_thb_500008\": d.cost_thb,\n\n    \"SS509_sensor_temperature_500010\": d.temp,\n    \"SS510_sensor_humidity_500011\": d.rh,\n    \"SS511_sensor_wind_speed_500013\": d.wind,\n\n    \"SS512_sensor_rssi_500015\": d.rssi,\n    \"SS513_sensor_rs485_error_500016\": d.rs485_err,\n    \"SS514_sensor_buffer_pending_500017\": d.buf_pending,\n    \"SS515_sensor_uptime_second_500018\": d.uptime_s,\n    \"SS516_sensor_firmware\": d.fw,\n\n    \"SS517_sensor_power_ok\": d.power_ok,\n    \"SS518_sensor_environment_ok\": d.env_ok,\n    \"SS519_sensor_wind_ok\": d.wind_ok\n};\n\nmsg.meta = {\n    node: d.node,\n    location: d.loc,\n    timestamp: d.ts\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "1a5c660765e75b29",
+                "af26eb039c1d739c",
+                "3805e0f472c9bf69"
+            ]
+        ]
+    },
+    {
+        "id": "40e1e592755caf66",
+        "type": "link out",
+        "z": "c874ef49d770808e",
+        "name": "link out 13",
+        "mode": "link",
+        "links": [],
+        "x": 1065,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "af26eb039c1d739c",
+        "type": "mqtt out",
+        "z": "c874ef49d770808e",
+        "name": "",
+        "topic": "climate_kampangphet_farm",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cfa83ad2e4724d38",
+        "x": 740,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3805e0f472c9bf69",
+        "type": "debug",
+        "z": "c874ef49d770808e",
+        "name": "Pruk",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "a547b781c8fa167b",
+        "type": "mqtt in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "",
+        "topic": "sensor01/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 340,
+        "wires": [
+            [
+                "77c0cac491eaaea8"
+            ]
+        ]
+    },
+    {
+        "id": "8cb7f03e9a79c5b9",
+        "type": "mqtt in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "",
+        "topic": "sensor02/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 400,
+        "wires": [
+            [
+                "30eabb81bfdf98bd"
+            ]
+        ]
+    },
+    {
+        "id": "4c7ace8d83f727ed",
+        "type": "mqtt in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "",
+        "topic": "sensor03/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 460,
+        "wires": [
+            [
+                "7b2ff09138419824"
+            ]
+        ]
+    },
+    {
+        "id": "9fe860c3326bbe85",
+        "type": "mqtt in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "",
+        "topic": "sensor/outside01/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 520,
+        "wires": [
+            [
+                "b10a4e63b28fad27"
+            ]
+        ]
+    },
+    {
+        "id": "dce44155cf7dc068",
+        "type": "mqtt in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "",
+        "topic": "sensor/power1/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 580,
+        "wires": [
+            [
+                "701a9381ae620081",
+                "0827d47582a544c5"
+            ]
+        ]
+    },
+    {
+        "id": "42ede015ebdca38e",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Model 500_Kampangphet ",
+        "func": "const d = msg.payload;\n\nmsg.payload = {\n\n    \"SS600_sensor_voltage_600000\": d.VAvg,\n    \"SS601_sensor_current_a_600001\": d.IA,\n    \"SS602_sensor_current_b_600002\": d.IB,\n    \"SS603_sensor_current_c_600003\": d.IC,\n    \"SS604_sensor_power_600004\": d.Power || 0,\n    \"SS605_sensor_power_factor_600005\": d.PF || 0,\n    \"SS606_sensor_frequency_600006\": d.Hz,\n    \"SS607_sensor_kilowatt_hour_600007\": d.KWH || 0,\n    \"SS608_sensor_cost_thb_600008\": d.Cost || 0,\n\n    \"SS609_sensor_temperature_600010\": d.temp1,\n    \"SS610_sensor_humidity_600011\": d.hum1,\n    \"SS611_sensor_wind_speed_600013\": d.wind,\n\n    \"SS620_sensor_temperature_600020\": d.temp2,\n    \"SS621_sensor_humidity_600021\": d.hum2,\n\n    \"SS622_sensor_temperature_600022\": d.temp3,\n    \"SS623_sensor_humidity_600023\": d.hum3,\n\n    \"SS624_sensor_nh3_600024\": d.Nh3,\n    \"SS625_sensor_co2_600025\": d.Co2,\n\n    \"SS626_sensor_outdoor_temperature_600026\": d.tempout,\n    \"SS627_sensor_outdoor_humidity_600027\": d.humout\n\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 1020,
+        "wires": [
+            [
+                "798ad7b7a7229516"
+            ]
+        ]
+    },
+    {
+        "id": "798ad7b7a7229516",
+        "type": "debug",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Pruk",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "77c0cac491eaaea8",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "name": "Set topic: sensor1",
+        "func": "msg.topic = \"sensor1\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 340,
+        "wires": [
+            [
+                "6ab292e023b0b299"
+            ]
+        ]
+    },
+    {
+        "id": "30eabb81bfdf98bd",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "name": "Set topic: sensor2",
+        "func": "msg.topic = \"sensor2\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 400,
+        "wires": [
+            [
+                "6ab292e023b0b299"
+            ]
+        ]
+    },
+    {
+        "id": "7b2ff09138419824",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "name": "Set topic: sensor3",
+        "func": "msg.topic = \"sensor3\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 460,
+        "wires": [
+            [
+                "6ab292e023b0b299"
+            ]
+        ]
+    },
+    {
+        "id": "b10a4e63b28fad27",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Set topic: outside",
+        "func": "msg.topic = \"outside\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 520,
+        "wires": [
+            [
+                "6ab292e023b0b299"
+            ]
+        ]
+    },
+    {
+        "id": "701a9381ae620081",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Set topic: power",
+        "func": "msg.topic = \"power\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 580,
+        "wires": [
+            [
+                "6ab292e023b0b299"
+            ]
+        ]
+    },
+    {
+        "id": "6ab292e023b0b299",
+        "type": "join",
+        "z": "c874ef49d770808e",
+        "name": "Join 5 sensor payloads",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": true,
+        "accumulate": false,
+        "timeout": "5",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 870,
+        "y": 460,
+        "wires": [
+            [
+                "f7dbe5a235c77cbc"
+            ]
+        ]
+    },
+    {
+        "id": "661b5f06bf28dc75",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Model 600 Kampangphet",
+        "func": "const p = msg.payload || {};\n\nmsg.payload = {\n    \"SS600_sensor_voltage_600000\": p.power?.VAvg ?? 0,\n    \"SS601_sensor_current_a_600001\": p.power?.IA ?? 0,\n    \"SS602_sensor_current_b_600002\": p.power?.IB ?? 0,\n    \"SS603_sensor_current_c_600003\": p.power?.IC ?? 0,\n    \"SS604_sensor_power_600004\": p.power?.Power ?? p.power?.P ?? 0,\n    \"SS605_sensor_power_factor_600005\": p.power?.PF ?? p.power?.pf ?? 0,\n    \"SS606_sensor_frequency_600006\": p.power?.Hz ?? 0,\n    \"SS607_sensor_kilowatt_hour_600007\": p.power?.KWH ?? p.power?.kwh ?? 0,\n    \"SS608_sensor_cost_thb_600008\": p.power?.Cost ?? p.power?.cost_thb ?? 0,\n\n    \"SS609_sensor_temperature_600010\": p.sensor1?.temp1 ?? 0,\n    \"SS610_sensor_humidity_600011\": p.sensor1?.hum1 ?? 0,\n\n    \"SS611_sensor_wind_speed_600013\": p.sensor2?.wind ?? 0,\n    \"SS620_sensor_temperature_600020\": p.sensor2?.temp2 ?? 0,\n    \"SS621_sensor_humidity_600021\": p.sensor2?.hum2 ?? 0,\n\n    \"SS622_sensor_temperature_600022\": p.sensor3?.temp3 ?? 0,\n    \"SS623_sensor_humidity_600023\": p.sensor3?.hum3 ?? 0,\n    \"SS624_sensor_nh3_600024\": p.sensor3?.Nh3 ?? p.sensor3?.NH3 ?? 0,\n    \"SS625_sensor_co2_600025\": p.sensor3?.Co2 ?? p.sensor3?.CO2 ?? 0,\n\n    \"SS626_sensor_outdoor_temperature_600026\": p.outside?.tempout ?? 0,\n    \"SS627_sensor_outdoor_humidity_600027\": p.outside?.humout ?? 0\n};\n\nmsg.meta = {\n    model: \"600\",\n    location: \"Kampangphet\",\n    source: \"joined_5_mqtt_topics\",\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1250,
+        "y": 260,
+        "wires": [
+            [
+                "77ee160ead1d5cea"
+            ]
+        ]
+    },
+    {
+        "id": "77ee160ead1d5cea",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Standard Mqtt_model_climate_600_Kampangphet ",
+        "func": "const MEASUREMENT_NAME = flow.get(\"measurement\") || msg.measurement || \"kampangphet\";\n\nconst META = Object.assign({\n    country: \"thailand\",\n    plant: \"kampangphet_farm\",\n    plant_id: 6000,\n    area: \"kampangphet\"\n}, flow.get(\"farmMeta\") || {}, msg.meta || {});\n\nconst INFO = {\n    SS600: [\"V\", \"Voltage\"],\n    SS601: [\"A\", \"Current A\"],\n    SS602: [\"A\", \"Current B\"],\n    SS603: [\"A\", \"Current C\"],\n    SS604: [\"W\", \"Power\"],\n    SS605: [\"\", \"Power Factor\"],\n    SS606: [\"Hz\", \"Frequency\"],\n    SS607: [\"kWh\", \"Kilowatt Hour\"],\n    SS608: [\"THB\", \"Cost THB\"],\n\n    SS609: [\"°C\", \"Temperature\"],\n    SS610: [\"%RH\", \"Humidity\"],\n\n    SS611: [\"m/s\", \"Wind Speed\"],\n    SS620: [\"°C\", \"Temperature\"],\n    SS621: [\"%RH\", \"Humidity\"],\n\n    SS622: [\"°C\", \"Temperature\"],\n    SS623: [\"%RH\", \"Humidity\"],\n    SS624: [\"ppm\", \"NH3\"],\n    SS625: [\"ppm\", \"CO2\"],\n\n    SS626: [\"°C\", \"Outdoor Temperature\"],\n    SS627: [\"%RH\", \"Outdoor Humidity\"]\n};\n\nfunction normalize600(p) {\n    if (!p || typeof p !== \"object\") return {};\n\n    return {\n        SS600_sensor_voltage_600000: p.power?.VAvg ?? 0,\n        SS601_sensor_current_a_600001: p.power?.IA ?? 0,\n        SS602_sensor_current_b_600002: p.power?.IB ?? 0,\n        SS603_sensor_current_c_600003: p.power?.IC ?? 0,\n        SS604_sensor_power_600004: p.power?.Power ?? p.power?.P ?? 0,\n        SS605_sensor_power_factor_600005: p.power?.PF ?? p.power?.pf ?? 0,\n        SS606_sensor_frequency_600006: p.power?.Hz ?? 0,\n        SS607_sensor_kilowatt_hour_600007: p.power?.KWH ?? p.power?.kwh ?? 0,\n        SS608_sensor_cost_thb_600008: p.power?.Cost ?? p.power?.cost_thb ?? 0,\n\n        SS609_sensor_temperature_600010: p.sensor1?.temp1 ?? 0,\n        SS610_sensor_humidity_600011: p.sensor1?.hum1 ?? 0,\n\n        SS611_sensor_wind_speed_600013: p.sensor2?.wind ?? 0,\n        SS620_sensor_temperature_600020: p.sensor2?.temp2 ?? 0,\n        SS621_sensor_humidity_600021: p.sensor2?.hum2 ?? 0,\n\n        SS622_sensor_temperature_600022: p.sensor3?.temp3 ?? 0,\n        SS623_sensor_humidity_600023: p.sensor3?.hum3 ?? 0,\n\n        SS624_sensor_nh3_600024:\n            p.sensor3?.Nh3 ??\n            p.sensor3?.NH3 ??\n            p.sensor3?.nh3 ?? 0,\n\n        SS625_sensor_co2_600025:\n            p.sensor3?.Co2 ??\n            p.sensor3?.CO2 ??\n            p.sensor3?.co2 ?? 0,\n\n        SS626_sensor_outdoor_temperature_600026: p.outside?.tempout ?? 0,\n        SS627_sensor_outdoor_humidity_600027: p.outside?.humout ?? 0\n    };\n}\n\nfunction toMs(t) {\n    if (!t) return Date.now();\n\n    const s = String(t);\n\n    if (/^\\d+$/.test(s)) {\n        if (s.length >= 18) return Math.floor(Number(s) / 1e6);\n        if (s.length === 13) return Number(s);\n        if (s.length === 10) return Number(s) * 1000;\n    }\n\n    return new Date(t).getTime();\n}\n\nfunction timeTH(ms) {\n    const d = new Date(ms);\n    const p = n => String(n).padStart(2, \"0\");\n\n    const y = d.getFullYear();\n    const m = p(d.getMonth() + 1);\n    const da = p(d.getDate());\n    const h = p(d.getHours());\n    const mi = p(d.getMinutes());\n    const se = p(d.getSeconds());\n\n    return {\n        timestamp_th: `${y}-${m}-${da} ${h}:${mi}:${se}`,\n        date_th: `${y}-${m}-${da}`,\n        time_th: `${h}:${mi}:${se}`\n    };\n}\n\nfunction machine(sensorId) {\n    const s = String(sensorId);\n\n    if (s.startsWith(\"600\")) {\n        return [\"swine_environment_sensor\", \"model_swine_env_600\"];\n    }\n\n    return [\"unknown\", \"unknown_model\"];\n}\n\nfunction normalize(raw) {\n    if (raw && typeof raw === \"object\") {\n        const hasSSKey = Object.keys(raw).some(k => /^SS\\d+/.test(k));\n\n        if (hasSSKey) return raw;\n\n        if (raw.power || raw.sensor1 || raw.sensor2 || raw.sensor3 || raw.outside) {\n            return normalize600(raw);\n        }\n    }\n\n    if (typeof raw === \"string\") {\n        const m = raw.match(/^([^:]+?)\\s*:\\s*(.+)$/);\n        if (!m) return {};\n\n        return {\n            [m[1].trim()]: m[2].trim()\n        };\n    }\n\n    if (msg.topic && /^SS\\d+/.test(msg.topic)) {\n        return {\n            [msg.topic]: raw\n        };\n    }\n\n    return {};\n}\n\nconst raw = msg.payload;\nconst input = normalize(raw);\n\nconst timeMs = toMs(raw && raw.ts ? raw.ts : Date.now());\nconst t = timeTH(timeMs);\n\nconst outUI = [];\nconst outInflux = [];\n\nfor (const [key, rawValue] of Object.entries(input)) {\n    const prefix = (key.match(/^(SS\\d+)/) || [])[1];\n    const sensorId = (key.match(/(\\d{6})/) || [])[1];\n\n    if (!prefix || !sensorId || !INFO[prefix]) continue;\n\n    const [unit, label] = INFO[prefix];\n    const [machine_type, machine_name] = machine(sensorId);\n\n    const isNum =\n        typeof rawValue === \"number\" ||\n        /^-?\\d+(\\.\\d+)?$/.test(String(rawValue));\n\n    const isBool = typeof rawValue === \"boolean\";\n\n    const value = isNum ? Number(Number(rawValue).toFixed(2)) : null;\n\n    const text = isNum\n        ? value.toFixed(2)\n        : isBool\n            ? String(rawValue)\n            : String(rawValue).trim();\n\n    const value_text = unit ? `${text} ${unit}` : text;\n\n    const common = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        sensor_key: key,\n        sensor_id: sensorId,\n        label: label,\n        unit: unit,\n        value_text: value_text,\n\n        country: META.country,\n        plant: META.plant,\n        plant_id: META.plant_id,\n        area: META.area,\n\n        node: raw.node || \"\",\n        location: raw.loc || \"\",\n\n        machine_type: machine_type,\n        machine_name: machine_name\n    };\n\n    outUI.push({\n        payload: {\n            time: String(timeMs),\n            value: value,\n            ...common\n        }\n    });\n\n    const fields = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        value_text: value_text,\n        unit: unit,\n        label: label\n    };\n\n    if (isNum) {\n        fields.value = value;\n    } else if (isBool) {\n        fields.value_bool = rawValue;\n        fields.value_str = String(rawValue);\n    } else {\n        fields.value_str = String(rawValue).trim();\n    }\n\n    outInflux.push({\n        measurement: MEASUREMENT_NAME,\n\n        tags: {\n            sensor_key: key,\n            sensor_id: sensorId,\n\n            country: String(META.country),\n            plant: String(META.plant),\n            plant_id: String(META.plant_id),\n            area: String(META.area),\n\n            node: String(raw.node || \"\"),\n            location: String(raw.loc || \"\"),\n\n            machine_type: machine_type,\n            machine_name: machine_name\n        },\n\n        payload: fields,\n        timestamp: timeMs\n    });\n}\n\nreturn [outUI, outInflux];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 260,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "4a784430831ee1b7",
+        "type": "influxdb out",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "influxdb": "304c9625cc25c531",
+        "name": "",
+        "measurement": "kampangphet",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "swinefarm",
+        "bucket": "climatesensor",
+        "x": 1590,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "72024b6aa993e095",
+        "type": "http in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "GET /api/swine/latest-all",
+        "url": "/api/swine/latest-all",
+        "method": "get",
+        "upload": false,
+        "x": 150,
+        "y": 820,
+        "wires": [
+            [
+                "a463423e49dfc291"
+            ]
+        ]
+    },
+    {
+        "id": "a463423e49dfc291",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Query SS600-SS627 latest-all",
+        "func": "const codes = [\n  \"SS600\",\"SS601\",\"SS602\",\"SS603\",\"SS604\",\"SS605\",\"SS606\",\"SS607\",\"SS608\",\n  \"SS609\",\"SS610\",\"SS611\",\"SS620\",\"SS621\",\"SS622\",\"SS623\",\"SS624\",\"SS625\",\"SS626\",\"SS627\"\n];\n\nmsg.meta = { codes };\n\nmsg.query = codes.map(code =>\n  `SELECT last(\"value\") AS value FROM \"data_fliter_ema\" WHERE \"sensor_name\" =~ /^${code}/;`\n).join(\"\\n\");\n\nreturn msg;",
+        "outputs": 1,
+        "x": 430,
+        "y": 820,
+        "wires": [
+            [
+                "d4e9a78d5e9d767e"
+            ]
+        ]
+    },
+    {
+        "id": "d4e9a78d5e9d767e",
+        "type": "influxdb in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "influxdb": "influx_config_fixed",
+        "name": "Influx SS600-SS627 latest-all",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 700,
+        "y": 820,
+        "wires": [
+            [
+                "0d4af3ba95a89c58"
+            ]
+        ]
+    },
+    {
+        "id": "0d4af3ba95a89c58",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Format SS600-SS627 latest-all JSON",
+        "func": "const codes = msg.meta.codes;\nlet out = {};\n\ncodes.forEach((code, i) => {\n  let row = msg.payload[i]?.[0];\n  out[code] = row?.value !== undefined && row?.value !== null ? Number(row.value) : null;\n});\n\nmsg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\nmsg.payload = out;\nreturn msg;",
+        "outputs": 1,
+        "x": 1010,
+        "y": 820,
+        "wires": [
+            [
+                "61958a103870b141",
+                "0831d33a8adb4083"
+            ]
+        ]
+    },
+    {
+        "id": "61958a103870b141",
+        "type": "http response",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Response SS600-SS627 latest-all",
+        "statusCode": "",
+        "headers": {},
+        "x": 1360,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "820e267458ad4d68",
+        "type": "http in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "GET /api/swine/sensor",
+        "url": "/api/swine/sensor",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 760,
+        "wires": [
+            [
+                "78bcc49ef0d5e77e"
+            ]
+        ]
+    },
+    {
+        "id": "78bcc49ef0d5e77e",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Query SS600-SS627 sensor",
+        "func": "const allowed = [\n  \"SS600\",\"SS601\",\"SS602\",\"SS603\",\"SS604\",\"SS605\",\"SS606\",\"SS607\",\"SS608\",\n  \"SS609\",\"SS610\",\"SS611\",\"SS620\",\"SS621\",\"SS622\",\"SS623\",\"SS624\",\"SS625\",\"SS626\",\"SS627\"\n];\n\nlet code = (msg.req.query.code || \"SS600\").trim();\nlet range = msg.req.query.range || \"3h\";\n\nif (!allowed.includes(code)) {\n  msg.statusCode = 400;\n  msg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\n  msg.payload = { error: \"invalid sensor code\", allowed };\n  return [null, msg];\n}\n\nlet groupBy = {\n  \"3h\": \"5m\",\n  \"6h\": \"5m\",\n  \"12h\": \"5m\",\n  \"24h\": \"10m\",\n  \"7d\": \"1h\",\n  \"30d\": \"6h\"\n}[range] || \"5m\";\n\nmsg.meta = { code, range };\n\nmsg.query = `\nSELECT mean(\"value\") AS value FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-${range}\nGROUP BY time(${groupBy}) fill(null);\n\nSELECT mean(\"value\") AS value FROM \"data_fliter_ema\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-${range}\nGROUP BY time(${groupBy}) fill(null);\n\nSELECT last(\"m\") AS m, last(\"b\") AS b, last(\"predict_next\") AS predict_next\nFROM \"data_fliter_regression_20value\"\nWHERE \"sensor_name\" =~ /^${code}/;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-3h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-6h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-12h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-24h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-7d;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-30d;\n`;\n\nreturn [msg, null];",
+        "outputs": 2,
+        "x": 420,
+        "y": 760,
+        "wires": [
+            [
+                "c670c052c82a7f96"
+            ],
+            [
+                "6d1dc0201f458f9b"
+            ]
+        ]
+    },
+    {
+        "id": "c670c052c82a7f96",
+        "type": "influxdb in",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "influxdb": "influx_config_fixed",
+        "name": "Influx SS600-SS627 sensor",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 680,
+        "y": 740,
+        "wires": [
+            [
+                "8f10d087fec28f21"
+            ]
+        ]
+    },
+    {
+        "id": "8f10d087fec28f21",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Format SS600-SS627 sensor JSON",
+        "func": "const sensors = {\n  SS600: { label: \"Voltage\", unit: \"V\" },\n  SS601: { label: \"Current A\", unit: \"A\" },\n  SS602: { label: \"Current B\", unit: \"A\" },\n  SS603: { label: \"Current C\", unit: \"A\" },\n  SS604: { label: \"Power\", unit: \"W\" },\n  SS605: { label: \"Power Factor\", unit: \"\" },\n  SS606: { label: \"Frequency\", unit: \"Hz\" },\n  SS607: { label: \"Kilowatt Hour\", unit: \"kWh\" },\n  SS608: { label: \"Cost THB\", unit: \"THB\" },\n  SS609: { label: \"Temperature\", unit: \"°C\" },\n  SS610: { label: \"Humidity\", unit: \"%RH\" },\n  SS611: { label: \"Wind Speed\", unit: \"m/s\" },\n  SS620: { label: \"Temperature 2\", unit: \"°C\" },\n  SS621: { label: \"Humidity 2\", unit: \"%RH\" },\n  SS622: { label: \"Temperature 3\", unit: \"°C\" },\n  SS623: { label: \"Humidity 3\", unit: \"%RH\" },\n  SS624: { label: \"NH3\", unit: \"ppm\" },\n  SS625: { label: \"CO2\", unit: \"ppm\" },\n  SS626: { label: \"Outdoor Temperature\", unit: \"°C\" },\n  SS627: { label: \"Outdoor Humidity\", unit: \"%RH\" }\n};\n\nfunction mapSeries(rows) {\n  return (rows || [])\n    .filter(r => r.value !== null && r.value !== undefined)\n    .map(r => ({ time: r.time, value: Number(r.value) }));\n}\n\nfunction statRow(rows) {\n  let r = rows?.[0] || {};\n  return {\n    min: r.min !== undefined && r.min !== null ? Number(r.min) : null,\n    max: r.max !== undefined && r.max !== null ? Number(r.max) : null,\n    mean: r.mean !== undefined && r.mean !== null ? Number(r.mean) : null\n  };\n}\n\nfunction regressionRow(rows) {\n  let r = null;\n  if (Array.isArray(rows) && rows.length > 0) {\n    r = Array.isArray(rows[0]) ? rows[0][0] : rows[0];\n  }\n  r = r || {};\n  return {\n    m: r.m !== undefined && r.m !== null ? Number(r.m) : null,\n    b: r.b !== undefined && r.b !== null ? Number(r.b) : null,\n    predict_next: r.predict_next !== undefined && r.predict_next !== null ? Number(r.predict_next) : null,\n    next_1d: null,\n    next_1w: null\n  };\n}\n\nlet code = msg.meta.code;\nlet raw = mapSeries(msg.payload[0]);\nlet ema = mapSeries(msg.payload[1]);\nlet regression = regressionRow(msg.payload[2]);\n\nmsg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\nmsg.payload = {\n  sensor_code: code,\n  label: sensors[code]?.label || code,\n  unit: sensors[code]?.unit || \"-\",\n  range: msg.meta.range,\n  raw_series: raw,\n  ema_series: ema,\n  regression_series: [],\n  regression: regression,\n  ranges: {\n    \"3h\": statRow(msg.payload[3]),\n    \"6h\": statRow(msg.payload[4]),\n    \"12h\": statRow(msg.payload[5]),\n    \"24h\": statRow(msg.payload[6]),\n    \"7d\": statRow(msg.payload[7]),\n    \"30d\": statRow(msg.payload[8])\n  }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "x": 990,
+        "y": 760,
+        "wires": [
+            [
+                "4db497efec200490",
+                "0831d33a8adb4083"
+            ]
+        ]
+    },
+    {
+        "id": "4db497efec200490",
+        "type": "http response",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Response SS600-SS627 sensor",
+        "statusCode": "",
+        "headers": {},
+        "x": 1350,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "6d1dc0201f458f9b",
+        "type": "http response",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Response SS600-SS627 error",
+        "statusCode": "",
+        "headers": {},
+        "x": 690,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "0831d33a8adb4083",
+        "type": "debug",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "Pruk_01",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1200,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "a2a42bd8d224ce4b",
+        "type": "catch",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "",
+        "scope": [
+            "4a784430831ee1b7"
+        ],
+        "uncaught": false,
+        "x": 1630,
+        "y": 800,
+        "wires": [
+            [
+                "a6b5ef410bb0f1e6"
+            ]
+        ]
+    },
+    {
+        "id": "a6b5ef410bb0f1e6",
+        "type": "debug",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1800,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "f7dbe5a235c77cbc",
+        "type": "function",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "new func",
+        "func": "const payloads = Array.isArray(msg.payload) ? msg.payload : [];\nlet p = {};\n\n// วนลูปแกะกล่อง Array เพื่อหาว่าข้อมูลไหนเป็นของเซ็นเซอร์ตัวไหน\npayloads.forEach(item => {\n    if (!item || typeof item !== \"object\") return;\n\n    // ตรวจสอบจากโครงสร้างของตัวแปรข้างใน payload\n    if (item.VAvg !== undefined || item.IA !== undefined || item.Power !== undefined || item.P !== undefined) {\n        p.power = item;\n    } else if (item.temp1 !== undefined || item.hum1 !== undefined) {\n        p.sensor1 = item;\n    } else if (item.wind !== undefined || item.temp2 !== undefined) {\n        p.sensor2 = item;\n    } else if (item.temp3 !== undefined || item.hum3 !== undefined || item.Nh3 !== undefined || item.Co2 !== undefined) {\n        p.sensor3 = item;\n    } else if (item.tempout !== undefined || item.humout !== undefined) {\n        p.outside = item;\n    }\n});\n\n// เซนเซอร์ที่ไม่ส่งค่ามารอบนี้ = \"ไม่มีค่า\" ไม่ใช่ 0 จึงต้องไม่เขียน field นั้นลง InfluxDB เลย\n// (ของเดิมใช้ ?? 0 ทำให้เซนเซอร์ที่ตายอยู่ดูเหมือนวัดได้ 0 °C\n//  และโหนด join ที่ยิงทุก 5 วินาทีทำให้ได้แถว \"ศูนย์ล้วน\" ราวครึ่งหนึ่งของทั้งหมด)\n// หมายเหตุ: ค่า 0 ที่เซนเซอร์ส่งมาจริง ๆ เช่นลมนิ่ง ยังถูกเขียนตามปกติ\nconst fields = {};\n\nconst put = (name, value) => {\n    if (value === undefined || value === null || value === \"\") return;\n    const num = typeof value === \"number\" ? value : Number(value);\n    if (!Number.isFinite(num)) return;\n    fields[name] = num;\n};\n\nput(\"voltage\", p.power?.VAvg);\nput(\"current_a\", p.power?.IA);\nput(\"current_b\", p.power?.IB);\nput(\"current_c\", p.power?.IC);\n/* มิเตอร์ตัวจริงส่งชื่อ PW (กำลังไฟ kW) กับ EN (หน่วยสะสม kWh)\n   ไม่ใช่ Power/KWH ที่โค้ดเดิมมองหา — ค่าจึงหล่นหายตั้งแต่ต้นทางมาตลอด\n   เก็บชื่อเดิมไว้เป็นตัวสำรองเผื่อมิเตอร์รุ่นอื่นใช้ชื่อนั้น */\nput(\"power\", p.power?.PW ?? p.power?.Power ?? p.power?.P);\nput(\"power_factor\", p.power?.PF ?? p.power?.pf);\nput(\"frequency\", p.power?.Hz);\nput(\"kilowatt_hour\", p.power?.EN ?? p.power?.KWH ?? p.power?.kwh);\nput(\"cost_thb\", p.power?.Cost ?? p.power?.cost_thb);\n\nput(\"temperature_1\", p.sensor1?.temp1);\nput(\"humidity_1\", p.sensor1?.hum1);\n\nput(\"wind_speed_2\", p.sensor2?.wind);\nput(\"temperature_2\", p.sensor2?.temp2);\nput(\"humidity_2\", p.sensor2?.hum2);\n\nput(\"temperature_3\", p.sensor3?.temp3);\nput(\"humidity_3\", p.sensor3?.hum3);\nput(\"nh3_3\", p.sensor3?.Nh3 ?? p.sensor3?.NH3 ?? p.sensor3?.nh3);\nput(\"co2_3\", p.sensor3?.Co2 ?? p.sensor3?.CO2 ?? p.sensor3?.co2);\n\nput(\"outdoor_temperature\", p.outside?.tempout);\nput(\"outdoor_humidity\", p.outside?.humout);\n\n// รอบนี้ไม่ได้ค่าอะไรเลย → ไม่ต้องเขียนอะไรลงฐานข้อมูล\nif (Object.keys(fields).length === 0) {\n    node.status({ fill: \"yellow\", shape: \"ring\", text: \"ไม่มีค่าในรอบนี้ — ข้าม\" });\n    return null;\n}\n\nnode.status({ fill: \"green\", shape: \"dot\", text: Object.keys(fields).length + \" ค่า\" });\n\n// จัดรูปแบบส่งให้โหนด InfluxDB 2.x\nmsg.payload = [\n    fields,\n    { farm: \"kampangphet\" }\n];\nmsg.measurement = \"kampangphet\";\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1240,
+        "y": 520,
+        "wires": [
+            [
+                "4a784430831ee1b7",
+                "3f3dcedb1fee7789"
+            ]
+        ]
+    },
+    {
+        "id": "3f3dcedb1fee7789",
+        "type": "debug",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1460,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "0827d47582a544c5",
+        "type": "debug",
+        "z": "c874ef49d770808e",
+        "g": "ded2916eabc87f1d",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "22ed44142f9686d7",
+        "type": "mqtt in",
+        "z": "1146d39e6f61badb",
+        "name": "",
+        "topic": "NODE_02/energy_env/pruk",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "e7b737d5821a6ef6",
+                "eebfeef690d976ef",
+                "69f9dd9d765c049c"
+            ]
+        ]
+    },
+    {
+        "id": "e7b737d5821a6ef6",
+        "type": "ui_template",
+        "z": "1146d39e6f61badb",
+        "group": "c095e161d650dad4",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<!DOCTYPE html>\n<html lang=\"th\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n    <title>NODE Dashboard</title>\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link\n        href=\"https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sarabun:wght@400;500;600&display=swap\"\n        rel=\"stylesheet\">\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js\"></script>\n    <style>\n        :root {\n            --c1: #0f172a;\n            --c2: #1e293b;\n            --c3: #334155;\n            --c4: #64748b;\n            --c5: #94a3b8;\n            --acc: #22d3ee;\n            --acc2: #a78bfa;\n            --acc3: #34d399;\n            --acc4: #fb923c;\n            --warn: #f87171;\n            --ok: #4ade80;\n            --border: rgba(148, 163, 184, 0.12);\n        }\n\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n        }\n\n        body {\n            background: var(--c1);\n            color: #e2e8f0;\n            font-family: 'Sarabun', sans-serif;\n            padding: 12px;\n        }\n\n        .topbar {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            margin-bottom: 14px;\n            padding: 10px 16px;\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n        }\n\n        .topbar-l {\n            display: flex;\n            align-items: center;\n            gap: 10px;\n        }\n\n        .node-id {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 15px;\n            font-weight: 600;\n            color: var(--acc);\n        }\n\n        .loc {\n            font-size: 12px;\n            color: var(--c5);\n            margin-top: 1px;\n        }\n\n        .status-dot {\n            width: 9px;\n            height: 9px;\n            border-radius: 50%;\n            background: var(--ok);\n            box-shadow: 0 0 6px var(--ok);\n            flex-shrink: 0;\n            transition: all .4s;\n        }\n\n        .ts-badge {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 11px;\n            color: var(--c5);\n            background: var(--c3);\n            padding: 3px 8px;\n            border-radius: 5px;\n        }\n\n        .fw {\n            font-size: 11px;\n            color: var(--c4);\n            margin-top: 2px;\n            text-align: right;\n        }\n\n        .section-title {\n            font-size: 11px;\n            color: var(--c4);\n            text-transform: uppercase;\n            letter-spacing: .08em;\n            margin-bottom: 7px;\n            padding-left: 2px;\n        }\n\n        .grid4 {\n            display: grid;\n            grid-template-columns: repeat(4, 1fr);\n            gap: 9px;\n            margin-bottom: 9px;\n        }\n\n        .grid3 {\n            display: grid;\n            grid-template-columns: repeat(3, 1fr);\n            gap: 9px;\n            margin-bottom: 9px;\n        }\n\n        .grid2 {\n            display: grid;\n            grid-template-columns: 1fr 1fr;\n            gap: 9px;\n            margin-bottom: 9px;\n        }\n\n        .card {\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n            padding: 11px 13px;\n        }\n\n        .card-label {\n            font-size: 11px;\n            color: var(--c4);\n            text-transform: uppercase;\n            letter-spacing: .06em;\n            margin-bottom: 4px;\n        }\n\n        .card-val {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 20px;\n            font-weight: 600;\n            color: #f1f5f9;\n        }\n\n        .card-unit {\n            font-size: 11px;\n            color: var(--c5);\n            margin-left: 3px;\n            font-weight: 400;\n        }\n\n        .card-accent {\n            border-left: 2px solid var(--acc);\n        }\n\n        .card-accent2 {\n            border-left: 2px solid var(--acc2);\n        }\n\n        .card-accent3 {\n            border-left: 2px solid var(--acc3);\n        }\n\n        .card-accent4 {\n            border-left: 2px solid var(--acc4);\n        }\n\n        .badge {\n            display: inline-block;\n            font-size: 10px;\n            padding: 3px 8px;\n            border-radius: 4px;\n            font-weight: 500;\n            margin-top: 4px;\n            transition: all .3s;\n        }\n\n        .badge-ok {\n            background: rgba(74, 222, 128, .15);\n            color: var(--ok);\n        }\n\n        .badge-err {\n            background: rgba(248, 113, 113, .15);\n            color: var(--warn);\n        }\n\n        .phase-row {\n            display: grid;\n            grid-template-columns: 1fr 1fr 1fr;\n            gap: 8px;\n        }\n\n        .phase-item {\n            text-align: center;\n            background: var(--c3);\n            border-radius: 7px;\n            padding: 8px;\n        }\n\n        .phase-label {\n            font-size: 10px;\n            color: var(--c4);\n            margin-bottom: 3px;\n        }\n\n        .phase-val {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 14px;\n            font-weight: 600;\n            color: #f1f5f9;\n        }\n\n        .rssi-bar {\n            height: 5px;\n            border-radius: 2px;\n            background: var(--c3);\n            width: 100%;\n            margin-top: 5px;\n            overflow: hidden;\n        }\n\n        .rssi-fill {\n            height: 100%;\n            border-radius: 2px;\n            background: var(--acc);\n            transition: width .5s;\n        }\n\n        .chart-card {\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n            padding: 13px;\n            margin-bottom: 9px;\n        }\n\n        .chart-header {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            margin-bottom: 9px;\n        }\n\n        .chart-title {\n            font-size: 13px;\n            color: #cbd5e1;\n            font-weight: 500;\n        }\n\n        .legend {\n            display: flex;\n            gap: 12px;\n        }\n\n        .leg-item {\n            display: flex;\n            align-items: center;\n            gap: 5px;\n            font-size: 11px;\n            color: var(--c5);\n        }\n\n        .leg-dot {\n            width: 8px;\n            height: 8px;\n            border-radius: 2px;\n            flex-shrink: 0;\n        }\n\n        .history-card {\n            background: var(--c2);\n            border-radius: 10px;\n            border: .5px solid var(--border);\n            padding: 13px;\n        }\n\n        .history-title {\n            font-size: 13px;\n            color: #cbd5e1;\n            font-weight: 500;\n            margin-bottom: 10px;\n        }\n\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 11px;\n        }\n\n        th {\n            color: var(--c4);\n            font-weight: 500;\n            padding: 5px 7px;\n            text-align: left;\n            border-bottom: .5px solid var(--border);\n        }\n\n        td {\n            padding: 5px 7px;\n            color: #cbd5e1;\n            border-bottom: .5px solid rgba(148, 163, 184, 0.06);\n        }\n\n        tr:last-child td {\n            border-bottom: none;\n        }\n\n        td.ok {\n            color: var(--ok);\n        }\n\n        td.warn {\n            color: var(--warn);\n        }\n\n        @media(max-width:600px) {\n            .grid4 {\n                grid-template-columns: repeat(2, 1fr);\n            }\n\n            .grid3 {\n                grid-template-columns: 1fr 1fr;\n            }\n\n            th:nth-child(n+6),\n            td:nth-child(n+6) {\n                display: none;\n            }\n        }\n    </style>\n</head>\n\n<body>\n\n    <!-- ═══════════════════════════ TOPBAR ═══════════════════════════ -->\n    <div class=\"topbar\">\n        <div class=\"topbar-l\">\n            <div class=\"status-dot\" id=\"statusDot\"></div>\n            <div>\n                <div class=\"node-id\" id=\"nodeId\">--</div>\n                <div class=\"loc\" id=\"locLabel\">--</div>\n            </div>\n        </div>\n        <div>\n            <div class=\"ts-badge\" id=\"tsLabel\">--:--:--</div>\n            <div class=\"fw\" id=\"fwLabel\">fw --</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ POWER ════════════════════════════ -->\n    <div class=\"section-title\">Power</div>\n    <div class=\"grid4\">\n        <div class=\"card card-accent\">\n            <div class=\"card-label\">Voltage</div>\n            <div class=\"card-val\" id=\"vVal\">--<span class=\"card-unit\">V</span></div>\n        </div>\n        <div class=\"card card-accent2\">\n            <div class=\"card-label\">Power</div>\n            <div class=\"card-val\" id=\"pVal\">--<span class=\"card-unit\">W</span></div>\n        </div>\n        <div class=\"card card-accent3\">\n            <div class=\"card-label\">Frequency</div>\n            <div class=\"card-val\" id=\"fVal\">--<span class=\"card-unit\">Hz</span></div>\n        </div>\n        <div class=\"card card-accent4\">\n            <div class=\"card-label\">Power Factor</div>\n            <div class=\"card-val\" id=\"pfVal\">--</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ 3-PHASE ══════════════════════════ -->\n    <div class=\"section-title\">Current (3-phase)</div>\n    <div class=\"card\" style=\"margin-bottom:9px;\">\n        <div class=\"phase-row\">\n            <div class=\"phase-item\">\n                <div class=\"phase-label\">Phase A</div>\n                <div class=\"phase-val\" id=\"iaVal\">-- A</div>\n            </div>\n            <div class=\"phase-item\">\n                <div class=\"phase-label\">Phase B</div>\n                <div class=\"phase-val\" id=\"ibVal\">-- A</div>\n            </div>\n            <div class=\"phase-item\">\n                <div class=\"phase-label\">Phase C</div>\n                <div class=\"phase-val\" id=\"icVal\">-- A</div>\n            </div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ ENERGY ═══════════════════════════ -->\n    <div class=\"section-title\">Energy & Cost</div>\n    <div class=\"grid2\">\n        <div class=\"card card-accent3\">\n            <div class=\"card-label\">Energy</div>\n            <div class=\"card-val\" id=\"kwhVal\">--<span class=\"card-unit\">kWh</span></div>\n        </div>\n        <div class=\"card card-accent4\">\n            <div class=\"card-label\">Cost</div>\n            <div class=\"card-val\" id=\"costVal\">--<span class=\"card-unit\">฿</span></div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ ENV ═══════════════════════════════ -->\n    <div class=\"section-title\">Environment</div>\n    <div class=\"grid3\">\n        <div class=\"card card-accent\">\n            <div class=\"card-label\">Temperature</div>\n            <div class=\"card-val\" id=\"tempVal\">--<span class=\"card-unit\">°C</span></div>\n        </div>\n        <div class=\"card card-accent2\">\n            <div class=\"card-label\">Humidity</div>\n            <div class=\"card-val\" id=\"rhVal\">--<span class=\"card-unit\">%</span></div>\n        </div>\n        <div class=\"card card-accent3\">\n            <div class=\"card-label\">Wind</div>\n            <div class=\"card-val\" id=\"windVal\">--<span class=\"card-unit\">m/s</span></div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ STATUS ═══════════════════════════ -->\n    <div class=\"section-title\" style=\"margin-top:2px;\">Status</div>\n    <div class=\"grid3\">\n        <div class=\"card\">\n            <div class=\"card-label\">Power</div>\n            <div class=\"badge\" id=\"powerBadge\">--</div>\n        </div>\n        <div class=\"card\">\n            <div class=\"card-label\">Env</div>\n            <div class=\"badge\" id=\"envBadge\">--</div>\n        </div>\n        <div class=\"card\">\n            <div class=\"card-label\">Wind</div>\n            <div class=\"badge\" id=\"windBadge\">--</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ SYSTEM ═══════════════════════════ -->\n    <div class=\"section-title\">System</div>\n    <div class=\"grid2\">\n        <div class=\"card\">\n            <div class=\"card-label\">RSSI</div>\n            <div class=\"card-val\" id=\"rssiVal\">--<span class=\"card-unit\">dBm</span></div>\n            <div class=\"rssi-bar\">\n                <div class=\"rssi-fill\" id=\"rssiBar\" style=\"width:0%\"></div>\n            </div>\n        </div>\n        <div class=\"card\">\n            <div class=\"card-label\">Uptime</div>\n            <div class=\"card-val\" id=\"uptimeVal\" style=\"font-size:16px;\">--</div>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ CHARTS ═══════════════════════════ -->\n    <div class=\"chart-card\" style=\"margin-top:2px;\">\n        <div class=\"chart-header\">\n            <div class=\"chart-title\">Voltage & Power</div>\n            <div class=\"legend\">\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#22d3ee;\"></div>Voltage (V)\n                </div>\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#a78bfa;\"></div>Power (W)\n                </div>\n            </div>\n        </div>\n        <div style=\"position:relative;height:160px;\">\n            <canvas id=\"powerChart\" role=\"img\" aria-label=\"Voltage and power history line chart\"></canvas>\n        </div>\n    </div>\n\n    <div class=\"chart-card\">\n        <div class=\"chart-header\">\n            <div class=\"chart-title\">Temp & Humidity</div>\n            <div class=\"legend\">\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#fb923c;\"></div>Temp (°C)\n                </div>\n                <div class=\"leg-item\">\n                    <div class=\"leg-dot\" style=\"background:#34d399;\"></div>Humidity (%)\n                </div>\n            </div>\n        </div>\n        <div style=\"position:relative;height:160px;\">\n            <canvas id=\"envChart\" role=\"img\" aria-label=\"Temperature and humidity history line chart\"></canvas>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ HISTORY TABLE ════════════════════ -->\n    <div class=\"history-card\">\n        <div class=\"history-title\">ข้อมูลย้อนหลัง (50 รายการล่าสุด)</div>\n        <div style=\"overflow-x:auto;\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>เวลา</th>\n                        <th>V</th>\n                        <th>W</th>\n                        <th>Hz</th>\n                        <th>°C</th>\n                        <th>%RH</th>\n                        <th>kWh</th>\n                        <th>Status</th>\n                    </tr>\n                </thead>\n                <tbody id=\"histTable\"></tbody>\n            </table>\n        </div>\n    </div>\n\n    <!-- ═══════════════════════════ SCRIPT ═══════════════════════════ -->\n    <script>\n        (function(scope) {\n    \n    const MAX_HIST = 50;\n    let history = [];\n    let pChart, eChart;\n    \n    const $ = id => document.getElementById(id);\n    \n    function num(v, def = 0) {\n        const n = Number(v);\n        return isNaN(n) ? def : n;\n    }\n    \n    function tsToTime(ts) {\n        return new Date(ts * 1000).toLocaleTimeString('th-TH');\n    }\n    \n    function uptimeFmt(s) {\n        s = num(s);\n        const h = Math.floor(s / 3600);\n        const m = Math.floor((s % 3600) / 60);\n        const sec = Math.floor(s % 60);\n        return h > 0 ? `${h}h ${m}m` : `${m}m ${sec}s`;\n    }\n    \n    function rssiPct(r) {\n        return Math.max(0, Math.min(100, ((r + 100) / 70) * 100));\n    }\n    \n    function setBadge(el, ok) {\n        el.className = 'badge ' + (ok ? 'badge-ok' : 'badge-err');\n        el.textContent = ok ? 'OK' : 'FAULT';\n    }\n    \n    /* ===== CHART ===== */\n    function initCharts() {\n    \n        pChart = new Chart($('powerChart'), {\n            type: 'line',\n            data: { labels: [], datasets: [\n                { label:'V', data:[], borderColor:'#22d3ee', yAxisID:'y' },\n                { label:'W', data:[], borderColor:'#a78bfa', yAxisID:'y2' }\n            ]},\n            options: { responsive:true, maintainAspectRatio:false }\n        });\n    \n        eChart = new Chart($('envChart'), {\n            type: 'line',\n            data: { labels: [], datasets: [\n                { label:'T', data:[], borderColor:'#fb923c', yAxisID:'y' },\n                { label:'RH', data:[], borderColor:'#34d399', yAxisID:'y2' }\n            ]},\n            options: { responsive:true, maintainAspectRatio:false }\n        });\n    }\n    \n    /* ===== RENDER ===== */\n    function render(d) {\n    \n        $('nodeId').textContent = d.node || '--';\n        $('locLabel').textContent = d.loc || '--';\n        $('tsLabel').textContent = tsToTime(d.ts || 0);\n        $('fwLabel').textContent = 'fw ' + (d.fw || '--');\n    \n        $('vVal').innerHTML = num(d.v).toFixed(1) + ' V';\n        $('pVal').innerHTML = num(d.p).toFixed(0) + ' W';\n        $('fVal').innerHTML = num(d.f).toFixed(2) + ' Hz';\n        $('pfVal').innerHTML = num(d.pf).toFixed(2);\n    \n        $('iaVal').textContent = num(d.ia).toFixed(2) + ' A';\n        $('ibVal').textContent = num(d.ib).toFixed(2) + ' A';\n        $('icVal').textContent = num(d.ic).toFixed(2) + ' A';\n    \n        $('kwhVal').innerHTML = num(d.kwh).toFixed(3) + ' kWh';\n        $('costVal').innerHTML = num(d.cost_thb).toFixed(2) + ' ฿';\n    \n        $('tempVal').innerHTML = num(d.temp).toFixed(1) + ' °C';\n        $('rhVal').innerHTML = num(d.rh).toFixed(1) + ' %';\n        $('windVal').innerHTML = num(d.wind).toFixed(1) + ' m/s';\n    \n        setBadge($('powerBadge'), d.power_ok);\n        setBadge($('envBadge'), d.env_ok);\n        setBadge($('windBadge'), d.wind_ok);\n    \n        const rssi = num(d.rssi, -100);\n        $('rssiVal').innerHTML = rssi + ' dBm';\n        $('rssiBar').style.width = rssiPct(rssi) + '%';\n    \n        $('uptimeVal').textContent = uptimeFmt(d.uptime_s);\n    \n        const dot = $('statusDot');\n        const ok = d.power_ok && d.env_ok && d.wind_ok;\n        dot.style.background = ok ? '#4ade80' : '#f87171';\n    }\n    \n    /* ===== UPDATE ===== */\n    function updateCharts() {\n        const labels = history.map(h => tsToTime(h.ts));\n    \n        pChart.data.labels = labels;\n        pChart.data.datasets[0].data = history.map(h => h.v);\n        pChart.data.datasets[1].data = history.map(h => h.p);\n        pChart.update();\n    \n        eChart.data.labels = labels;\n        eChart.data.datasets[0].data = history.map(h => h.temp);\n        eChart.data.datasets[1].data = history.map(h => h.rh);\n        eChart.update();\n    }\n    \n    function updateTable() {\n        $('histTable').innerHTML = history.slice().reverse().map(h => `\n            <tr>\n                <td>${tsToTime(h.ts)}</td>\n                <td>${h.v.toFixed(1)}</td>\n                <td>${h.p.toFixed(0)}</td>\n                <td>${h.f.toFixed(2)}</td>\n                <td>${h.temp.toFixed(1)}</td>\n                <td>${h.rh.toFixed(1)}</td>\n                <td>${h.kwh.toFixed(3)}</td>\n                <td>${h.power_ok ? 'OK':'FAULT'}</td>\n            </tr>\n        `).join('');\n    }\n    \n    /* ===== INGEST ===== */\n    function ingest(data) {\n    \n        if (typeof data === 'string') {\n            try { data = JSON.parse(data); } catch(e){ return; }\n        }\n    \n        history.push({\n            ts: num(data.ts),\n            v: num(data.v),\n            p: num(data.p),\n            f: num(data.f),\n            temp: num(data.temp),\n            rh: num(data.rh),\n            kwh: num(data.kwh),\n            power_ok: data.power_ok,\n            env_ok: data.env_ok,\n            wind_ok: data.wind_ok\n        });\n    \n        if (history.length > MAX_HIST) history.shift();\n    \n        render(data);\n        updateCharts();\n        updateTable();\n    }\n    \n    /* ===== INIT ===== */\n    setTimeout(initCharts, 300);\n    \n    /* ===== NODE-RED HOOK ===== */\n    scope.$watch('msg', function(msg) {\n        if (msg && msg.payload) {\n            ingest(msg.payload);\n        }\n    });\n    \n    })(scope);\n    </script>\n\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5147324ac0ad076b",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "name": "Standard Mqtt_model_climate_500_Kampangphet ",
+        "func": "const MEASUREMENT_NAME = flow.get(\"measurement\") || msg.measurement || \"kampangphet\";\n\nconst META = Object.assign({\n    country: \"thailand\",\n    plant: \"kampangphet_farm\",\n    plant_id: 5000,\n    area: \"kampangphet\"\n}, flow.get(\"farmMeta\") || {}, msg.meta || {});\n\nconst INFO = {\n    SS300:[\"°C\",\"Temperature\"], SS301:[\"%RH\",\"Humidity\"], SS302:[\"m/s\",\"Wind Speed\"], SS303:[\"dir\",\"Wind Direction\"], SS304:[\"W/m²\",\"Enegy_Intensity\"], SS305:[\"mm\",\"Rainfall\"], SS306:[\"mm\",\"Rainfall 24hr\"], SS307:[\"hPa\",\"Pressure\"],\n    SS400:[\"°C\",\"Temperature\"], SS401:[\"%RH\",\"Humidity\"], SS402:[\"m/s\",\"Wind Speed\"], SS403:[\"dir\",\"Wind Direction\"], SS404:[\"W/m²\",\"Enegy_Intensity\"], SS405:[\"mm\",\"Rainfall\"], SS406:[\"mm\",\"Rainfall 24hr\"], SS407:[\"hPa\",\"Pressure\"],\n    SS500:[\"V\",\"Voltage\"], SS501:[\"A\",\"Current A\"], SS502:[\"A\",\"Current B\"], SS503:[\"A\",\"Current C\"], SS504:[\"W\",\"Power\"], SS505:[\"\",\"Power Factor\"], SS506:[\"Hz\",\"Frequency\"], SS507:[\"kWh\",\"Kilowatt Hour\"], SS508:[\"THB\",\"Cost THB\"],\n    SS509:[\"°C\",\"Temperature\"], SS510:[\"%RH\",\"Humidity\"], SS511:[\"m/s\",\"Wind Speed\"], SS512:[\"dBm\",\"RSSI\"], SS513:[\"\",\"RS485 Error\"], SS514:[\"\",\"Buffer Pending\"], SS515:[\"s\",\"Uptime Second\"], SS516:[\"\",\"Firmware\"], SS517:[\"\",\"Power OK\"], SS518:[\"\",\"Environment OK\"], SS519:[\"\",\"Wind OK\"]\n};\n\nconst NODE02_MAP = {\n    v:\"SS500_sensor_voltage_500000\",\n    ia:\"SS501_sensor_current_a_500001\",\n    ib:\"SS502_sensor_current_b_500002\",\n    ic:\"SS503_sensor_current_c_500003\",\n    p:\"SS504_sensor_power_500004\",\n    pf:\"SS505_sensor_power_factor_500005\",\n    f:\"SS506_sensor_frequency_500006\",\n    kwh:\"SS507_sensor_kilowatt_hour_500007\",\n    cost_thb:\"SS508_sensor_cost_thb_500008\",\n    temp:\"SS509_sensor_temperature_500010\",\n    rh:\"SS510_sensor_humidity_500011\",\n    wind:\"SS511_sensor_wind_speed_500013\",\n    rssi:\"SS512_sensor_rssi_500015\",\n    rs485_err:\"SS513_sensor_rs485_error_500016\",\n    buf_pending:\"SS514_sensor_buffer_pending_500017\",\n    uptime_s:\"SS515_sensor_uptime_second_500018\",\n    fw:\"SS516_sensor_firmware_500019\",\n    power_ok:\"SS517_sensor_power_ok_500020\",\n    env_ok:\"SS518_sensor_environment_ok_500021\",\n    wind_ok:\"SS519_sensor_wind_ok_500022\"\n};\n\nfunction toMs(t) {\n    if (!t) return Date.now();\n\n    const s = String(t);\n\n    if (/^\\d+$/.test(s)) {\n        if (s.length >= 18) return Math.floor(Number(s) / 1e6);\n        if (s.length === 13) return Number(s);\n        if (s.length === 10) return Number(s) * 1000;\n    }\n\n    return new Date(t).getTime();\n}\n\nfunction timeTH(ms) {\n    const d = new Date(ms);\n    const p = n => String(n).padStart(2, \"0\");\n\n    const y = d.getFullYear();\n    const m = p(d.getMonth() + 1);\n    const da = p(d.getDate());\n    const h = p(d.getHours());\n    const mi = p(d.getMinutes());\n    const se = p(d.getSeconds());\n\n    return {\n        timestamp_th: `${y}-${m}-${da} ${h}:${mi}:${se}`,\n        date_th: `${y}-${m}-${da}`,\n        time_th: `${h}:${mi}:${se}`\n    };\n}\n\nfunction machine(sensorId) {\n    const s = String(sensorId);\n\n    if (s.startsWith(\"300\")) return [\"weathersensor\", \"model_weather_300\"];\n    if (s.startsWith(\"400\")) return [\"weathersensor\", \"model_weather_400\"];\n    if (s.startsWith(\"500\")) return [\"power_environment_sensor\", \"model_power_env_500\"];\n    if (s.startsWith(\"200\")) return [\"soilsensor\", \"model_soil\"];\n\n    return [\"unknown\", \"unknown_model\"];\n}\n\nfunction normalize(raw) {\n    if (raw && typeof raw === \"object\" && !Object.keys(raw).some(k => /^SS\\d+/.test(k))) {\n        const mapped = {};\n\n        for (const [src, key] of Object.entries(NODE02_MAP)) {\n            if (raw[src] !== undefined) {\n                mapped[key] = raw[src];\n            }\n        }\n\n        if (Object.keys(mapped).length) return mapped;\n    }\n\n    if (raw && typeof raw === \"object\") return raw;\n\n    if (typeof raw === \"string\") {\n        const m = raw.match(/^([^:]+?)\\s*:\\s*(.+)$/);\n        if (!m) return {};\n\n        return {\n            [m[1].trim()]: m[2].trim()\n        };\n    }\n\n    if (msg.topic && /^SS\\d+/.test(msg.topic)) {\n        return {\n            [msg.topic]: raw\n        };\n    }\n\n    return {};\n}\n\nconst raw = msg.payload;\nconst input = normalize(raw);\n\nconst timeMs = toMs(raw && raw.ts ? raw.ts : Date.now());\nconst t = timeTH(timeMs);\n\nconst outUI = [];\nconst outInflux = [];\n\nfor (const [key, rawValue] of Object.entries(input)) {\n    const prefix = (key.match(/^(SS\\d+)/) || [])[1];\n    const sensorId = (key.match(/(\\d{6})/) || [])[1];\n\n    if (!prefix || !sensorId || !INFO[prefix]) continue;\n\n    const [unit, label] = INFO[prefix];\n    const [machine_type, machine_name] = machine(sensorId);\n\n    const isNum =\n        typeof rawValue === \"number\" ||\n        /^-?\\d+(\\.\\d+)?$/.test(String(rawValue));\n\n    const isBool = typeof rawValue === \"boolean\";\n\n    const value = isNum ? Number(Number(rawValue).toFixed(2)) : null;\n\n    const text = isNum\n        ? value.toFixed(2)\n        : isBool\n            ? String(rawValue)\n            : String(rawValue).trim();\n\n    const value_text = unit ? `${text} ${unit}` : text;\n\n    const common = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        sensor_key: key,\n        sensor_id: sensorId,\n        label: label,\n        unit: unit,\n        value_text: value_text,\n\n        country: META.country,\n        plant: META.plant,\n        plant_id: META.plant_id,\n        area: META.area,\n\n        node: raw.node || \"\",\n        location: raw.loc || \"\",\n\n        machine_type: machine_type,\n        machine_name: machine_name\n    };\n\n    outUI.push({\n        payload: {\n            time: String(timeMs),\n            value: value,\n            ...common\n        }\n    });\n\n    const fields = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        value_text: value_text,\n        unit: unit,\n        label: label\n    };\n\n    if (isNum) {\n        fields.value = value;\n    } else if (isBool) {\n        fields.value_bool = rawValue;\n        fields.value_str = String(rawValue);\n    } else {\n        fields.value_str = String(rawValue).trim();\n    }\n\n    outInflux.push({\n        measurement: MEASUREMENT_NAME,\n\n        tags: {\n            sensor_key: key,\n            sensor_id: sensorId,\n\n            country: String(META.country),\n            plant: String(META.plant),\n            plant_id: String(META.plant_id),\n            area: String(META.area),\n\n            node: String(raw.node || \"\"),\n            location: String(raw.loc || \"\"),\n\n            machine_type: machine_type,\n            machine_name: machine_name\n        },\n\n        payload: fields,\n        timestamp: timeMs\n    });\n}\n\nreturn [outUI, outInflux];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eebfeef690d976ef",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "name": "Model 500_Kampangphet ",
+        "func": "const d = msg.payload;\n\nmsg.payload = {\n    \"SS500_sensor_voltage_500000\": d.v,\n    \"SS501_sensor_current_a_500001\": d.ia,\n    \"SS502_sensor_current_b_500002\": d.ib,\n    \"SS503_sensor_current_c_500003\": d.ic,\n    \"SS504_sensor_power_500004\": d.p,\n    \"SS505_sensor_power_factor_500005\": d.pf,\n    \"SS506_sensor_frequency_500006\": d.f,\n    \"SS507_sensor_kilowatt_hour_500007\": d.kwh,\n    \"SS508_sensor_cost_thb_500008\": d.cost_thb,\n\n    \"SS509_sensor_temperature_500010\": d.temp,\n    \"SS510_sensor_humidity_500011\": d.rh,\n    \"SS511_sensor_wind_speed_500013\": d.wind,\n\n    \"SS512_sensor_rssi_500015\": d.rssi,\n    \"SS513_sensor_rs485_error_500016\": d.rs485_err,\n    \"SS514_sensor_buffer_pending_500017\": d.buf_pending,\n    \"SS515_sensor_uptime_second_500018\": d.uptime_s,\n    \"SS516_sensor_firmware\": d.fw,\n\n    \"SS517_sensor_power_ok\": d.power_ok,\n    \"SS518_sensor_environment_ok\": d.env_ok,\n    \"SS519_sensor_wind_ok\": d.wind_ok\n};\n\nmsg.meta = {\n    node: d.node,\n    location: d.loc,\n    timestamp: d.ts\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "5147324ac0ad076b",
+                "ca16e0d691191c51",
+                "69f9dd9d765c049c"
+            ]
+        ]
+    },
+    {
+        "id": "ca16e0d691191c51",
+        "type": "mqtt out",
+        "z": "1146d39e6f61badb",
+        "name": "",
+        "topic": "climate_kampangphet_farm",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cfa83ad2e4724d38",
+        "x": 740,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "69f9dd9d765c049c",
+        "type": "debug",
+        "z": "1146d39e6f61badb",
+        "name": "Pruk",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "d5d81431b243ac45",
+        "type": "mqtt in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "",
+        "topic": "sensor01/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 240,
+        "wires": [
+            [
+                "5e2020f3b481166c"
+            ]
+        ]
+    },
+    {
+        "id": "5a792aa348b49c41",
+        "type": "mqtt in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "",
+        "topic": "sensor02/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 300,
+        "wires": [
+            [
+                "5e2020f3b481166c"
+            ]
+        ]
+    },
+    {
+        "id": "fb6cef89697bdf07",
+        "type": "mqtt in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "",
+        "topic": "sensor03/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "5e2020f3b481166c"
+            ]
+        ]
+    },
+    {
+        "id": "dca3e2aadae39f2c",
+        "type": "mqtt in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "",
+        "topic": "sensor/outside01/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "5e2020f3b481166c"
+            ]
+        ]
+    },
+    {
+        "id": "9d995003ae0d5557",
+        "type": "mqtt in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "",
+        "topic": "sensor/power1/farm/swine/cpf",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cfa83ad2e4724d38",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 480,
+        "wires": [
+            [
+                "5e2020f3b481166c"
+            ]
+        ]
+    },
+    {
+        "id": "c3738b7920d02f03",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Model 500_Kampangphet ",
+        "func": "const d = msg.payload;\n\nmsg.payload = {\n\n    \"SS600_sensor_voltage_600000\": d.VAvg,\n    \"SS601_sensor_current_a_600001\": d.IA,\n    \"SS602_sensor_current_b_600002\": d.IB,\n    \"SS603_sensor_current_c_600003\": d.IC,\n    \"SS604_sensor_power_600004\": d.Power || 0,\n    \"SS605_sensor_power_factor_600005\": d.PF || 0,\n    \"SS606_sensor_frequency_600006\": d.Hz,\n    \"SS607_sensor_kilowatt_hour_600007\": d.KWH || 0,\n    \"SS608_sensor_cost_thb_600008\": d.Cost || 0,\n\n    \"SS609_sensor_temperature_600010\": d.temp1,\n    \"SS610_sensor_humidity_600011\": d.hum1,\n    \"SS611_sensor_wind_speed_600013\": d.wind,\n\n    \"SS620_sensor_temperature_600020\": d.temp2,\n    \"SS621_sensor_humidity_600021\": d.hum2,\n\n    \"SS622_sensor_temperature_600022\": d.temp3,\n    \"SS623_sensor_humidity_600023\": d.hum3,\n\n    \"SS624_sensor_nh3_600024\": d.Nh3,\n    \"SS625_sensor_co2_600025\": d.Co2,\n\n    \"SS626_sensor_outdoor_temperature_600026\": d.tempout,\n    \"SS627_sensor_outdoor_humidity_600027\": d.humout\n\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 480,
+        "wires": [
+            [
+                "f264f99a8411b817"
+            ]
+        ]
+    },
+    {
+        "id": "5e2020f3b481166c",
+        "type": "link out",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "link out 14",
+        "mode": "link",
+        "links": [
+            "73b9ee8241d4829e"
+        ],
+        "x": 345,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "73b9ee8241d4829e",
+        "type": "link in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "link in 19",
+        "links": [
+            "5e2020f3b481166c"
+        ],
+        "x": 415,
+        "y": 380,
+        "wires": [
+            [
+                "e96f15788fe9e93f",
+                "73e4f670f87e3fe7",
+                "2ffac65901cc78bb",
+                "6f476ed9f0907ad3",
+                "eef1f057814cd5f6"
+            ]
+        ]
+    },
+    {
+        "id": "f264f99a8411b817",
+        "type": "debug",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Pruk",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1310,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "e96f15788fe9e93f",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "name": "Set topic: sensor1",
+        "func": "msg.topic = \"sensor1\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 240,
+        "wires": [
+            [
+                "eda54b0dfaf69953"
+            ]
+        ]
+    },
+    {
+        "id": "73e4f670f87e3fe7",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "name": "Set topic: sensor2",
+        "func": "msg.topic = \"sensor2\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 300,
+        "wires": [
+            [
+                "eda54b0dfaf69953"
+            ]
+        ]
+    },
+    {
+        "id": "2ffac65901cc78bb",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "name": "Set topic: sensor3",
+        "func": "msg.topic = \"sensor3\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 360,
+        "wires": [
+            [
+                "eda54b0dfaf69953"
+            ]
+        ]
+    },
+    {
+        "id": "6f476ed9f0907ad3",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Set topic: outside",
+        "func": "msg.topic = \"outside\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 420,
+        "wires": [
+            [
+                "eda54b0dfaf69953"
+            ]
+        ]
+    },
+    {
+        "id": "eef1f057814cd5f6",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Set topic: power",
+        "func": "msg.topic = \"power\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 480,
+        "wires": [
+            [
+                "eda54b0dfaf69953"
+            ]
+        ]
+    },
+    {
+        "id": "eda54b0dfaf69953",
+        "type": "join",
+        "z": "1146d39e6f61badb",
+        "name": "Join 5 sensor payloads",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": true,
+        "accumulate": false,
+        "timeout": "",
+        "count": "5",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 870,
+        "y": 360,
+        "wires": [
+            [
+                "d9e178e1432681be"
+            ]
+        ]
+    },
+    {
+        "id": "d9e178e1432681be",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "name": "Model 600 Kampangphet",
+        "func": "const p = msg.payload || {};\n\nmsg.payload = {\n    \"SS600_sensor_voltage_600000\": p.power?.VAvg ?? 0,\n    \"SS601_sensor_current_a_600001\": p.power?.IA ?? 0,\n    \"SS602_sensor_current_b_600002\": p.power?.IB ?? 0,\n    \"SS603_sensor_current_c_600003\": p.power?.IC ?? 0,\n    \"SS604_sensor_power_600004\": p.power?.Power ?? p.power?.P ?? 0,\n    \"SS605_sensor_power_factor_600005\": p.power?.PF ?? p.power?.pf ?? 0,\n    \"SS606_sensor_frequency_600006\": p.power?.Hz ?? 0,\n    \"SS607_sensor_kilowatt_hour_600007\": p.power?.KWH ?? p.power?.kwh ?? 0,\n    \"SS608_sensor_cost_thb_600008\": p.power?.Cost ?? p.power?.cost_thb ?? 0,\n\n    \"SS609_sensor_temperature_600010\": p.sensor1?.temp1 ?? 0,\n    \"SS610_sensor_humidity_600011\": p.sensor1?.hum1 ?? 0,\n\n    \"SS611_sensor_wind_speed_600013\": p.sensor2?.wind ?? 0,\n    \"SS620_sensor_temperature_600020\": p.sensor2?.temp2 ?? 0,\n    \"SS621_sensor_humidity_600021\": p.sensor2?.hum2 ?? 0,\n\n    \"SS622_sensor_temperature_600022\": p.sensor3?.temp3 ?? 0,\n    \"SS623_sensor_humidity_600023\": p.sensor3?.hum3 ?? 0,\n    \"SS624_sensor_nh3_600024\": p.sensor3?.Nh3 ?? p.sensor3?.NH3 ?? 0,\n    \"SS625_sensor_co2_600025\": p.sensor3?.Co2 ?? p.sensor3?.CO2 ?? 0,\n\n    \"SS626_sensor_outdoor_temperature_600026\": p.outside?.tempout ?? 0,\n    \"SS627_sensor_outdoor_humidity_600027\": p.outside?.humout ?? 0\n};\n\nmsg.meta = {\n    model: \"600\",\n    location: \"Kampangphet\",\n    source: \"joined_5_mqtt_topics\",\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 360,
+        "wires": [
+            [
+                "3b5d316069f1248b"
+            ]
+        ]
+    },
+    {
+        "id": "54e58c6526eb99f7",
+        "type": "debug",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Pruk",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1570,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "3b5d316069f1248b",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Standard Mqtt_model_climate_600_Kampangphet ",
+        "func": "const MEASUREMENT_NAME = flow.get(\"measurement\") || msg.measurement || \"kampangphet\";\n\nconst META = Object.assign({\n    country: \"thailand\",\n    plant: \"kampangphet_farm\",\n    plant_id: 6000,\n    area: \"kampangphet\"\n}, flow.get(\"farmMeta\") || {}, msg.meta || {});\n\nconst INFO = {\n    SS600: [\"V\", \"Voltage\"],\n    SS601: [\"A\", \"Current A\"],\n    SS602: [\"A\", \"Current B\"],\n    SS603: [\"A\", \"Current C\"],\n    SS604: [\"W\", \"Power\"],\n    SS605: [\"\", \"Power Factor\"],\n    SS606: [\"Hz\", \"Frequency\"],\n    SS607: [\"kWh\", \"Kilowatt Hour\"],\n    SS608: [\"THB\", \"Cost THB\"],\n\n    SS609: [\"°C\", \"Temperature\"],\n    SS610: [\"%RH\", \"Humidity\"],\n\n    SS611: [\"m/s\", \"Wind Speed\"],\n    SS620: [\"°C\", \"Temperature\"],\n    SS621: [\"%RH\", \"Humidity\"],\n\n    SS622: [\"°C\", \"Temperature\"],\n    SS623: [\"%RH\", \"Humidity\"],\n    SS624: [\"ppm\", \"NH3\"],\n    SS625: [\"ppm\", \"CO2\"],\n\n    SS626: [\"°C\", \"Outdoor Temperature\"],\n    SS627: [\"%RH\", \"Outdoor Humidity\"]\n};\n\nfunction normalize600(p) {\n    if (!p || typeof p !== \"object\") return {};\n\n    return {\n        SS600_sensor_voltage_600000: p.power?.VAvg ?? 0,\n        SS601_sensor_current_a_600001: p.power?.IA ?? 0,\n        SS602_sensor_current_b_600002: p.power?.IB ?? 0,\n        SS603_sensor_current_c_600003: p.power?.IC ?? 0,\n        SS604_sensor_power_600004: p.power?.Power ?? p.power?.P ?? 0,\n        SS605_sensor_power_factor_600005: p.power?.PF ?? p.power?.pf ?? 0,\n        SS606_sensor_frequency_600006: p.power?.Hz ?? 0,\n        SS607_sensor_kilowatt_hour_600007: p.power?.KWH ?? p.power?.kwh ?? 0,\n        SS608_sensor_cost_thb_600008: p.power?.Cost ?? p.power?.cost_thb ?? 0,\n\n        SS609_sensor_temperature_600010: p.sensor1?.temp1 ?? 0,\n        SS610_sensor_humidity_600011: p.sensor1?.hum1 ?? 0,\n\n        SS611_sensor_wind_speed_600013: p.sensor2?.wind ?? 0,\n        SS620_sensor_temperature_600020: p.sensor2?.temp2 ?? 0,\n        SS621_sensor_humidity_600021: p.sensor2?.hum2 ?? 0,\n\n        SS622_sensor_temperature_600022: p.sensor3?.temp3 ?? 0,\n        SS623_sensor_humidity_600023: p.sensor3?.hum3 ?? 0,\n\n        SS624_sensor_nh3_600024:\n            p.sensor3?.Nh3 ??\n            p.sensor3?.NH3 ??\n            p.sensor3?.nh3 ?? 0,\n\n        SS625_sensor_co2_600025:\n            p.sensor3?.Co2 ??\n            p.sensor3?.CO2 ??\n            p.sensor3?.co2 ?? 0,\n\n        SS626_sensor_outdoor_temperature_600026: p.outside?.tempout ?? 0,\n        SS627_sensor_outdoor_humidity_600027: p.outside?.humout ?? 0\n    };\n}\n\nfunction toMs(t) {\n    if (!t) return Date.now();\n\n    const s = String(t);\n\n    if (/^\\d+$/.test(s)) {\n        if (s.length >= 18) return Math.floor(Number(s) / 1e6);\n        if (s.length === 13) return Number(s);\n        if (s.length === 10) return Number(s) * 1000;\n    }\n\n    return new Date(t).getTime();\n}\n\nfunction timeTH(ms) {\n    const d = new Date(ms);\n    const p = n => String(n).padStart(2, \"0\");\n\n    const y = d.getFullYear();\n    const m = p(d.getMonth() + 1);\n    const da = p(d.getDate());\n    const h = p(d.getHours());\n    const mi = p(d.getMinutes());\n    const se = p(d.getSeconds());\n\n    return {\n        timestamp_th: `${y}-${m}-${da} ${h}:${mi}:${se}`,\n        date_th: `${y}-${m}-${da}`,\n        time_th: `${h}:${mi}:${se}`\n    };\n}\n\nfunction machine(sensorId) {\n    const s = String(sensorId);\n\n    if (s.startsWith(\"600\")) {\n        return [\"swine_environment_sensor\", \"model_swine_env_600\"];\n    }\n\n    return [\"unknown\", \"unknown_model\"];\n}\n\nfunction normalize(raw) {\n    if (raw && typeof raw === \"object\") {\n        const hasSSKey = Object.keys(raw).some(k => /^SS\\d+/.test(k));\n\n        if (hasSSKey) return raw;\n\n        if (raw.power || raw.sensor1 || raw.sensor2 || raw.sensor3 || raw.outside) {\n            return normalize600(raw);\n        }\n    }\n\n    if (typeof raw === \"string\") {\n        const m = raw.match(/^([^:]+?)\\s*:\\s*(.+)$/);\n        if (!m) return {};\n\n        return {\n            [m[1].trim()]: m[2].trim()\n        };\n    }\n\n    if (msg.topic && /^SS\\d+/.test(msg.topic)) {\n        return {\n            [msg.topic]: raw\n        };\n    }\n\n    return {};\n}\n\nconst raw = msg.payload;\nconst input = normalize(raw);\n\nconst timeMs = toMs(raw && raw.ts ? raw.ts : Date.now());\nconst t = timeTH(timeMs);\n\nconst outUI = [];\nconst outInflux = [];\n\nfor (const [key, rawValue] of Object.entries(input)) {\n    const prefix = (key.match(/^(SS\\d+)/) || [])[1];\n    const sensorId = (key.match(/(\\d{6})/) || [])[1];\n\n    if (!prefix || !sensorId || !INFO[prefix]) continue;\n\n    const [unit, label] = INFO[prefix];\n    const [machine_type, machine_name] = machine(sensorId);\n\n    const isNum =\n        typeof rawValue === \"number\" ||\n        /^-?\\d+(\\.\\d+)?$/.test(String(rawValue));\n\n    const isBool = typeof rawValue === \"boolean\";\n\n    const value = isNum ? Number(Number(rawValue).toFixed(2)) : null;\n\n    const text = isNum\n        ? value.toFixed(2)\n        : isBool\n            ? String(rawValue)\n            : String(rawValue).trim();\n\n    const value_text = unit ? `${text} ${unit}` : text;\n\n    const common = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        sensor_key: key,\n        sensor_id: sensorId,\n        label: label,\n        unit: unit,\n        value_text: value_text,\n\n        country: META.country,\n        plant: META.plant,\n        plant_id: META.plant_id,\n        area: META.area,\n\n        node: raw.node || \"\",\n        location: raw.loc || \"\",\n\n        machine_type: machine_type,\n        machine_name: machine_name\n    };\n\n    outUI.push({\n        payload: {\n            time: String(timeMs),\n            value: value,\n            ...common\n        }\n    });\n\n    const fields = {\n        timestamp_th: t.timestamp_th,\n        date_th: t.date_th,\n        time_th: t.time_th,\n\n        value_text: value_text,\n        unit: unit,\n        label: label\n    };\n\n    if (isNum) {\n        fields.value = value;\n    } else if (isBool) {\n        fields.value_bool = rawValue;\n        fields.value_str = String(rawValue);\n    } else {\n        fields.value_str = String(rawValue).trim();\n    }\n\n    outInflux.push({\n        measurement: MEASUREMENT_NAME,\n\n        tags: {\n            sensor_key: key,\n            sensor_id: sensorId,\n\n            country: String(META.country),\n            plant: String(META.plant),\n            plant_id: String(META.plant_id),\n            area: String(META.area),\n\n            node: String(raw.node || \"\"),\n            location: String(raw.loc || \"\"),\n\n            machine_type: machine_type,\n            machine_name: machine_name\n        },\n\n        payload: fields,\n        timestamp: timeMs\n    });\n}\n\nreturn [outUI, outInflux];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1490,
+        "y": 360,
+        "wires": [
+            [
+                "54e58c6526eb99f7",
+                "19832d51424c1f0c"
+            ]
+        ]
+    },
+    {
+        "id": "19832d51424c1f0c",
+        "type": "influxdb out",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "influxdb": "304c9625cc25c531",
+        "name": "",
+        "measurement": "kampangphet",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "swinefarm",
+        "bucket": "climatesensor",
+        "x": 1530,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "bda3918e06361464",
+        "type": "http in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "GET /api/swine/latest-all",
+        "url": "/api/swine/latest-all",
+        "method": "get",
+        "upload": false,
+        "x": 150,
+        "y": 620,
+        "wires": [
+            [
+                "94e5d35cd82b4a0f"
+            ]
+        ]
+    },
+    {
+        "id": "94e5d35cd82b4a0f",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Query SS600-SS627 latest-all",
+        "func": "const codes = [\n  \"SS600\",\"SS601\",\"SS602\",\"SS603\",\"SS604\",\"SS605\",\"SS606\",\"SS607\",\"SS608\",\n  \"SS609\",\"SS610\",\"SS611\",\"SS620\",\"SS621\",\"SS622\",\"SS623\",\"SS624\",\"SS625\",\"SS626\",\"SS627\"\n];\n\nmsg.meta = { codes };\n\nmsg.query = codes.map(code =>\n  `SELECT last(\"value\") AS value FROM \"data_fliter_ema\" WHERE \"sensor_name\" =~ /^${code}/;`\n).join(\"\\n\");\n\nreturn msg;",
+        "outputs": 1,
+        "x": 430,
+        "y": 620,
+        "wires": [
+            [
+                "59b480ba8b1a96d0"
+            ]
+        ]
+    },
+    {
+        "id": "59b480ba8b1a96d0",
+        "type": "influxdb in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "influxdb": "influx_config_fixed",
+        "name": "Influx SS600-SS627 latest-all",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 700,
+        "y": 620,
+        "wires": [
+            [
+                "2ff4b5fdf3cb1705"
+            ]
+        ]
+    },
+    {
+        "id": "2ff4b5fdf3cb1705",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Format SS600-SS627 latest-all JSON",
+        "func": "const codes = msg.meta.codes;\nlet out = {};\n\ncodes.forEach((code, i) => {\n  let row = msg.payload[i]?.[0];\n  out[code] = row?.value !== undefined && row?.value !== null ? Number(row.value) : null;\n});\n\nmsg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\nmsg.payload = out;\nreturn msg;",
+        "outputs": 1,
+        "x": 1010,
+        "y": 620,
+        "wires": [
+            [
+                "5ce60e0d171aa97e",
+                "40684ff5a6314a53"
+            ]
+        ]
+    },
+    {
+        "id": "5ce60e0d171aa97e",
+        "type": "http response",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Response SS600-SS627 latest-all",
+        "statusCode": "",
+        "headers": {},
+        "x": 1360,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "4c17e93e576abc45",
+        "type": "http in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "GET /api/swine/sensor",
+        "url": "/api/swine/sensor",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 560,
+        "wires": [
+            [
+                "8a4c8ae7d38caf96"
+            ]
+        ]
+    },
+    {
+        "id": "8a4c8ae7d38caf96",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Query SS600-SS627 sensor",
+        "func": "const allowed = [\n  \"SS600\",\"SS601\",\"SS602\",\"SS603\",\"SS604\",\"SS605\",\"SS606\",\"SS607\",\"SS608\",\n  \"SS609\",\"SS610\",\"SS611\",\"SS620\",\"SS621\",\"SS622\",\"SS623\",\"SS624\",\"SS625\",\"SS626\",\"SS627\"\n];\n\nlet code = (msg.req.query.code || \"SS600\").trim();\nlet range = msg.req.query.range || \"3h\";\n\nif (!allowed.includes(code)) {\n  msg.statusCode = 400;\n  msg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\n  msg.payload = { error: \"invalid sensor code\", allowed };\n  return [null, msg];\n}\n\nlet groupBy = {\n  \"3h\": \"5m\",\n  \"6h\": \"5m\",\n  \"12h\": \"5m\",\n  \"24h\": \"10m\",\n  \"7d\": \"1h\",\n  \"30d\": \"6h\"\n}[range] || \"5m\";\n\nmsg.meta = { code, range };\n\nmsg.query = `\nSELECT mean(\"value\") AS value FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-${range}\nGROUP BY time(${groupBy}) fill(null);\n\nSELECT mean(\"value\") AS value FROM \"data_fliter_ema\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-${range}\nGROUP BY time(${groupBy}) fill(null);\n\nSELECT last(\"m\") AS m, last(\"b\") AS b, last(\"predict_next\") AS predict_next\nFROM \"data_fliter_regression_20value\"\nWHERE \"sensor_name\" =~ /^${code}/;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-3h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-6h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-12h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-24h;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-7d;\n\nSELECT min(\"value\") AS min, max(\"value\") AS max, mean(\"value\") AS mean FROM \"data_filter_weather\"\nWHERE \"sensor_name\" =~ /^${code}/ AND time >= now()-30d;\n`;\n\nreturn [msg, null];",
+        "outputs": 2,
+        "x": 420,
+        "y": 560,
+        "wires": [
+            [
+                "bc4a94d64aae9a3b"
+            ],
+            [
+                "1c4ac8dd730e22bf"
+            ]
+        ]
+    },
+    {
+        "id": "bc4a94d64aae9a3b",
+        "type": "influxdb in",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "influxdb": "influx_config_fixed",
+        "name": "Influx SS600-SS627 sensor",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 680,
+        "y": 540,
+        "wires": [
+            [
+                "0723cdcd30d3545b"
+            ]
+        ]
+    },
+    {
+        "id": "0723cdcd30d3545b",
+        "type": "function",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Format SS600-SS627 sensor JSON",
+        "func": "const sensors = {\n  SS600: { label: \"Voltage\", unit: \"V\" },\n  SS601: { label: \"Current A\", unit: \"A\" },\n  SS602: { label: \"Current B\", unit: \"A\" },\n  SS603: { label: \"Current C\", unit: \"A\" },\n  SS604: { label: \"Power\", unit: \"W\" },\n  SS605: { label: \"Power Factor\", unit: \"\" },\n  SS606: { label: \"Frequency\", unit: \"Hz\" },\n  SS607: { label: \"Kilowatt Hour\", unit: \"kWh\" },\n  SS608: { label: \"Cost THB\", unit: \"THB\" },\n  SS609: { label: \"Temperature\", unit: \"°C\" },\n  SS610: { label: \"Humidity\", unit: \"%RH\" },\n  SS611: { label: \"Wind Speed\", unit: \"m/s\" },\n  SS620: { label: \"Temperature 2\", unit: \"°C\" },\n  SS621: { label: \"Humidity 2\", unit: \"%RH\" },\n  SS622: { label: \"Temperature 3\", unit: \"°C\" },\n  SS623: { label: \"Humidity 3\", unit: \"%RH\" },\n  SS624: { label: \"NH3\", unit: \"ppm\" },\n  SS625: { label: \"CO2\", unit: \"ppm\" },\n  SS626: { label: \"Outdoor Temperature\", unit: \"°C\" },\n  SS627: { label: \"Outdoor Humidity\", unit: \"%RH\" }\n};\n\nfunction mapSeries(rows) {\n  return (rows || [])\n    .filter(r => r.value !== null && r.value !== undefined)\n    .map(r => ({ time: r.time, value: Number(r.value) }));\n}\n\nfunction statRow(rows) {\n  let r = rows?.[0] || {};\n  return {\n    min: r.min !== undefined && r.min !== null ? Number(r.min) : null,\n    max: r.max !== undefined && r.max !== null ? Number(r.max) : null,\n    mean: r.mean !== undefined && r.mean !== null ? Number(r.mean) : null\n  };\n}\n\nfunction regressionRow(rows) {\n  let r = null;\n  if (Array.isArray(rows) && rows.length > 0) {\n    r = Array.isArray(rows[0]) ? rows[0][0] : rows[0];\n  }\n  r = r || {};\n  return {\n    m: r.m !== undefined && r.m !== null ? Number(r.m) : null,\n    b: r.b !== undefined && r.b !== null ? Number(r.b) : null,\n    predict_next: r.predict_next !== undefined && r.predict_next !== null ? Number(r.predict_next) : null,\n    next_1d: null,\n    next_1w: null\n  };\n}\n\nlet code = msg.meta.code;\nlet raw = mapSeries(msg.payload[0]);\nlet ema = mapSeries(msg.payload[1]);\nlet regression = regressionRow(msg.payload[2]);\n\nmsg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\nmsg.payload = {\n  sensor_code: code,\n  label: sensors[code]?.label || code,\n  unit: sensors[code]?.unit || \"-\",\n  range: msg.meta.range,\n  raw_series: raw,\n  ema_series: ema,\n  regression_series: [],\n  regression: regression,\n  ranges: {\n    \"3h\": statRow(msg.payload[3]),\n    \"6h\": statRow(msg.payload[4]),\n    \"12h\": statRow(msg.payload[5]),\n    \"24h\": statRow(msg.payload[6]),\n    \"7d\": statRow(msg.payload[7]),\n    \"30d\": statRow(msg.payload[8])\n  }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "x": 990,
+        "y": 560,
+        "wires": [
+            [
+                "75f693de45e115e8",
+                "40684ff5a6314a53"
+            ]
+        ]
+    },
+    {
+        "id": "75f693de45e115e8",
+        "type": "http response",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Response SS600-SS627 sensor",
+        "statusCode": "",
+        "headers": {},
+        "x": 1350,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "1c4ac8dd730e22bf",
+        "type": "http response",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Response SS600-SS627 error",
+        "statusCode": "",
+        "headers": {},
+        "x": 690,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "40684ff5a6314a53",
+        "type": "debug",
+        "z": "1146d39e6f61badb",
+        "g": "8905b0acfa927fbb",
+        "name": "Pruk_01",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1200,
+        "y": 720,
+        "wires": []
+    }
+]

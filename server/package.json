@@ -1,0 +1,23 @@
+{
+  "name": "swine-sync-server",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "bridge": "node src/bridge/index.js",
+    "seed": "node src/db/seed/index.js",
+    "migrate": "node-pg-migrate --migrations-dir src/db/migrations --envPath ../.env",
+    "seed:admin": "node src/db/seed/admin.js",
+    "reset:password": "node src/db/seed/reset-password.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "node-pg-migrate": "^8.0.4",
+    "pg": "^8.16.3",
+    "pino": "^9.13.1",
+    "zod": "^4.1.13"
+  }
+}

@@ -1,0 +1,292 @@
+/* กล่องป๊อบอัพกลางจอ (components/ui/Modal.jsx)
+   พื้นหลังมืดจาง + กล่องขาวลอยขึ้นมา — ใช้ token ทั้งหมด */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  /* ต้องระบุคอลัมน์เป็น minmax(0, 1fr) ห้ามปล่อยให้ grid คิดเอง —
+     ค่าตั้งต้นของ track คือ auto ซึ่งกว้างตาม max-content ของกล่อง แล้ว width: min(…, 100%)
+     ของ .modal ก็ไปอ้าง 100% ของ track ที่พองไปแล้ว กลายเป็นอ้างวงกลม
+     ผลคือบนมือถือ (390px) ป๊อบอัพกว้าง 464px ล้นออกนอกจอทั้งสองข้างโดยที่หน้าไม่เลื่อน
+     minmax(0, 1fr) ตรึง track ให้ไม่เกินความกว้างพื้นหลัง ทุกป๊อบอัพจึงพอดีจอเสมอ */
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  padding: var(--space-5);
+  background: rgb(var(--scrim-rgb) / 0.42);
+  animation: modal-fade 0.16s ease-out;
+}
+
+.modal {
+  position: relative;
+  width: min(920px, 100%);
+  max-height: calc(100vh - var(--space-8));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-hover);
+  animation: modal-rise 0.18s ease-out;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  padding-right: calc(var(--space-6) + 48px); /* เว้นที่ให้ปุ่มปิดที่ลอยอยู่มุมขวาบน */
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-headings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.modal-title {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.modal-subtitle {
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.modal-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  color: var(--ink-secondary);
+  transition: transform 0.12s ease, color 0.15s ease;
+}
+
+.modal-close:hover {
+  transform: translateY(-2px);
+  color: var(--ink-primary);
+}
+
+.modal-close:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.modal-body {
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+
+/* ---------- ป๊อบอัพที่สลับหน้าย่อยได้ (tall) ---------- */
+/* ตรึงความสูงไว้คงที่ ไม่ยืด-หดตามเนื้อหาของแต่ละหน้าย่อย
+   เดิมป๊อบอัพตั้งค่าสูง 384px ตอนอยู่แท็บ "ภาษา" แต่ 852px ตอนแท็บ "การแสดงผล"
+   พอกล่องเปลี่ยนขนาด มันจะเด้งกลับไปกึ่งกลางจอใหม่ แถบแท็บเลยเลื่อนหนีเมาส์
+   (ขอบบนขยับจาก 258px ไป 24px) กดสลับแท็บรัว ๆ ทีก็ต้องไล่หาปุ่มใหม่ทุกครั้ง */
+.modal.is-tall {
+  height: min(780px, calc(100vh - var(--space-8)));
+}
+
+/* เนื้อหาต้องกินที่ที่เหลือทั้งหมด แล้วเลื่อนข้างในตัวเอง
+   min-height: 0 จำเป็นสำหรับลูกของ flex ที่ต้องเลื่อนได้ (ไม่งั้นไม่ยอมหดต่ำกว่าเนื้อหา) */
+.modal.is-tall .modal-body {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------- บานใหญ่ (size="xl") ----------
+   สำหรับป๊อบอัพที่ฝังอะไรทั้งหน้าไว้ข้างใน (ตอนนี้คือ Voice AI) — กว้างและสูงเกือบเต็มจอ
+   สูงคงที่แบบเดียวกับ is-tall เนื้อหาข้างในจะได้กินที่ที่เหลือทั้งหมด */
+.modal.is-xl {
+  width: min(1280px, 100%);
+  height: calc(100vh - var(--space-8));
+}
+
+.modal.is-xl .modal-body {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------- แบบหัวกลาง + ภาพประกอบ (align="center") ---------- */
+.modal.is-sm {
+  width: min(760px, 100%);
+}
+
+.modal.is-center .modal-head {
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-6) var(--space-2);
+  border-bottom: 0;
+  text-align: center;
+}
+
+.modal-art {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.modal-art > * {
+  display: block;
+  width: min(320px, 76%);
+  height: auto;
+}
+
+.modal.is-center .modal-title {
+  font-size: var(--text-2xl);
+}
+
+.modal.is-center .modal-subtitle {
+  max-width: 46ch;
+}
+
+.modal.is-center .modal-body {
+  padding-top: var(--space-5);
+}
+
+.modal.is-center .modal-foot {
+  border-top: 0;
+  background: transparent;
+  padding-top: var(--space-2);
+}
+
+.modal-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--border);
+  background: var(--bg-tint);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+/* ปุ่มมาตรฐานในแถวท้ายกล่อง */
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.modal-btn:hover {
+  transform: translateY(-2px);
+  color: var(--ink-primary);
+}
+
+.modal-btn:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.modal-btn.is-primary {
+  border-color: transparent;
+  background: var(--accent-gradient);
+  box-shadow: var(--shadow-raised-gold);
+  color: var(--ink-inverse);
+}
+
+.modal-btn.is-primary:hover {
+  color: var(--ink-inverse);
+}
+
+.modal-btn.is-primary:active {
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+.modal-btn:disabled {
+  transform: none;
+  box-shadow: none;
+  background: var(--bg-sunken);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+.modal-btn:focus-visible,
+.modal-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.modal-foot-note {
+  margin-right: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+@keyframes modal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop,
+  .modal {
+    animation: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .modal-backdrop {
+    padding: var(--space-3);
+  }
+
+  .modal-head,
+  .modal-body,
+  .modal-foot {
+    padding: var(--space-4);
+  }
+
+  /* ต้องประกาศหลังบรรทัดบน — shorthand `padding` ข้างบนล้างที่เว้นให้ปุ่มปิดทิ้ง
+     ชื่อป๊อบอัพยาว ๆ เลยวิ่งไปซ้อนใต้ปุ่ม ✕ บนจอแคบทุกป๊อบอัพ (เจอตอนทำ T1.248)
+     ปุ่มปิดกว้าง 44 + ห่างขอบ 16 + ช่องไฟ 8 = 68px จากขอบขวา */
+  .modal-head {
+    padding-right: calc(var(--space-4) + 52px);
+  }
+
+  /* หัวกล่องบนจอแคบ: ข้อความยาวจะขึ้นหลายบรรทัด ให้ไอคอนอยู่ชิดบน */
+  .modal-head {
+    align-items: flex-start;
+  }
+
+  .modal.is-center .modal-head {
+    align-items: center;
+  }
+
+  .modal-foot-note {
+    margin-right: 0;
+    width: 100%;
+  }
+}
+

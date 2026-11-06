@@ -1,0 +1,848 @@
+/* กระดานจัดเลย์เอาต์ (components/board/) — สีและระยะทั้งหมดมาจาก token */
+
+.lb-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+/* ตารางจาง ๆ ตอนกำลังจัด — บอกว่าช่องอยู่ตรงไหนโดยไม่ต้องเดา
+   วาดเป็นเส้นไล่ระดับสองชั้น (แนวตั้ง = เส้นแบ่งคอลัมน์ · แนวนอน = เส้นแบ่งแถว)
+   ระยะของเส้นส่งมาจาก LayoutBoard.jsx ซึ่งวัดความกว้างคอลัมน์จริงอยู่แล้ว
+
+   เคยวาดเป็น <span> ทีละช่อง แต่พอลดความสูงแถวเหลือ 4px หน้าที่ยาวหน่อยจะกลายเป็น
+   หลายพัน element ทันทีที่กดเข้าโหมดจัด — เส้นไล่ระดับให้ผลตาเดียวกันโดยไม่มี element เพิ่มเลย */
+.lb-ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--border) 0 1px,
+      transparent 1px var(--lb-col, 100px)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--border) 0 1px,
+      transparent 1px var(--lb-row, 20px)
+    );
+  opacity: 0.6;
+}
+
+.lb-block {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* กล่องข้างในต้องสูงเต็มช่องที่ผู้ใช้กำหนด ไม่ใช่สูงตามเนื้อหา
+   ไม่งั้น "ยืดให้สูงขึ้น" จะไม่เห็นผลอะไรเลย */
+.lb-body {
+  height: 100%;
+  min-width: 0;
+}
+
+.lb-body > * {
+  height: 100%;
+  /* ต้องบังคับ width ด้วย ไม่ใช่แค่ height — กล่องสรุปที่ "กดแล้วเปิดป๊อบอัพ"
+     ถูก render เป็น <button> ซึ่งหดตามเนื้อหา (shrink-to-fit) ไม่ยืดเต็มพ่อแม่
+     เหมือน <section>/<a> ➜ กล่องสองใบขวาเลยแคบกว่าเพื่อนทั้งที่ช่องกริดเท่ากันเป๊ะ */
+  width: 100%;
+}
+
+/* เนื้อหาที่ยาวเกินกล่องให้เลื่อนในตัวเอง ห้ามดันกล่องอื่น */
+.lb-body > .card {
+  overflow: auto;
+}
+
+/* กล่องสรุปสูงตามช่องที่ผู้ใช้กำหนด ไม่ใช่ตามเนื้อหา — ถ้าเนื้อหาเกาะขอบบน
+   จะเหลือที่ว่างค้างข้างล่างจนดูไม่สมส่วน เวลายืดกล่องให้สูงขึ้นก็ยิ่งเห็นชัด
+   ➜ ให้เนื้อหาอยู่กลางแนวตั้ง ที่ว่างถูกแบ่งบน-ล่างเท่ากันแทน
+   (ทุกใบมีเนื้อหาโครงเดียวกัน หัวข้อ/ตัวเลข/คำอธิบายจึงอยู่ระดับเดียวกันอยู่แล้ว
+    ปุ่มเลือกฟาร์มลอยอยู่มุมขวาบน ไม่ได้ทำให้เนื้อหาของใบนั้นสูงกว่าเพื่อน)
+   (.stat-tile กับ .card เป็น element เดียวกัน — ดู StatTile.jsx) */
+.lb-body > .stat-tile.is-row {
+  align-items: center;
+}
+
+.lb-body > .stat-tile:not(.is-row) {
+  justify-content: center;
+}
+
+/* กติกา "ยืดเต็มกล่อง" ใช้เฉพาะจอกว้างที่กระดานทำงานเป็นตารางจริง
+   จอแคบกระดานเรียงเป็นคอลัมน์เดียวและกล่องสูงตามเนื้อหา จึงไม่ต้องยืดอะไร */
+@media (min-width: 900px) {
+  /* การ์ดแผนที่: ตัวแผนที่ถูกตรึงสูง var(--map-h) ไว้ตายตัว พอการ์ดสูงกว่านั้น
+     (เพราะผู้ใช้ยืดเอง หรือเพราะช่องตั้งต้นสูงกว่าเนื้อหา) ส่วนที่เกินจะกลายเป็น
+     พื้นที่ขาวโล่งท้ายการ์ด ➜ บนกระดานให้แผนที่กินความสูงที่เหลือทั้งหมดแทน
+     จำกัดขอบเขตไว้ที่ .lb-body เท่านั้น หน้าอื่นที่ใช้ FarmExplorer ยังสูงเท่าเดิม */
+  .lb-body .map-layout {
+    flex: 1 1 auto;
+    min-height: 0;
+    /* ค่าเดิมคือ align-items: start (แถบรายชื่อฟาร์มจะได้ไม่ยืดตามแผนที่)
+       แต่บนกระดานต้องให้ยืด ไม่งั้นแผนที่ไม่รับความสูงที่แถวนี้ได้มา */
+    align-items: stretch;
+  }
+
+  .lb-body .farm-map {
+    min-height: 0;
+  }
+
+  /* แถบรายชื่อฟาร์มถูกจำกัดไว้ที่ --map-h ตายตัว พอแผนที่ยืดสูงกว่านั้น ขอบล่างสองฝั่ง
+     จะไม่ตรงกัน ➜ บนกระดานปล่อยให้สูงเท่าแผนที่ แล้วให้รายชื่อข้างในเลื่อนเอาเอง */
+  .lb-body .fx-rail {
+    max-height: none;
+    min-height: 0;
+  }
+
+  /* หมายเหตุ: เคยลองให้กราฟ Recharts ยืดเต็มกล่องแบบเดียวกับแผนที่ แต่ทำไม่ได้ —
+     ResponsiveContainer ที่รับ height เป็นตัวเลข (CHART_HEIGHT) จะเฝ้าดูเฉพาะความกว้าง
+     ยืดกล่องด้วย CSS จึงได้แค่ช่องว่างเปล่าเพิ่ม ส่วน <svg> ยังสูงเท่าเดิม
+     ➜ ปล่อยให้กราฟสูงคงที่ แล้วตั้งความสูงตั้งต้นของกล่องให้พอดีแทน (ดู DEFAULT_LAYOUTS) */
+
+  .lb-body .farm-map-frame {
+    height: auto;
+    flex: 1 1 auto;
+    /* ย่อได้แค่ระดับที่ยังอ่านแผนที่ออก — ต่ำกว่านี้ให้การ์ดเลื่อนแทน */
+    min-height: var(--map-h-min);
+  }
+}
+
+/* ---------- โหมดจัดเลย์เอาต์ ---------- */
+.lb-board.is-editing .lb-block {
+  outline: 2px dashed var(--accent-bright);
+  outline-offset: 2px;
+  border-radius: var(--radius-lg);
+}
+
+/* กำลังลากอยู่ = ยกขึ้นมาทับใบอื่นและเน้นขอบให้ชัด */
+.lb-board.is-editing .lb-block.is-moving {
+  z-index: 3;
+  outline-style: solid;
+  outline-color: var(--accent);
+}
+
+.lb-board.is-editing .lb-body {
+  /* ปิดการกดของจริงระหว่างจัด — ไม่งั้นลากทับปุ่มแล้วเผลอกดเข้าหน้าอื่น */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- แถบจับย้าย ---------- */
+.lb-move {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  cursor: grab;
+  touch-action: none;
+}
+
+.lb-move:active {
+  cursor: grabbing;
+}
+
+.lb-move svg {
+  flex-shrink: 0;
+}
+
+.lb-move-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lb-size {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  opacity: 0.85;
+}
+
+/* ระหว่างลาก/ยืด ตัวเลขนี้เปลี่ยนตามเวลาจริง — เน้นให้รู้ว่ากำลังนับอยู่ ไม่ใช่ป้ายค้าง */
+/* ผสมจาก currentColor ไม่ใช่สีคงที่ — แถบจับเปลี่ยนสีตามธีมได้ ป้ายจึงต้องเข้มขึ้น/อ่อนลงตามตัวหนังสือ */
+.lb-size.is-live {
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent);
+  font-weight: 800;
+  opacity: 1;
+}
+
+.lb-move:focus-visible {
+  outline: 2px solid var(--ink-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- มือจับยืดทั้ง 8 ทิศ ---------- */
+.lb-handle {
+  position: absolute;
+  z-index: 4;
+  /* touch-action ต้องเป็น none ไม่งั้นบนมือถือระบบจะกินท่าลากไปเลื่อนหน้าแทน */
+  touch-action: none;
+}
+
+/* ขอบทั้งสี่ด้าน — แถบบางตลอดแนว */
+.lb-handle.is-n,
+.lb-handle.is-s {
+  left: 14px;
+  right: 14px;
+  height: 12px;
+  cursor: ns-resize;
+}
+
+.lb-handle.is-w,
+.lb-handle.is-e {
+  top: 14px;
+  bottom: 14px;
+  width: 12px;
+  cursor: ew-resize;
+}
+
+.lb-handle.is-n {
+  top: -6px;
+}
+.lb-handle.is-s {
+  bottom: -6px;
+}
+.lb-handle.is-w {
+  left: -6px;
+}
+.lb-handle.is-e {
+  right: -6px;
+}
+
+/* สี่มุม — จุดกลมให้เห็นชัดว่าจับตรงไหนได้ */
+.lb-handle.is-nw,
+.lb-handle.is-ne,
+.lb-handle.is-sw,
+.lb-handle.is-se {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+}
+
+.lb-handle.is-nw {
+  top: -8px;
+  left: -8px;
+  cursor: nwse-resize;
+}
+.lb-handle.is-ne {
+  top: -8px;
+  right: -8px;
+  cursor: nesw-resize;
+}
+.lb-handle.is-sw {
+  bottom: -8px;
+  left: -8px;
+  cursor: nesw-resize;
+}
+.lb-handle.is-se {
+  bottom: -8px;
+  right: -8px;
+  cursor: nwse-resize;
+}
+
+/* จอแคบ: กริด 12 คอลัมน์เล็กเกินกว่าจะจัดด้วยนิ้ว — ยุบเป็นคอลัมน์เดียวและปิดการจัด
+   (แถบเครื่องมือจะบอกผู้ใช้ว่าให้ไปจัดบนจอกว้าง) */
+@media (max-width: 899px) {
+  .lb-board,
+  .lb-ghost {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lb-block {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+  }
+
+  /* LayoutBoard.jsx ตั้ง grid-template-rows: repeat(n, 44px) ไว้เป็น inline style
+     พอจอแคบสั่ง grid-row: auto กล่องจะไปตกในแถวตายตัว 44px แล้วเนื้อหาโดนบีบจนเละ
+     ➜ ล้างแถวตายตัวทิ้ง (ต้อง !important เพราะทับ inline style) ให้สูงตามเนื้อหาแทน */
+  .lb-board {
+    grid-template-rows: none !important;
+    grid-auto-rows: auto;
+  }
+
+  .lb-body,
+  .lb-body > * {
+    height: auto;
+  }
+
+  .lb-body > .card {
+    overflow: visible;
+  }
+
+  .lb-ghost,
+  .lb-move,
+  .lb-handle {
+    display: none;
+  }
+
+  .lb-board.is-editing .lb-block {
+    outline: 0;
+  }
+
+  .lb-board.is-editing .lb-body {
+    pointer-events: auto;
+  }
+}
+
+/* ================= แผงจัดเลย์เอาต์ (อยู่ในป๊อบอัพตั้งค่า) ================= */
+.ls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ls-board {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.ls-board svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.ls-board b {
+  color: var(--ink-primary);
+}
+
+.ls-row {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.ls-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  box-shadow: var(--shadow-raised-gold);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  white-space: nowrap;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.ls-toggle:hover {
+  transform: translateY(-2px);
+}
+
+.ls-toggle:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+/* กำลังจัดอยู่ = ปุ่มเปลี่ยนเป็นแบบเส้นขอบ ให้ต่างจากตอนยังไม่เริ่มอย่างชัดเจน */
+.ls-toggle.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  box-shadow: none;
+  color: var(--accent-strong);
+}
+
+.ls-saved {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.ls-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ls-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.ls-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ls-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ls-btn.is-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--ink-inverse);
+}
+
+/* ยืนยันลบ — แดงเฉพาะตอนกดครั้งแรกแล้วเท่านั้น (กดสองครั้งถึงลบจริง) */
+.ls-btn.is-danger {
+  border-color: var(--status-critical);
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.ls-btn:focus-visible,
+.ls-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ls-form {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.ls-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 200px;
+}
+
+.ls-field span {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.ls-field input {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.ls-field input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+/* ================= แถบลอย "กำลังจัดเลย์เอาต์" =================
+   ทางออกจากโหมดจัด เพราะปุ่มเปิดโหมดอยู่ในป๊อบอัพตั้งค่าซึ่งปิดตัวเองไปตอนเริ่มจัด
+   ลอยอยู่ล่างจอด้วย position: fixed จึงไม่ดันเนื้อหาและตามผู้ใช้ไปทุกที่ที่เลื่อน */
+.eb {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-5);
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  max-width: min(720px, calc(100vw - var(--space-6)));
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--accent-bright);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-float);
+}
+
+.eb-text {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.eb-text svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.eb-text b {
+  color: var(--ink-primary);
+}
+
+.eb-hint {
+  color: var(--ink-muted);
+}
+
+.eb-done {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  box-shadow: var(--shadow-raised-gold);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  white-space: nowrap;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.eb-done:hover {
+  transform: translateY(-2px);
+}
+
+.eb-done:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+.eb-done:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* จอแคบ: จัดเลย์เอาต์ไม่ได้ จึงไม่ต้องมีแถบนี้ */
+@media (max-width: 899px) {
+  .eb {
+    display: none;
+  }
+}
+
+/* ================= ระหว่างลาก ================= */
+
+/* กล่องที่กำลังลาก: ลอยตามเคอร์เซอร์เป็นพิกเซล ไม่มี transition มาหน่วง
+   (การขยับของใบอื่นใช้ FLIP ใน LayoutBoard.jsx ไม่ได้ใช้ transition ของ CSS) */
+.lb-board.is-editing .lb-block.is-moving {
+  z-index: 5;
+  outline-style: solid;
+  outline-color: var(--accent);
+  /* ยกขึ้นมาให้รู้สึกว่า "หยิบขึ้นมาจากกระดาน" แบบวิดเจ็ตบนไอโฟน
+     ใช้ box-shadow ไม่ใช่ filter: drop-shadow — drop-shadow ต้องวาดเงาจากรูปร่างจริง
+     ของทั้งซับทรี ซึ่งแพงมากตอนลากการ์ดที่มีกราฟ/แผนที่อยู่ข้างใน */
+  transition: none;
+  will-change: transform;
+}
+
+.lb-board.is-editing .lb-block.is-moving .lb-body > * {
+  box-shadow: 0 12px 28px rgb(var(--shadow-rgb) / 0.26);
+}
+
+.lb-board.is-editing .lb-block.is-moving .lb-body {
+  transform: scale(1.02);
+  opacity: 0.96;
+  transition: transform 0.16s ease;
+}
+
+/* ใบอื่นจางลงนิดหนึ่งระหว่างมีคนลาก สายตาจะได้อยู่กับใบที่ถืออยู่ */
+.lb-board.is-dragging .lb-block:not(.is-moving) .lb-body {
+  opacity: 0.72;
+  transition: opacity 0.16s ease;
+}
+
+/* เงาบอกช่องปลายทาง — บอกล่วงหน้าว่าปล่อยแล้วจะลงตรงไหนพอดี
+   ความจางมาจากสีโปร่ง ไม่ใช่ opacity เพราะ opacity จะจางป้ายบอกขนาดข้างในไปด้วยจนอ่านไม่ออก */
+/* ตอนยืด: กล่องจริงเปลี่ยนขนาดให้เห็นอยู่แล้ว เงาจึงเหลือแค่กรอบ ไม่ถมสีทับการ์ด */
+.lb-drop.is-resize {
+  background: transparent;
+}
+
+.lb-drop {
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  border: 2px dashed color-mix(in srgb, var(--accent) 62%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--accent-tint) 58%, transparent);
+  pointer-events: none;
+}
+
+/* ป้ายบอกขนาดตอนยืด — ช่องกริด (ค่าที่บันทึกจริง) + ขนาดบนจอเป็นพิกเซล (สิ่งที่ตาเห็น) */
+.lb-drop-size {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d), 0 10px 24px rgb(var(--shadow-rgb) / 0.2);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.lb-drop-size b {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.lb-drop-size em {
+  font-size: var(--text-xs);
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.lb-drop-px {
+  margin-top: var(--space-1);
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-board.is-editing .lb-block.is-moving .lb-body,
+  .lb-board.is-dragging .lb-block:not(.is-moving) .lb-body {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- ชุดเลย์เอาต์: ปุ่มเปิดป๊อบอัพ + รายการที่ค้นหาได้ ----------
+   เดิมเป็น dropdown แล้วเปลี่ยนเป็นปุ่มเรียงยาว — ปุ่มเรียงกินที่ในแผงตั้งค่า
+   พอชุดเยอะขึ้นจะดันของอื่นตกจอ จึงย้ายรายการเข้าป๊อบอัพที่มีช่องค้นหาแทน
+   (ผู้ใช้สั่ง 31 ส.ค. 2569 — "กดปุ่มแล้วโชว์ป๊อบอัพที่เคยบันทึกไว้ และมีช่องให้ค้นหา") */
+.ls-presets {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.ls-presets-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+/* ปุ่มที่กดแล้วเปิดรายการ — บอกชื่อชุดที่ใช้อยู่และจำนวนชุดทั้งหมด */
+.ls-picker-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ls-picker-btn:hover { border-color: var(--accent); }
+
+.ls-picker-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ls-picker-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ls-picker-count {
+  flex-shrink: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+/* ---------- ป๊อบอัพรายการ ---------- */
+.ls-picker {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 320px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+}
+
+.ls-picker-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-tint);
+}
+
+.ls-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+}
+
+.ls-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.ls-search input:focus { outline: none; }
+.ls-search:focus-within { border-color: var(--accent); }
+
+.ls-picker-close {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  cursor: pointer;
+}
+
+.ls-picker-close:hover {
+  border-color: var(--accent);
+  color: var(--ink-primary);
+}
+
+.ls-picker-list {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-2);
+  overflow-y: auto;
+}
+
+.ls-picker-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  text-align: left;
+  color: var(--ink-primary);
+  cursor: pointer;
+}
+
+.ls-picker-item:hover { background: var(--bg-tint); }
+
+.ls-picker-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* ชุดที่ใช้อยู่ — ไอคอนถูก + ป้าย "ใช้อยู่" + พื้นเน้น ไม่ได้บอกด้วยสีอย่างเดียว */
+.ls-picker-item.is-on {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.ls-picker-item-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ls-preset-on {
+  flex-shrink: 0;
+  padding: 0 var(--space-2);
+  border-radius: 999px;
+  background: var(--accent-strong);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-inverse);
+}
+
+/* ค้นแล้วไม่เจอ — มีทั้งไอคอนและข้อความ พร้อมบอกคำที่ค้นไปด้วย */
+.ls-picker-empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-5) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}

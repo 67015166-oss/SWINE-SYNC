@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการทั่วไป</title><desc id="dsc">ภาพวาดสุกรนอนซึม มีไข้สูง 40 ถึง 41 องศา และเดินกะเผลก</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="206" cy="242" rx="150" ry="18" fill="#e6dcd4"/>
+  <ellipse cx="186" cy="188" rx="112" ry="56" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="296" cy="160" rx="48" ry="42" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <path d="M272 122 q-18 -30 10 -34 q24 -2 20 26" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="336" cy="170" rx="18" ry="15" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+  <ellipse cx="331" cy="170" rx="3" ry="4" fill="#6f4f47"/><ellipse cx="341" cy="170" rx="3" ry="4" fill="#6f4f47"/>
+  <path d="M296 152 q12 5 22 1" fill="none" stroke="#9b7268" stroke-width="3" stroke-linecap="round"/>
+  <path d="M104 226 q12 20 34 16 M164 230 q14 18 36 12" fill="none" stroke="#9b7268" stroke-width="9" stroke-linecap="round"/>
+  <path d="M78 178 q-16 14 -6 30" fill="none" stroke="#9b7268" stroke-width="7" stroke-linecap="round"/>
+  <g transform="translate(40 40)">
+    <rect x="0" y="0" width="16" height="72" rx="8" fill="#fff" stroke="#9b7268" stroke-width="2.5"/>
+    <rect x="5" y="20" width="6" height="46" fill="#c0392b"/>
+    <circle cx="8" cy="76" r="11" fill="#c0392b"/>
+    <text x="30" y="30" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="19" font-weight="600" fill="#c0392b">ไข้สูง 40–41°C</text>
+    <text x="30" y="54" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="15" fill="#5b4a44">ซึม ไม่ยอมลุก</text>
+  </g>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">ซึม ไม่ยอมลุก เดินกะเผลก</text>
+</svg>

@@ -1,0 +1,249 @@
+/* หน้า "อุณหภูมิและความชื้นทุกฟาร์ม" (/dashboard/climate)
+   ตัวเลขรวม 4 ใบ → กราฟแท่งรายฟาร์ม + ปุ่มกรองฟาร์ม → ตารางรายโรงเรือน
+
+   ความลึกใช้ชุดเดียวกับทั้งแอป — แผ่นนูน (--shadow-3d) กับพื้นจม (--shadow-well)
+   สิ่งที่กดได้เท่านั้นที่ยกขึ้นตอนชี้ */
+
+/* ---------- ปุ่มเปิดป๊อบอัพเลือกฟาร์ม/โรงเรือน (ปุ่มระดับหน้า) ---------- */
+
+.ca-pick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d);
+  font-family: var(--font-sans);
+  text-align: left;
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ca-pick-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+.ca-pick-btn:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.ca-pick-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.ca-pick-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-tint);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--accent);
+}
+
+.ca-pick-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.ca-pick-text span {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.ca-pick-text b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.ca-pick-arrow {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+/* ---------- ปุ่มกรองฟาร์มใต้กราฟ ---------- */
+
+.ca-farms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.ca-farm,
+.ca-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ca-farm svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+
+.ca-farm em {
+  font-style: normal;
+  color: var(--ink-muted);
+}
+
+.ca-farm:hover,
+.ca-sort:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-3d);
+}
+
+.ca-farm:focus-visible,
+.ca-sort:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ที่เลือกอยู่ — พื้นทองอ่อน + ตัวหนา + ไอคอนถูก (ไม่ได้ต่างกันแค่สี) */
+.ca-farm.is-on,
+.ca-sort.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  font-weight: 800;
+  color: var(--accent-strong);
+}
+
+.ca-farm.is-on svg,
+.ca-farm.is-on em {
+  color: var(--accent);
+}
+
+/* ---------- แถบเรียงตาราง ---------- */
+
+.ca-sorts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.ca-sorts-label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+/* ---------- ตารางรายโรงเรือน ---------- */
+
+.ca-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ca-table th {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-strong);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-align: left;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.ca-table th.num,
+.ca-table td.num {
+  text-align: right;
+}
+
+.ca-table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--ink-primary);
+  vertical-align: top;
+}
+
+.ca-table tbody tr:hover {
+  background: var(--bg-tint);
+}
+
+.ca-farm-cell {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+}
+
+.ca-farm-cell b {
+  font-weight: 700;
+}
+
+.ca-farm-cell span,
+.ca-stage {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.ca-stage {
+  display: block;
+}
+
+/* ชื่อโรงเรือนเป็นลิงก์เข้าไปหน้าเจาะรายโรงเรือน */
+.ca-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.ca-link:hover {
+  color: var(--accent-strong);
+  text-decoration: underline;
+}
+
+/* ค่าที่หลุดเกณฑ์เน้นด้วยสีตัวเลข — สถานะจริงอ่านได้จากป้ายท้ายแถวเสมอ */
+.ca-value {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ca-value.is-warning {
+  color: var(--status-warning-text);
+}
+
+.ca-value.is-critical {
+  color: var(--status-critical-text);
+}
+
+.ca-value.is-offline {
+  color: var(--ink-muted);
+}
+
+@media (max-width: 719px) {
+  .ca-pick-btn {
+    width: 100%;
+  }
+
+  .ca-pick-arrow {
+    margin-left: auto;
+  }
+}

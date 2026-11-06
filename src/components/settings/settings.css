@@ -1,0 +1,1357 @@
+/* หน้าตั้งค่าธีม — ตัวเลือกธีม/โหมดสีใช้สไตล์ร่วมจาก components/theme/theme.css
+   ไฟล์นี้มีเฉพาะของที่เป็นของหน้านี้จริง ๆ: ตัวติ๊กเลือกเมนู/กล่องสรุป และปุ่มคืนค่า */
+
+.st-pickers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  gap: var(--space-6);
+}
+
+.st-picker {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.st-picker-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0;
+  margin-bottom: var(--space-4);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-picker-note {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-secondary);
+}
+
+.st-picker-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.st-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.st-opt:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-tint);
+}
+
+.st-opt.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  font-weight: 600;
+}
+
+/* ติ๊กครบเพดานแล้ว — บอกด้วยความจางว่ากดไม่ได้ ไม่ใช่ปล่อยให้กดแล้วเงียบ */
+.st-opt.is-full {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.st-opt:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.st-opt-box {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--ink-inverse);
+}
+
+.st-opt.is-on .st-opt-box {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.st-opt-icon {
+  color: var(--ink-muted);
+}
+
+.st-opt.is-on .st-opt-icon {
+  color: var(--accent);
+}
+
+.st-picker-order {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.st-picker-order svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.st-reset {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+.st-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition: transform 0.12s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.st-reset-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.st-reset-btn:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.st-reset-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- แถวตัวเลือกอันเดียว (ขนาดตัวอักษร · ความหนาแน่น · ระดับแจ้งเตือน) ---------- */
+.st-choice {
+  margin: 0 0 var(--space-6);
+  padding: 0;
+  border: 0;
+}
+
+.st-choice:last-of-type {
+  margin-bottom: 0;
+}
+
+.st-choice-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0;
+  margin-bottom: var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-choice-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: var(--space-2);
+}
+
+.st-choice-opt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.st-choice-opt:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-tint);
+}
+
+.st-choice-opt.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.st-choice-opt:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.st-choice-opt b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-choice-opt span {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+/* ---------- สวิตช์เปิด/ปิดหนึ่งอย่าง ---------- */
+.st-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--border);
+}
+
+.st-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.st-toggle-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-toggle-text span {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+/* ---------- ช่องปรับตัวเลข ---------- */
+.st-numbers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.st-number {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+}
+
+.st-number-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.st-number-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-number-text span {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.st-number-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.st-number-ctrl b {
+  min-width: 116px;
+  font-size: var(--text-base);
+  font-weight: 700;
+  text-align: center;
+  color: var(--ink-primary);
+}
+
+.st-number-ctrl button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.st-number-ctrl button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.st-number-ctrl button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.st-number-ctrl button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- ช่องกรอกข้อความ ---------- */
+.st-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.st-field-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.st-field-label b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-field-label span {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.st-field input {
+  width: min(320px, 100%);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.st-field input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+/* ---------- ปุ่มคืนค่า / ล้างข้อมูล ---------- */
+.st-danger {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+.st-danger-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+/* ปุ่มล้างข้อมูลใช้สีสถานะวิกฤต เพราะกดแล้วย้อนกลับไม่ได้จริง ๆ */
+.st-reset-btn.is-danger {
+  border-color: var(--status-critical);
+  color: var(--status-critical-text);
+}
+
+.st-reset-btn.is-danger:hover {
+  border-color: var(--status-critical);
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+@media (max-width: 519px) {
+  .st-reset,
+  .st-danger-btns {
+    justify-content: stretch;
+  }
+
+  .st-reset-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .st-number {
+    justify-content: space-between;
+  }
+}
+
+/* ================= ป๊อบอัพตั้งค่า (components/settings/SettingsModal.jsx) ================= */
+
+/* กล่องเนื้อหาของป๊อบอัพตั้งค่าเป็นสองคอลัมน์: แถบหมวดซ้าย (นิ่ง) + เนื้อหาขวา (เลื่อนได้)
+   ระยะขอบในและการเลื่อนจึงย้ายจาก .modal-body ไปอยู่ที่คอลัมน์ขวาแทน
+   (ป๊อบอัพเดียวในแอปที่ใช้ prop `tall` คือป๊อบอัพตั้งค่า — ตัวเลือกนี้จึงไม่ไปโดนกล่องอื่น) */
+.modal.is-tall .modal-body {
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ---------- แถบหมวดด้านซ้าย ---------- */
+/* เห็นหมวดทั้ง 9 พร้อมกันตลอดเวลา และไม่เลื่อนหนีตอนอ่านเนื้อหายาว ๆ
+   (เดิมเป็นแถบแท็บแนวนอนหนึบบนสุด ซึ่งกินความกว้างจนชื่อหมวดถูกบีบ) */
+.st-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  width: 210px;
+  padding: var(--space-5) var(--space-4);
+  border-right: 1px solid var(--border);
+  background: var(--bg-sunken);
+  overflow-y: auto;
+}
+
+.st-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  text-align: start;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.st-tab svg {
+  flex-shrink: 0;
+}
+
+.st-tab:hover {
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+/* หมวดที่เปิดอยู่ = แถบทอง (ทองแปลว่า "สิ่งที่เลือกอยู่" เหมือนเมนูทั้งแอป) */
+.st-tab.is-on {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.st-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- คอลัมน์เนื้อหา ---------- */
+.st-panel {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+
+/* จอแคบไม่มีที่พอสำหรับสองคอลัมน์ — แถบหมวดกลับไปเป็นแถวเลื่อนแนวนอนด้านบน */
+@media (max-width: 899px) {
+  .modal.is-tall .modal-body {
+    flex-direction: column;
+  }
+
+  .st-side {
+    flex-direction: row;
+    width: auto;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .st-tab {
+    width: auto;
+    padding: var(--space-2) var(--space-3);
+    border-radius: 999px;
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+
+  .st-panel {
+    padding: var(--space-4);
+  }
+}
+
+/* ---------- แถบบอกผลของ "หน้าเปิดระบบ" ---------- */
+/* ค่านี้มีผลครั้งต่อไปที่เข้าสู่ระบบ ซึ่งนานเกินกว่าจะรู้ว่ากดแล้วเปลี่ยนอะไร
+   แถบนี้จึงบอกผลเป็นประโยค พร้อมปุ่มลองเปิดหน้านั้นทันที */
+.st-home-now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--accent-bright);
+  border-radius: var(--radius-lg);
+  background: var(--accent-tint);
+}
+
+.st-home-now-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.st-home-now-text svg {
+  flex-shrink: 0;
+  color: var(--accent-strong);
+}
+
+.st-home-now-text b {
+  font-weight: 800;
+  color: var(--accent-strong);
+}
+
+.st-home-now-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--accent-bright);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+
+.st-home-now-btn:hover {
+  transform: translateY(-2px);
+  background: var(--bg-tint);
+}
+
+.st-home-now-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- แถบเลื่อนขนาดตัวอักษร ---------- */
+.st-slider {
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+}
+
+.st-slider-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.st-slider-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.st-slider-title b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-slider-title span {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.st-slider-value {
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-4);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--accent-strong);
+}
+
+.st-slider-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ตัว ก เล็ก-ใหญ่ที่ปลายแถบ — ขนาดคงที่ ไม่ผูกกับ --text-scale
+   ไม่งั้นตัวบอกขนาดจะโตตามค่าที่กำลังปรับจนเทียบกันไม่ได้ */
+.st-slider-small,
+.st-slider-big {
+  flex-shrink: 0;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.st-slider-small {
+  font-size: 14px;
+}
+
+.st-slider-big {
+  font-size: 26px;
+}
+
+.st-slider-track {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  min-width: 0;
+}
+
+/* รางและส่วนที่ผ่านมาแล้ววาดเอง เพราะแต่ละเบราว์เซอร์ทาสี input[type=range] คนละแบบ */
+.st-slider-track::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+}
+
+.st-slider-fill {
+  position: absolute;
+  left: 0;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.st-slider-track input[type="range"] {
+  position: relative;
+  width: 100%;
+  height: 32px;
+  margin: 0;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.st-slider-track input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--bg-surface);
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: var(--shadow-raised);
+}
+
+.st-slider-track input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--bg-surface);
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: var(--shadow-raised);
+}
+
+.st-slider-track input[type="range"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+.st-slider-marks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.st-slider-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.st-slider-mark:hover {
+  border-color: var(--border-strong);
+  color: var(--ink-primary);
+}
+
+.st-slider-mark.is-on {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.st-slider-mark:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ตัวอย่างข้อความจริง — ขยายตามแถบเลื่อนทันทีเพราะใช้ token เดียวกับทั้งแอป */
+.st-slider-preview {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.st-slider-preview b {
+  color: var(--ink-primary);
+}
+
+/* ---------- แถวปุ่มท้ายป๊อบอัพ ---------- */
+.st-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.st-actions-now {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.st-actions-now b {
+  color: var(--ink-primary);
+}
+
+/* ป๊อบอัพแคบกว่าหน้าเต็ม — ตัวเลือกเมนู/กล่องสรุปวางซ้อนกันแทนที่จะเรียงคู่ */
+.st-pickers {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 639px) {
+  .st-actions {
+    align-items: stretch;
+  }
+
+  .st-actions .modal-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---------- ตัวเลือกหน้าแรก ---------- */
+.st-homes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.st-home {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+
+.st-home:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-tint);
+  transform: translateY(-1px);
+}
+
+.st-home.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.st-home:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.st-home b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.st-check {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--ink-inverse);
+}
+
+.st-home.is-on .st-check {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+/* ตัวอย่างพื้นหลังย่อส่วนใต้แถบเลื่อนความเข้ม — ภาพจริงใบเดียวกับหน้าภาพรวม
+   ทาม่านด้วย token ชุดเดียวกัน แต่บังคับ --photo-strength เฉพาะกล่องนี้
+   ผู้ใช้จึงเห็นผลทันทีโดยไม่ต้องปิดป๊อบอัพออกไปดู */
+.st-bg-preview {
+  display: block;
+  height: 84px;
+  margin-top: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-image: linear-gradient(
+      to bottom,
+      var(--photo-veil-top),
+      var(--photo-veil-bottom)
+    ),
+    url("/overview-bg.jpg");
+  background-size: cover;
+  background-position: center 30%;
+  box-shadow: var(--shadow-well);
+}
+
+/* ================= หมวดบัญชี: สิทธิ์ที่ใช้อยู่ =================
+   อ่านอย่างเดียว — เป็นการ "บอกว่าคุณคือใครและทำอะไรได้" ไม่ใช่ที่ให้เปลี่ยนสิทธิ์
+   (เปลี่ยนได้ที่หน้าเข้าสู่ระบบเท่านั้น ไม่งั้นการแบ่งสิทธิ์ก็ไม่มีความหมาย) */
+.st-account {
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+
+.st-account-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+}
+
+.st-account-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.st-account-text span {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.st-account-text b {
+  font-size: var(--text-lg);
+  color: var(--ink-primary);
+}
+
+/* ทำได้ | ทำไม่ได้ วางคู่กัน — เทียบกันได้ในสายตาเดียว */
+.st-account-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* มีแค่รายการเดียว (ผู้ดูแลระบบไม่มีข้อห้าม) ก็กินเต็มความกว้าง */
+.st-account-list:only-child {
+  grid-column: 1 / -1;
+}
+
+.st-account-list-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--green-strong);
+}
+
+.st-account-list.is-deny .st-account-list-head {
+  color: var(--status-critical-text);
+}
+
+.st-account-list ul {
+  margin: 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--ink-secondary);
+}
+
+.st-account-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.st-account-foot .icon,
+.st-account-list-head .icon {
+  flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+  .st-account-lists {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= หมวดบัญชี: บัญชีที่จดจำไว้ + บันทึกการเข้าใช้งาน =================
+   ทั้งสองบล็อกเป็นข้อมูลของ "เครื่องนี้" ไม่ใช่ของบัญชี (ดู lib/auth/sessions.js)
+   หน้าตาเหมือนกันทั้งคู่โดยตั้งใจ — อ่านเป็นรายการเวลาแบบเดียวกัน */
+.st-sessions {
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+
+.st-sessions-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.st-sessions-count {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.st-sessions-empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.st-sessions-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* หนึ่งบรรทัด = ไอคอน + รหัสผู้ใช้ + เวลา (ดันไปชิดขวา) + ป้ายผล/ปุ่ม
+   เวลาใช้ตัวเลขความกว้างเท่ากัน คอลัมน์จึงตรงกันทุกบรรทัด */
+.st-session {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-size: var(--text-sm);
+}
+
+.st-session b {
+  color: var(--ink-primary);
+}
+
+.st-session-time {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.st-session-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.st-session-btn:hover:not(:disabled) {
+  border-color: var(--status-critical-text);
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.st-sessions-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+/* ---------- ออกจากระบบ — ล่างสุดของแถบหมวดด้านซ้าย ----------
+   ไม่ใช้พื้นทอง: ทองในระบบนี้แปลว่า "ปุ่มหลักของหน้านั้น" แต่การออกจากระบบ
+   ไม่ใช่สิ่งที่คนเปิดหน้าตั้งค่ามาทำเป็นหลัก ➜ ปุ่มเรียบ แล้วค่อยเป็นสีเตือนตอนยืนยัน */
+.st-signout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* ดันลงล่างสุดของแถบ ไม่ว่าจะมีกี่หมวดก็ตาม */
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.st-signout-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-primary);
+  text-align: start;
+  cursor: pointer;
+}
+
+.st-signout-btn:hover {
+  border-color: var(--accent);
+}
+
+.st-signout-btn:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* ปุ่มยืนยันจริง — บอกด้วยทั้งสีและคำว่า "ยืนยัน" ไม่ได้สื่อด้วยสีอย่างเดียว */
+.st-signout-btn.is-confirm {
+  border-color: var(--status-critical);
+  background: var(--status-critical);
+  color: var(--ink-inverse);
+}
+
+.st-signout-ask {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  color: var(--ink-secondary);
+}
+
+.st-signout-ask svg {
+  flex-shrink: 0;
+}
+
+/* ปุ่มยืนยัน/ไม่ออก อยู่แถวเดียวกัน แบ่งความกว้างเท่า ๆ กัน */
+.st-signout-btns {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.st-signout-btns .st-signout-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-2);
+}
+
+/* จอแคบ: แถบหมวดกลายเป็นแถวนอนเลื่อนได้ ปุ่มออกจึงต้องเลิกดันลงล่าง
+   และไม่ต้องมีเส้นคั่นด้านบน (มันอยู่ท้ายแถวแล้ว ไม่ใช่ท้ายคอลัมน์) */
+@media (max-width: 860px) {
+  .st-signout {
+    flex-direction: row;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+    flex-shrink: 0;
+  }
+
+  .st-signout-btn {
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
+/* ทางเข้าหน้าจัดการผู้ใช้ในหมวดบัญชี — เป็นลิงก์ไปอีกหน้า ไม่ใช่ปุ่มทำงานในป๊อบอัพ
+   จึงหน้าตาต่างจากปุ่มอื่นในหมวดนี้โดยตั้งใจ (มีลูกศรบอกทิศ) */
+.st-users-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--ink-primary);
+}
+
+.st-users-link:hover {
+  border-color: var(--accent);
+  background: var(--bg-tint);
+}
+
+.st-users-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.st-users-link > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.st-users-link b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ---------- เปลี่ยนรหัสผ่านของตัวเอง (หมวดบัญชี) ----------
+   พับไว้เป็นค่าตั้งต้น เพราะเป็นงานที่ทำนาน ๆ ครั้ง */
+.st-pw {
+  margin-top: var(--space-3);
+}
+
+.st-pw-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  font-family: var(--font-sans);
+  text-align: left;
+  color: var(--ink-primary);
+  cursor: pointer;
+}
+
+.st-pw-toggle:hover {
+  border-color: var(--accent);
+  background: var(--bg-tint);
+}
+
+.st-pw-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.st-pw-toggle > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.st-pw-toggle b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ลูกศรหมุนลงตอนกาง — บอกสถานะซ้ำกับ aria-expanded ที่ screen reader อ่าน */
+.st-pw-arrow {
+  transition: transform 0.15s ease;
+}
+
+.st-pw-arrow.is-open {
+  transform: rotate(90deg);
+}
+
+.st-pw-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--bg-sunken);
+}
+
+.st-pw-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.st-pw-field > span {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.st-pw-field input {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.st-pw-field input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ผลลัพธ์ — มีทั้งไอคอนและข้อความ ไม่ได้บอกด้วยสีอย่างเดียว */
+.st-pw-msg {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.st-pw-msg.is-bad {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.st-pw-msg.is-good {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.st-pw-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  cursor: pointer;
+}
+
+.st-pw-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.st-pw-submit:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}

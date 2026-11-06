@@ -1,0 +1,232 @@
+/* หน้าแบบจำลองโรงเรือน — สี/ขนาด/ระยะทุกค่ามาจาก tokens.css เท่านั้น */
+
+.tw-empty {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-base);
+}
+
+/* ---------- ตัวเลือกโรงเรือน (โผล่เมื่อมีมากกว่าหนึ่งหลัง) ---------- */
+.tw-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.tw-pick-btn {
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.tw-pick-btn:hover {
+  background: var(--bg-tint);
+}
+
+.tw-pick-btn.is-on {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.tw-legend {
+  margin: var(--space-3) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- ค่าที่วัดได้ ---------- */
+.tw-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tw-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tw-row:last-child {
+  border-bottom: 0;
+}
+
+.tw-row-icon {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.tw-row-label {
+  color: var(--ink-secondary);
+  font-size: var(--text-base);
+}
+
+.tw-row-value {
+  margin-inline-start: auto;
+  color: var(--ink-primary);
+  font-size: var(--text-lg);
+  white-space: nowrap;
+}
+
+.tw-thi {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--bg-sunken);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tw-thi-label {
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tw-thi-value {
+  color: var(--ink-primary);
+  font-size: var(--text-xl);
+}
+
+.tw-thi-text {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+/* ---------- เหตุที่ยังไม่ปิด ---------- */
+.tw-alerts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tw-alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tw-alert-time {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* ---------- ขอบเขตของแบบจำลอง ---------- */
+.tw-trust {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-5);
+}
+
+.tw-trust h4 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.tw-trust ul {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+/* ---------- ค่านอกเล้าค้าง ---------- */
+.tw-stuck {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+  font-size: var(--text-sm);
+}
+
+/* ---------- ชั้นที่ 2: แบบจำลอง ---------- */
+.tw-model-off {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.tw-model-reason {
+  margin: 0;
+  color: var(--ink-primary);
+  font-size: var(--text-base);
+}
+
+.tw-model-need {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tw-model-params {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.tw-model-params li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.tw-model-params span {
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+}
+
+.tw-model-params b {
+  color: var(--ink-primary);
+  font-size: var(--text-xl);
+}
+
+/* แถบ "ข้อมูลไม่สด" เหนือค่าที่วัดได้ (T1.301) — ต้องเห็นก่อนตัวเลข ไม่ใช่หมายเหตุท้ายการ์ด */
+.tw-stale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-well);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}

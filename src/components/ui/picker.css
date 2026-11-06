@@ -1,0 +1,399 @@
+/* โครงเนื้อในของป๊อบอัพแบบ "เลือกฟาร์ม → เลือกโรงเรือน"
+   ใช้ร่วมกันหลายป๊อบอัพ (ClimatePicker · AlertPicker)
+   สองคอลัมน์เรียงซ้าย→ขวา คั่นด้วยเส้นตั้งและลูกศร
+   ใช้ตารางเดียวทั้งบล็อกเพื่อให้ "หัวข้อ / ช่องเลือก / การ์ด" ของสองฝั่งอยู่ระดับเดียวกันเป๊ะ */
+
+.cp-art {
+  width: min(300px, 78%);
+  height: auto;
+}
+
+
+.cp-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
+  gap: var(--space-3) var(--space-5);
+  align-items: start;
+}
+
+/* ตำแหน่งของแต่ละชิ้นในตาราง (ซ้าย = a, กลาง = c, ขวา = b) */
+.cp-a1 {
+  grid-area: 1 / 1;
+}
+
+.cp-a2 {
+  grid-area: 2 / 1;
+}
+
+.cp-a3 {
+  grid-area: 3 / 1;
+}
+
+.cp-b1 {
+  grid-area: 1 / 3;
+}
+
+.cp-b2 {
+  grid-area: 2 / 3;
+}
+
+.cp-b3 {
+  grid-area: 3 / 3;
+}
+
+.cp-line {
+  grid-area: 1 / 2 / 4 / 3;
+  width: 1px;
+  height: 100%;
+  justify-self: center;
+  background: var(--border);
+}
+
+.cp-chev {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  align-self: center;
+  justify-self: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  color: var(--accent);
+}
+
+.cp-c2 {
+  grid-area: 2 / 2;
+}
+
+.cp-c3 {
+  grid-area: 3 / 2;
+}
+
+/* ---------- หัวข้อขั้นตอน ---------- */
+.cp-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.cp-step-num {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: var(--shadow-3d-chip);
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--ink-inverse);
+}
+
+.cp-step-icon {
+  color: var(--green);
+}
+
+/* ---------- ช่องเลือก (dropdown) ---------- */
+.cp-select {
+  position: relative;
+  display: block;
+}
+
+.cp-select select {
+  width: 100%;
+  padding: var(--space-4) var(--space-7) var(--space-4) var(--space-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cp-select select:hover {
+  border-color: var(--green);
+}
+
+.cp-select select:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.cp-select select:disabled {
+  background: var(--bg-sunken);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+.cp-select-arrow {
+  position: absolute;
+  top: 50%;
+  right: var(--space-5);
+  transform: translateY(-50%) rotate(90deg);
+  pointer-events: none;
+  color: var(--ink-secondary);
+}
+
+/* ---------- การ์ดตัวอย่างของสิ่งที่เลือก ---------- */
+.cp-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 118px;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d);
+}
+
+.cp-thumb {
+  display: block;
+  width: 76px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-3d-chip);
+  overflow: hidden;
+}
+
+.cp-thumb-art {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cp-card-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.cp-card-text b {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.cp-card-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.cp-card-meta svg {
+  color: var(--green);
+}
+
+.cp-pill {
+  padding: var(--space-1) var(--space-4);
+  border-radius: 999px;
+  background: var(--green-tint);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--green-strong);
+}
+
+.cp-card-empty {
+  margin: auto;
+  font-size: var(--text-base);
+  color: var(--ink-muted);
+}
+
+/* ---------- แถวปุ่มท้ายกล่อง ---------- */
+.cp-actions {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.45fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.cp-actions .modal-btn {
+  justify-content: center;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-lg);
+}
+
+/* ---------- ช่องค้นหาในป๊อบอัพ (PickerSearch) ----------
+   ทางลัดของคนที่รู้ชื่อฟาร์ม/โรงเรือนอยู่แล้ว ไม่ต้องไล่เลือกทีละขั้น */
+.cp-search {
+  margin-bottom: var(--space-5);
+}
+
+.cp-search-box {
+  position: relative;
+  display: block;
+}
+
+.cp-search-box input {
+  width: 100%;
+  padding: var(--space-4) var(--space-5) var(--space-4) var(--space-8);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.cp-search-box input::placeholder {
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.cp-search-box input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.cp-search-icon {
+  position: absolute;
+  top: 50%;
+  left: var(--space-5);
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--ink-secondary);
+}
+
+/* รายการผลลัพธ์ — วางต่อจากช่องค้นหาในสายเนื้อหา (ไม่ลอยทับ)
+   เพราะเนื้อในป๊อบอัพเลื่อนได้ ถ้าลอยทับจะโดนขอบกล่องตัดหาย */
+.cp-results {
+  list-style: none;
+  margin-top: var(--space-2);
+  max-height: 300px;
+  overflow-y: auto;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d);
+}
+
+.cp-result {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  font-family: var(--font-sans);
+  text-align: start;
+  color: var(--ink-secondary);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cp-result:hover,
+.cp-result:focus-visible {
+  outline: none;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.cp-result svg {
+  flex-shrink: 0;
+}
+
+.cp-result-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cp-result-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.cp-result-text span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.cp-result-arrow {
+  color: var(--ink-muted);
+}
+
+/* ตัวอักษรที่ตรงคำค้น — บอกให้เห็นว่าผลลัพธ์นี้ตรงตรงไหน */
+.cp-mark {
+  padding: 0 2px;
+  border-radius: 4px;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.cp-results-more,
+.cp-search-empty {
+  padding: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.cp-search-empty {
+  margin-top: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d);
+}
+
+/* ---------- จอแคบ: เรียงลงมาเป็นแถวเดียว ---------- */
+@media (max-width: 719px) {
+  .cp-cols {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: var(--space-3);
+  }
+
+  .cp-a1,
+  .cp-a2,
+  .cp-a3,
+  .cp-b1,
+  .cp-b2,
+  .cp-b3 {
+    grid-area: auto;
+  }
+
+  .cp-b1 {
+    margin-top: var(--space-4);
+  }
+
+  .cp-line,
+  .cp-chev {
+    display: none;
+  }
+
+  .cp-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,2104 @@
+/* หน้า "ภายในโรงเรือน" (/dashboard/farms/:farmId/barns/:barnId)
+   เลย์เอาต์เฉพาะหน้านี้: แถบเมนูซ้ายเต็มความสูง + แถบบนของหน้า + เนื้อหา 3 แถว
+   สี/ขนาด/ระยะทั้งหมดมาจาก tokens.css */
+
+/* แถบเมนูซ้ายเป็นแผงเลื่อนเข้าที่ลอยทับเนื้อหาแล้ว (ดู AppSidebar.css)
+   จึงไม่ต้องกันคอลัมน์ไว้ให้ — เนื้อหาได้ความกว้างเต็มเสมอ */
+.bl {
+  display: block;
+  min-height: 100vh;
+}
+
+.bl :target {
+  scroll-margin-top: var(--space-6);
+}
+
+/* ================= แถบเมนูซ้าย ================= */
+.bl-side {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-4);
+  border-right: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.bl-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-2) var(--space-6);
+  color: var(--ink-primary);
+}
+
+.bl-brand:hover {
+  color: var(--accent-strong);
+}
+
+.bl-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  min-width: 0;
+}
+
+.bl-brand-mark {
+  width: 46px;
+  height: 46px;
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.bl-brand-text span {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--ink-muted);
+}
+
+.bl-brand-text b {
+  font-size: var(--text-base);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+/* การ์ดฟาร์มปิดท้ายแถบเมนู */
+.bl-farm-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: auto;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--ink-primary);
+  text-align: center;
+}
+
+.bl-farm-card:hover {
+  border-color: var(--accent-bright);
+  color: var(--accent-strong);
+}
+
+.bl-farm-art {
+  display: block;
+  height: 110px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  overflow: hidden;
+}
+
+.bl-farm-card b {
+  font-size: var(--text-base);
+  font-weight: 800;
+}
+
+.bl-farm-card > span:nth-of-type(2) {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ป้ายสถานะปิดท้ายการ์ด — จัดกึ่งกลางเหมือนข้อความด้านบน */
+.bl-farm-card .status-badge {
+  align-self: center;
+  margin-top: var(--space-2);
+}
+
+.bl-nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.bl-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.bl-nav-link svg {
+  flex-shrink: 0;
+  padding: 4px;
+  box-sizing: content-box;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.bl-nav-link:hover {
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.bl-nav-link.is-active svg {
+  border-color: var(--accent-bright);
+  background: var(--bg-surface);
+}
+
+.bl-nav-link.is-active {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.bl-side-scene {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ================= แถบบนของหน้า ================= */
+.bl-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-page);
+}
+
+.bl-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.bl-top-icon {
+  flex-shrink: 0;
+}
+
+.bl-top-headings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.bl-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.bl-top-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.bl-updated {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.bl-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  box-shadow: var(--shadow-raised-gold);
+  color: var(--ink-inverse);
+  font-size: var(--text-base);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.bl-logout:hover {
+  transform: translateY(-2px);
+  color: var(--ink-inverse);
+}
+
+.bl-logout:active {
+  transform: translateY(3px);
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+/* ================= เนื้อหา ================= */
+.bl-main {
+  padding: var(--space-5) var(--space-6) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.bl-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-3d);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bl-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+/* ภาพกล้องคงสัดส่วนของตัวเอง ไม่ยืดตามความสูงการ์ดข้าง ๆ */
+/* กล่องแถวถูกแทนด้วยกระดานจัดเลย์เอาต์แล้ว จึงเลือกจากการ์ดโดยตรง */
+.bl-card .bl-cam {
+  flex: none;
+}
+
+/* แถวค่าสภาพแวดล้อมดันไปชิดล่างของการ์ดกล้อง ทั้งสองการ์ดจึงจบระดับเดียวกัน */
+.bl-card .bl-env {
+  margin-top: auto;
+}
+
+/* โรงเรือนที่ยังไม่มีกล้อง — ข้อความแทนภาพต้อง **ยืดเต็มที่ว่างแล้วอยู่กึ่งกลาง**
+   ไม่งั้นข้อความบรรทัดเดียวเกาะอยู่ใต้หัวการ์ด ส่วนแถวค่าถูก margin-top:auto ดันลงไปชิดล่าง
+   เหลือรูโหว่กลางการ์ดร่วม 200px (เห็นชัดที่ฟาร์มกำแพงเพชรซึ่งยังไม่ได้ติดกล้อง) */
+.bl-card > .fx-empty {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  text-align: center;
+}
+
+.bl-card .bl-trends {
+  flex: 1;
+}
+
+/* หัวการ์ดของหน้านี้ (มีป้าย A/B/C) — ไม่ใช้ prop title ของ Card เพราะต้องมีป้ายและสถานะ */
+.bl-card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.bl-card-head h2 {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+/* ป้ายลำดับการ์ด A / B / C — กล่องทองนูน */
+.bl-tag {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid var(--accent-bright);
+  border-radius: var(--radius-sm);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-size: var(--text-base);
+  font-weight: 800;
+}
+
+.bl-head-note {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+/* ป้ายสถานะเล็กมุมขวาของหัวการ์ด */
+.bl-chip {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.bl-chip.is-ok {
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+}
+
+.bl-chip.is-warn {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+}
+
+.bl-editing {
+  margin-left: auto;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+/* ---------- A. กล้อง AI ---------- */
+.bl-live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--status-good-bg);
+  color: var(--status-good-text);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.bl-live.is-off {
+  background: var(--status-offline-bg);
+  color: var(--status-offline-text);
+}
+
+.bl-live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--status-good);
+  animation: bl-blink 2s ease-in-out infinite;
+}
+
+.bl-live.is-off .bl-live-dot {
+  background: var(--status-offline);
+  animation: none;
+}
+
+@keyframes bl-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.bl-cam {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--scene-metal);
+}
+
+/* ครอบคลุมทั้งภาพนิ่ง/สตรีม (<img>) และฉากวาดสำรอง (<svg>) — ทั้งคู่ครอปเต็มกรอบเหมือนกัน
+   ไม่มี object-fit ภาพจริงจะถูกยืดผิดสัดส่วน เพราะกล้องเป็น 16:9 แต่กรอบเป็น 16:10 */
+.bl-cam-view {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* แถบผลการนับทับขอบล่างของภาพ */
+.bl-cam-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(to top, rgb(var(--scrim-rgb) / 0.88), rgb(var(--scrim-rgb) / 0));
+  color: var(--ink-on-scrim);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.bl-cam-bar b {
+  margin-left: auto;
+  font-size: var(--text-stat);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--accent-bright);
+}
+
+.bl-cam-bar em {
+  font-size: var(--text-base);
+  font-style: normal;
+}
+
+.bl-cam-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.bl-cam-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.bl-cam-tab:hover {
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.bl-cam-tab.is-active {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* ---------- เครื่องมือบนภาพกล้อง (ขยาย / บันทึกภาพ) ----------
+   วางมุมขวาบน เพราะกรอบตรวจจับกับแถบผลการนับอยู่กลางและล่างของเฟรม
+   พื้นปุ่มเป็นสีฉากมืดโปร่ง ไม่ใช่พื้นการ์ด — ภาพกล้องเข้มกว่าหน้าจอที่เหลือ */
+.bl-cam-tools {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.bl-cam-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid rgb(var(--surface-rgb) / 0.28);
+  border-radius: 999px;
+  background: rgb(var(--scrim-rgb) / 0.55);
+  backdrop-filter: blur(6px);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-on-scrim);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.bl-cam-tool:hover {
+  background: rgb(var(--scrim-rgb) / 0.78);
+  transform: translateY(-1px);
+}
+
+.bl-cam-tool:active {
+  transform: none;
+}
+
+/* ป้ายยืนยันหลังกดบันทึก — กลางภาพ หายเองใน 2 วินาที */
+.bl-cam-flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 999px;
+  background: rgb(var(--scrim-rgb) / 0.82);
+  color: var(--ink-on-scrim);
+  font-size: var(--text-base);
+  font-weight: 700;
+  animation: bl-flash 0.2s ease both;
+}
+
+@keyframes bl-flash {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+/* ---------- ภาพกล้องเต็มจอ (กดปุ่ม "ขยาย") ----------
+   แผงเต็มหน้าจอเว็บ: แถบบน (ชื่อ+ปุ่มปิด) · ภาพตรงกลาง · แถบล่าง (ตัวเลข+เลือกกล้อง+บันทึก)
+   ภาพใช้ contain ไม่ใช่ cover — เต็มจอแล้วต้องเห็นทั้งเฟรม ไม่ใช่โดนครอปเหมือนตอนอยู่ในการ์ด */
+.bl-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 120; /* สูงกว่าป๊อบอัพ (100) และปุ่มผู้ช่วย AI (60) */
+  display: flex;
+  flex-direction: column;
+  /* ทึบสนิท — เหลือความโปร่งไว้แม้นิดเดียวก็เห็นหัวหน้าเว็บลอยผ่านแถบบนมา */
+  background: rgb(var(--scrim-rgb));
+  animation: bl-viewer-in 0.16s ease both;
+}
+
+@keyframes bl-viewer-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.bl-viewer-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+}
+
+/* ต้องเป็น max-* ไม่ใช่ width/height 100% — ภาพมีสัดส่วนของตัวเอง ถ้าบังคับ 100%
+   ความสูงจะคิดจากสัดส่วนภาพแล้วล้นทะลุแถบล่างลงไป */
+.bl-viewer-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ฉากวาดสำรองไม่มีขนาดของตัวเอง จึงต้องกางให้เต็มพื้นที่เอง */
+svg.bl-viewer-img {
+  width: 100%;
+  height: 100%;
+}
+
+.bl-viewer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  /* แผงนี้พื้นเข้มเสมอทุกโหมดสี ตัวหนังสือจึงต้องสว่างคงที่ ไม่ใช่ --ink-inverse
+     ที่โหมดมืดกลายเป็นสีเข้มจนอ่านไม่เห็น */
+  color: var(--ink-on-scrim);
+}
+
+.bl-viewer-bar.is-top {
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(var(--surface-rgb) / 0.14);
+}
+
+.bl-viewer-bar.is-bottom {
+  justify-content: center;
+  border-top: 1px solid rgb(var(--surface-rgb) / 0.14);
+}
+
+.bl-viewer-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  min-width: 0;
+}
+
+.bl-viewer-title b {
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+.bl-viewer-title span {
+  font-size: var(--text-sm);
+  opacity: 0.72;
+}
+
+.bl-viewer-acts,
+.bl-viewer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* แถบล่าง: ตัวเลขชิดซ้าย ปุ่มเลือกกล้องอยู่กลาง ปุ่มบันทึกชิดขวา */
+.bl-viewer-count {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-right: auto;
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.bl-viewer-count b {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--accent-bright);
+}
+
+.bl-viewer-count em {
+  font-style: normal;
+  font-size: var(--text-sm);
+}
+
+.bl-viewer-bar.is-bottom > *:last-child {
+  margin-left: auto;
+}
+
+.bl-viewer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid rgb(var(--surface-rgb) / 0.3);
+  border-radius: 999px;
+  background: rgb(var(--surface-rgb) / 0.08);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-on-scrim);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.bl-viewer-btn:hover {
+  background: rgb(var(--surface-rgb) / 0.2);
+}
+
+.bl-viewer-btn:focus-visible {
+  outline: 2px solid var(--accent-bright);
+  outline-offset: 2px;
+}
+
+/* กล้องที่กำลังดูอยู่ และปุ่มบันทึก — ทองของแบรนด์บนพื้นมืด */
+/* ตัวหนังสือบนพื้นทองต้องเป็นสีมืดคงที่ ไม่ใช่สีครีม — ครีมบนทองอ่านไม่ออก
+   ใช้สีฉากมืดของแผงนี้ (คงที่ทุกโหมดสี เหมือนพื้นทองที่มันทับอยู่) */
+.bl-viewer-btn.is-on,
+.bl-viewer-btn.is-primary {
+  border-color: var(--accent-bright);
+  background: var(--accent-bright);
+  color: rgb(var(--scrim-rgb));
+}
+
+.bl-viewer-btn.is-on:hover,
+.bl-viewer-btn.is-primary:hover {
+  background: var(--accent);
+  color: var(--ink-on-scrim);
+}
+
+@media (max-width: 700px) {
+  .bl-viewer-bar {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  /* จอแคบไม่มีที่พอให้ตัวเลขกับปุ่มอยู่แถวเดียว — ให้ตกบรรทัดแล้วจัดกลางแทน */
+  .bl-viewer-count,
+  .bl-viewer-bar.is-bottom > *:last-child {
+    margin: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bl-viewer {
+    animation: none;
+  }
+}
+
+/* ---------- ภาพที่บันทึกไว้ (ใต้ปุ่มเลือกกล้อง) ---------- */
+.bl-shots {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.bl-shots-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.bl-shots-head h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.bl-shots-count {
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.bl-shots-note {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.bl-shots-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.bl-shot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+}
+
+.bl-shot-open {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  text-align: start;
+}
+
+.bl-shot-thumb {
+  display: block;
+  width: 76px;
+  flex-shrink: 0;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--scene-metal);
+}
+
+.bl-shot-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bl-shot-body b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.bl-shot-meta {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  overflow-wrap: anywhere;
+}
+
+.bl-shot-confirm {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-1);
+}
+
+.bl-shot-del {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.bl-shot-del:hover {
+  border-color: var(--status-critical);
+  color: var(--status-critical-text);
+}
+
+.bl-shot-del.is-yes {
+  border-color: var(--status-critical);
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.bl-shot-open:hover .bl-shot-body b {
+  color: var(--accent-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bl-cam-flash {
+    animation: none;
+  }
+
+  .bl-cam-tool:hover {
+    transform: none;
+  }
+}
+
+/* ---------- ค่าสภาพแวดล้อมปัจจุบัน (ใต้ภาพกล้องในการ์ด A) ---------- */
+.bl-env {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  /* สองคอลัมน์ให้เท่ากับกริดกราฟในการ์ดข้าง ๆ — สองการ์ดจึงดูเป็นจังหวะเดียวกัน */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+/* กล่องค่าหนึ่งค่า: ไอคอนสีประจำตัวชี้วัดซ้าย · ขวาเป็น ป้าย → ตัวเลข+หน่วย → เกณฑ์
+   ใช้เงาบางกว่าการ์ดแม่ เพื่อให้ลำดับชั้นชัด ไม่นูนแข่งกันจนดูรก */
+.bl-env-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-bottom: 3px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.bl-env-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bl-env-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.bl-env-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.bl-env-value em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+/* สีประจำตัวชี้วัด = สีเส้นกราฟของตัวชี้วัดนั้น (อุณหภูมิ ส้ม · ความชื้น น้ำเงิน ·
+   ลม เขียว · NH₃ ม่วง) — ห้ามใช้สีสถานะมาทำสีประจำตัวชี้วัด เพราะแดงต้องแปลว่า
+   "ค่านี้ผิดปกติ" เท่านั้น ไม่ใช่แปลว่า "นี่คือช่องอุณหภูมิ" */
+.bl-env-item.is-temp {
+  border-bottom-color: var(--series-8);
+}
+
+.bl-env-item.is-humid {
+  border-bottom-color: var(--series-1);
+}
+
+.bl-env-item.is-wind {
+  border-bottom-color: var(--series-4);
+}
+
+.bl-env-item.is-gas {
+  border-bottom-color: var(--series-5);
+}
+
+/* ไอคอนสีประจำตัวชี้วัด (สีเดียวกับเส้นใต้การ์ด) */
+.bl-env-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+}
+
+/* พื้นวงกลมใช้ --bg-tint กลาง ๆ เหมือนกันหมด ให้ "สี" อยู่ที่ตัวไอคอนอย่างเดียว
+   (ไอคอนคือกราฟิก ไม่ใช่ตัวหนังสือ จึงใส่สี series ได้) */
+.bl-env-item.is-temp .bl-env-icon {
+  color: var(--series-8);
+}
+
+.bl-env-item.is-humid .bl-env-icon {
+  color: var(--series-1);
+}
+
+.bl-env-item.is-wind .bl-env-icon {
+  color: var(--series-4);
+}
+
+.bl-env-item.is-gas .bl-env-icon {
+  color: var(--series-5);
+}
+
+.bl-env-item b {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.bl-env-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--status-good-text);
+}
+
+/* ค่าที่หลุดเกณฑ์ — ตัวเลขและข้อความเปลี่ยนสี พร้อมไอคอนเตือน (ไม่ใช้สีอย่างเดียว) */
+.bl-env-item.is-warn b {
+  color: var(--status-warning-text);
+}
+
+.bl-env-item.is-warn .bl-env-hint {
+  color: var(--status-warning-text);
+}
+
+/* ไม่มีค่าให้อ่าน — ต้องไม่เขียวเหมือน "เหมาะสม" และไม่ส้มเหมือน "นอกเกณฑ์"
+   เพราะมันคือ "ไม่รู้" ไม่ใช่ทั้งดีและแย่ (กติกาเดียวกับ StatusBadge tone="offline") */
+.bl-env-item.is-nodata .bl-env-hint {
+  color: var(--ink-secondary);
+}
+
+/* ---------- B. แนวโน้มสภาพแวดล้อม ---------- */
+/* ตัวเลือกช่วงเวลาในหัวการ์ด */
+.bl-range {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+/* line-height ตายตัวเพื่อให้ "ความสูงของตัวเลือกช่วงเวลา" คำนวณล่วงหน้าได้
+   ค่าตั้งต้น `normal` ขึ้นกับฟอนต์ที่เบราว์เซอร์เลือก จะเอาไปตั้งเป็นเกณฑ์ให้การ์ดอีกใบไม่ได้ */
+.bl-range .fx-select {
+  line-height: 1.6;
+}
+
+/* จอแคบลงมา: ซ่อนคำว่า "ช่วงเวลา" จากสายตา (โปรแกรมอ่านหน้าจอยังได้ยิน)
+   ไม่ซ่อนแล้วหัวการ์ด B ยาวเกินจนชื่อการ์ดตกสองบรรทัด หัวจึงสูงกว่าการ์ด A ที่วางคู่กัน
+   แล้วเนื้อหาข้างในสองใบเริ่มคนละระดับ — ตัวเลือกเองก็บอกอยู่แล้วว่าเป็นช่วงเวลา
+   ("24 ชั่วโมงล่าสุด") คำกำกับจึงไม่ใช่สิ่งที่ขาดไม่ได้บนจอแคบ
+   (ค่าเดียวกับ .sr-only ใน base.css — เขียนซ้ำเพราะต้องใช้ในเงื่อนไขความกว้าง) */
+@media (max-width: 1100px) {
+  .bl-range > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* ═══ หัวการ์ด A กับ B ต้องอยู่บรรทัดเดียวกัน ═══
+   กรอบนอกสองใบสูงเท่ากันแล้ว (ดู presets.js) แต่ **ข้างในยังเหลื่อมกัน 22px**
+   เพราะหัวของ B มีตัวเลือกช่วงเวลา (54px) ส่วนหัวของ A มีแค่ป้ายสถานะ (32px)
+   ทุกอย่างในการ์ด B จึงเริ่มต่ำกว่า A ทั้งใบ — หัวข้อ กราฟ ไปจนถึงแถวล่างสุด
+
+   ตั้งความสูงขั้นต่ำของหัวให้เท่ากับตัวเลือกช่วงเวลา ด้วยสูตรเดียวกับที่ตัวเลือกใช้จริง
+   (ตัวหนังสือ × line-height + ระยะในกล่องบนล่าง + เส้นขอบ) ไม่ใช่ตัวเลขที่กะเอา
+   **ให้เฉพาะสองใบที่วางคู่กัน** — การ์ดอื่นในหน้าไม่ได้อยู่คู่กันแบบนี้
+   ถ้าใส่ให้ทุกใบจะเสียที่ว่างใต้หัวไปฟรี ๆ ทั้งหน้า */
+.bl-card.is-paired .bl-card-head {
+  min-height: calc(var(--text-base) * 1.6 + var(--space-3) * 2 + 2px);
+  /* ชิดบน ไม่ใช่กึ่งกลาง — ที่จอแคบลงมาชื่อการ์ด B ตกสองบรรทัด หัวจึงสูงกว่าเกณฑ์ขั้นต่ำ
+     ถ้ายังจัดกึ่งกลางอยู่ ชื่อของ A (บรรทัดเดียว) จะลอยลงมาอยู่กลางกล่อง แล้วชื่อสองใบ
+     เหลื่อมกันอีก 12px ทั้งที่กล่องสูงเท่ากัน — ชิดบนแล้วชื่อเริ่มระดับเดียวกันทุกความกว้าง */
+  align-items: flex-start;
+}
+
+.bl-trends {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* **กราฟทั้งสี่ใบต้องสูงเท่ากันเป๊ะ ไม่ว่าหัวใบไหนจะยาวกว่า**
+     ปล่อยให้แต่ละใบจัดแถวของตัวเองเมื่อไหร่ ใบที่หัวตกบรรทัด (เช่น "ความเร็วลม"
+     ที่จอราว 1000px) จะได้กราฟเตี้ยกว่าเพื่อน 20px ทั้งที่อยู่ในกรอบเดียวกัน
+     ➜ ประกาศแถว "หัว/กราฟ" ไว้ที่กริดแม่ แล้วให้ทุกใบใช้แถวชุดเดียวกันผ่าน subgrid
+     หัวของสองใบในแถวเดียวกันจึงสูงเท่ากัน และกราฟทุกใบได้ที่เหลือเท่ากันหมด */
+  grid-template-rows: auto 1fr auto 1fr;
+  gap: var(--space-3);
+}
+
+
+/* กราฟย่อยหนึ่งใบ = หนึ่งค่า (แกน Y เดียว ไม่ต้องมี legend)
+   ตัวกราฟยืดเต็มพื้นที่ที่เหลือ การ์ด B จึงสูงเท่าการ์ด A พอดี ไม่เหลือช่องว่างท้ายการ์ด */
+.bl-trend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.bl-trend-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.bl-trend-chart {
+  flex: 1;
+  min-height: 116px;
+}
+
+/* ต้องอยู่ **หลัง** .bl-trend ที่ตั้ง display:flex ไม่งั้นถูกทับแล้วไม่มีผล
+   (subgrid = ใช้แถว "หัว/กราฟ" ชุดเดียวกับกริดแม่ ดูเหตุผลเต็มที่ .bl-trends) */
+@supports (grid-template-rows: subgrid) {
+  .bl-trend {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+}
+
+.bl-trend-head b {
+  min-width: 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.bl-trend-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+}
+
+/* ค่าล่าสุดของกราฟใบนั้น — ป้ายเล็กมุมขวาของหัวกราฟ */
+.bl-trend-now {
+  margin-left: auto;
+  padding: 2px var(--space-3);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+
+/* สีประจำตัวชี้วัด — ชุดเดียวกับกล่องค่าปัจจุบันและเส้นกราฟ
+   ป้ายค่าล่าสุด (.bl-trend-now) เป็น "ตัวหนังสือ" จึงคงสีหมึกปกติไว้ตามกติกา
+   ("ตัวหนังสือห้ามใส่สี series") — ให้ไอคอนข้างหน้าเป็นตัวบอกว่านี่คือตัวชี้วัดไหน */
+.bl-trend-icon.is-temp {
+  color: var(--series-8);
+}
+
+.bl-trend-icon.is-humid {
+  color: var(--series-1);
+}
+
+.bl-trend-icon.is-wind {
+  color: var(--series-4);
+}
+
+.bl-trend-icon.is-gas {
+  color: var(--series-5);
+}
+
+/* ---------- C. แจ้งเตือน + คำแนะนำ ---------- */
+.bl-alerts {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.bl-alert {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+/* ทั้งแถวเป็นปุ่มเดียว — กดตรงไหนก็กางคำแนะนำของข้อนั้น
+   เป้ากดจึงเท่ากับพื้นที่ที่ตาเห็น ไม่ต้องเล็งลูกศรเล็ก ๆ มุมขวา */
+.bl-alert-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  background: transparent;
+  font-family: var(--font-sans);
+  text-align: start;
+  cursor: pointer;
+}
+
+.bl-alert-row:hover {
+  background: var(--bg-tint);
+}
+
+.bl-alert-row:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: -2px;
+}
+
+/* ป้าย "คำแนะนำ AI" ท้ายแถว — มีทั้งไอคอนและข้อความ ไม่ได้บอกด้วยลูกศรอย่างเดียว */
+.bl-alert-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.bl-alert-row:hover .bl-alert-more,
+.bl-alert.is-open .bl-alert-more {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.bl-alert-flip {
+  transform: rotate(180deg);
+}
+
+/* กล่องคำแนะนำที่กางออกมา — พื้นจมลงหนึ่งระดับ จะได้เห็นชัดว่าเป็นของแถวข้างบน
+   ไม่ใช่การแจ้งเตือนอีกข้อหนึ่ง */
+.bl-advice {
+  padding: var(--space-4) var(--space-5) var(--space-4);
+  border-top: 1px solid var(--border);
+  background: var(--bg-sunken);
+}
+
+.bl-advice-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+/* เรียงเป็นลำดับเลข เพราะคำแนะนำมีลำดับที่ควรทำก่อน-หลังจริง ๆ ไม่ใช่รายการเฉย ๆ */
+.bl-advice-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-inline-start: var(--space-6);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.bl-advice-list li::marker {
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.bl-alert-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--status-offline);
+}
+
+.bl-alert.is-critical .bl-alert-dot {
+  background: var(--status-critical);
+}
+
+.bl-alert.is-serious .bl-alert-dot {
+  background: var(--status-serious);
+}
+
+.bl-alert.is-warning .bl-alert-dot {
+  background: var(--status-warning);
+}
+
+.bl-alert.is-good .bl-alert-dot {
+  background: var(--status-good);
+}
+
+.bl-alert-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.bl-alert-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.bl-alert time {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* แผงคำแนะนำจาก AI — เขียวอ่อนเต็มใบ ข้อความซ้าย ภาพประกอบขวา */
+.bl-ai {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  /* หัวข้อต้องเริ่มระดับเดียวกับการ์ดแจ้งเตือนที่วางคู่กัน — `center` จัดทั้งก้อนไว้กลางการ์ด
+     ทำให้หัวข้อ "คำแนะนำจาก AI" อยู่ต่ำกว่าหัวข้อของใบข้าง ๆ ถึง 49px
+     (ภาพประกอบยังอยู่กึ่งกลางเหมือนเดิม — ดู .bl-ai-art) */
+  align-items: start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--green-tint);
+  border-radius: var(--radius-xl);
+  background: var(--green-tint);
+}
+
+.bl-ai-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.bl-ai-head svg {
+  color: var(--green-strong);
+}
+
+.bl-ai-body ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.bl-ai-body li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.bl-ai-body li svg {
+  margin-top: 4px;
+  flex-shrink: 0;
+  color: var(--green-strong);
+}
+
+/* ภาพประกอบลอยขึ้นลงเบา ๆ เหมือนภาพประกอบหน้าอื่นในระบบ */
+.bl-ai-art {
+  /* เนื้อหาชิดบนแล้ว แต่ภาพประกอบยังอยู่กึ่งกลางแนวตั้งของการ์ดเหมือนเดิม */
+  align-self: center;
+  width: 240px;
+  max-width: 32vw;
+  height: auto;
+  animation: bl-float 6s ease-in-out infinite;
+}
+
+@keyframes bl-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bl-ai-art,
+  .bl-live-dot {
+    animation: none;
+  }
+}
+
+/* ---------- แถวกลาง: สรุปจำนวนสุกรวันนี้ ----------
+   ทุกกล่องหน้าตาเดียวกัน (ไอคอน → ป้าย → ตัวเลข+หน่วย → คำอธิบาย)
+   สีใช้เฉพาะสามช่องที่ต้องรีบดู (ขาดหาย/ป่วย/ตาย) ที่เหลือเป็นหมึกเข้ม
+   เพื่อไม่ให้แถวนี้กลายเป็นแถบสีรุ้ง */
+.bl-counts {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  /* จอกว้างเรียงครบห้ากล่องในแถวเดียว จอแคบค่อยพับลง */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 1100px) {
+  .bl-counts {
+    /* 210px ทำให้จอราว 1000px ได้ 4 คอลัมน์ แล้วกล่องที่ห้าไปยืนเดี่ยวในแถวล่าง
+       เหลือช่องว่างข้าง ๆ ถึงสามช่อง — ขยายเป็น 260px ให้ตกเป็น 3+2 ซึ่งเหลือช่องว่างช่องเดียว */
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+}
+
+/* กล่องนูนสามมิติ — สีประจำช่องคุมทั้งใบผ่าน --count-tone ที่เดียว
+   (พื้นไล่สีอ่อน · ขอบ · สันขอบบน · ขอบล่างหนา = ความหนาแผ่น · เงาเรืองใต้กล่อง)
+   --count-tint คุมความเข้มของพื้น: ช่องกลาง ๆ ตั้งไว้ต่ำ แถวนี้จึงไม่กลายเป็นแถบสีรุ้ง */
+.bl-count {
+  /* ช่องที่ไม่มีสีประจำใช้สีเงาของธีม (น้ำตาลอุ่น) ไม่ใช่เทา — จะได้เข้ากับพื้นครีม */
+  --count-tone: rgb(var(--shadow-rgb));
+  --count-tint: 7%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 104px;
+  padding: var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--count-tone) 26%, var(--border));
+  border-bottom: 3px solid color-mix(in srgb, var(--count-tone) 52%, var(--border-strong));
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-surface);
+  background-image: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--count-tone) var(--count-tint), var(--bg-surface)) 0%,
+    color-mix(in srgb, var(--count-tone) calc(var(--count-tint) / 3), var(--bg-surface)) 52%,
+    var(--bg-surface) 100%
+  );
+  box-shadow: 0 1px 0 rgb(var(--surface-rgb) / 0.95) inset,
+    0 -6px 12px color-mix(in srgb, var(--count-tone) 8%, transparent) inset, var(--shadow-3d),
+    0 10px 26px color-mix(in srgb, var(--count-tone) 16%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* สันสีบาง ๆ ที่ขอบบน — ทำให้เห็นเป็นแผ่นหนามีสัน ไม่ใช่พื้นสีแบน */
+.bl-count::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--count-tone) 55%, transparent),
+    transparent
+  );
+}
+
+.bl-count:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1px 0 rgb(var(--surface-rgb) / 0.95) inset,
+    0 -6px 12px color-mix(in srgb, var(--count-tone) 10%, transparent) inset, var(--shadow-3d-hover),
+    0 18px 38px color-mix(in srgb, var(--count-tone) 26%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bl-count {
+    transition: none;
+  }
+
+  .bl-count:hover {
+    transform: none;
+  }
+}
+
+/* วงกลมไอคอนนูนขึ้นมาจากพื้นกล่อง (ขอบในสว่างด้านบน + เงาด้านล่าง) */
+.bl-count-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background-color: var(--bg-tint);
+  background-image: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--bg-surface) 55%, transparent) 0%,
+    transparent 62%
+  );
+  color: var(--ink-secondary);
+  box-shadow: var(--shadow-3d-chip);
+}
+
+.bl-count-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bl-count-label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.bl-count-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.bl-count-value b {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink-primary);
+}
+
+.bl-count-value em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+.bl-count-note {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* AI นับได้ = ตัวเลขหลักของระบบ ใช้ทองของแบรนด์ (ไม่ใช่สีสถานะ) */
+.bl-count.is-ai {
+  --count-tone: var(--accent-bright);
+  --count-tint: 14%;
+}
+
+.bl-count.is-ai .bl-count-icon {
+  background-color: var(--accent-tint);
+  color: var(--accent);
+}
+
+/* สามช่องที่ต้องรีบดู — พื้น ขอบ ไอคอน และตัวเลขใช้สีสถานะเดียวกัน */
+.bl-count.is-missing {
+  --count-tone: var(--status-serious);
+  --count-tint: 13%;
+}
+
+.bl-count.is-missing .bl-count-icon {
+  background-color: var(--status-serious-bg);
+  color: var(--status-serious-text);
+}
+
+.bl-count.is-missing .bl-count-value b {
+  color: var(--status-serious-text);
+}
+
+.bl-count.is-sick {
+  --count-tone: var(--status-critical);
+  --count-tint: 13%;
+}
+
+.bl-count.is-sick .bl-count-icon {
+  background-color: var(--status-critical-bg);
+  color: var(--status-critical-text);
+}
+
+.bl-count.is-sick .bl-count-value b {
+  color: var(--status-critical-text);
+}
+
+.bl-count.is-dead {
+  --count-tone: var(--status-offline);
+  --count-tint: 11%;
+}
+
+.bl-count.is-dead .bl-count-icon {
+  background-color: var(--status-offline-bg);
+  color: var(--status-offline-text);
+}
+
+.bl-count.is-dead .bl-count-value b {
+  color: var(--status-offline-text);
+}
+
+/* ---------- แถวล่าง: ฟอร์ม + ตาราง ---------- */
+/* ฟอร์มเป็นกริดสัดส่วนคงที่ (วันที่ · ประเภท · จำนวน · หน่วย · หมายเหตุ · ปุ่ม) */
+.bl-form {
+  display: grid;
+  grid-template-columns: 1.3fr 1.4fr 0.9fr 0.8fr 1.9fr auto;
+  align-items: end;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-sunken);
+}
+
+.bl-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.bl-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+@media (max-width: 1200px) {
+  .bl-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .bl-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.bl-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.bl-form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.bl-add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  box-shadow: var(--shadow-raised-gold);
+  color: var(--ink-inverse);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.bl-add:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+/* ปิดเพราะไม่มีสิทธิ์บันทึก — จางลงและเปลี่ยนเคอร์เซอร์ ไม่ได้สื่อด้วยสีอย่างเดียว
+   (ไอคอนเปลี่ยนเป็นแม่กุญแจ + มีแถบ AdminNote บอกเหตุผลอยู่เหนือฟอร์ม) */
+.bl-add:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.bl-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ปุ่มเรื่องภาพกล้องที่ถูกปิดเพราะไม่มีสิทธิ์ record.write (T1.345)
+   ต้อง "ดูออกว่าปิด" ไม่ใช่ปิดแต่หน้าตาเหมือนเดิม ไม่งั้นคนกดแล้วนึกว่าแอปค้าง
+   ใช้ค่าเดียวกับ .bl-add ด้านบนเพื่อให้ปุ่มที่ปิดทั้งหน้าดูเป็นชุดเดียวกัน */
+.bl-cam-tool:disabled,
+.bl-shot-del:disabled,
+.bl-viewer-btn:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ปิดแล้วต้องไม่ขยับตอนเอาเมาส์ไปวาง — ไม่งั้นยังดูเหมือนกดได้ */
+.bl-cam-tool:disabled:hover,
+.bl-shot-del:disabled:hover,
+.bl-viewer-btn:disabled:hover {
+  transform: none;
+}
+
+.bl-add:active {
+  transform: translateY(3px);
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+.bl-add:focus-visible,
+.bl-icon-btn:focus-visible,
+.bl-page-btn:focus-visible,
+.bl-shot-open:focus-visible,
+.bl-shot-del:focus-visible,
+.bl-cam-tool:focus-visible,
+.bl-cam-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* แถบค้นหา + ปุ่มเปิดรายการ (รายการถูกซ่อนไว้เป็นค่าตั้งต้น) */
+.bl-list-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.bl-search {
+  flex: 1 1 320px;
+}
+
+.bl-list-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tint);
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+.bl-list-hint svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.bl-table {
+  margin-top: var(--space-4);
+}
+
+.bl-table th {
+  background: var(--bg-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.bl-table td {
+  border-bottom: 1px solid var(--border);
+}
+
+.bl-table tr.is-editing {
+  background: var(--accent-tint);
+}
+
+.bl-when {
+  white-space: nowrap;
+  color: var(--ink-secondary);
+}
+
+.bl-note {
+  min-width: 220px;
+}
+
+/* สีของประเภทข้อมูลในตาราง — สื่อความหมาย ไม่ใช่ตกแต่ง (มีข้อความกำกับอยู่แล้ว) */
+.bl-type {
+  font-weight: 700;
+}
+
+.bl-type.is-bad {
+  color: var(--status-critical-text);
+}
+
+.bl-type.is-warn {
+  color: var(--status-warning-text);
+}
+
+.bl-type.is-info {
+  color: var(--accent-strong);
+}
+
+.bl-type.is-good {
+  color: var(--status-good-text);
+}
+
+.bl-row-actions {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.bl-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  box-shadow: var(--shadow-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.bl-icon-btn.is-text {
+  padding: var(--space-2) var(--space-3);
+}
+
+.bl-icon-btn:hover {
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.bl-icon-btn.is-danger {
+  color: var(--status-critical-text);
+}
+
+.bl-icon-btn.is-danger:hover {
+  border-color: var(--status-critical);
+  background: var(--status-critical-bg);
+}
+
+/* ---------- แบ่งหน้า ---------- */
+.bl-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.bl-pager-info,
+.bl-pager-size {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.bl-pager-btns {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.bl-page-btn {
+  display: grid;
+  place-items: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.bl-page-btn:hover:not(:disabled) {
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.bl-page-btn.is-active {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.bl-page-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.bl-flip {
+  transform: rotate(180deg);
+}
+
+.bl-note-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.bl-missing {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+}
+
+/* ================= จอแคบ ================= */
+@media (max-width: 1100px) {
+  .bl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bl-side {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bl-nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  /* แถบเมนูย้ายขึ้นด้านบนแล้ว — การ์ดฟาร์มไม่จำเป็นและกินพื้นที่มาก */
+  .bl-farm-card {
+    display: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .bl-top {
+    flex-wrap: wrap;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .bl-trends {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bl-ai {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .bl-ai-art {
+    max-width: 60vw;
+  }
+
+  .bl-title {
+    font-size: var(--text-xl);
+  }
+
+  .bl-top-right {
+    flex-basis: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+
+  .bl-updated {
+    display: none;
+  }
+
+  .bl-main {
+    padding: var(--space-4) var(--space-4) var(--space-7);
+  }
+}
+
+/* ค่าที่ไม่มีเซนเซอร์วัด — แทนที่กรอบกราฟเปล่า (ดูเหตุผลใน TrendChart ของ BarnDetail.jsx)
+   **สูงเท่ากรอบกราฟเป๊ะ (116px)** เพื่อให้การ์ดสี่ใบยังสูงเท่ากัน ไม่มีใบไหนโดดออกมา
+   วัดจากของจริงในเบราว์เซอร์ ไม่ได้เดา — ถ้าเปลี่ยนความสูงกราฟ ต้องแก้ตรงนี้ด้วย */
+.bl-trend-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  /* ยืดเท่ากับกราฟใบข้าง ๆ (.bl-trend-chart ก็ flex: 1) — ความสูงตายตัวทำให้ใบที่ไม่มีค่า
+     เตี้ยกว่าเพื่อนแล้วเหลือที่ว่างใต้กรอบประในช่องเดียวกัน */
+  flex: 1;
+  min-height: 116px;
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  /* ไม่เขียวไม่ส้ม — มันคือ "ไม่รู้" ไม่ใช่ทั้งดีและแย่ */
+  color: var(--ink-secondary);
+  text-align: center;
+}
+
+/* ---------- บันทึกอยู่ที่ไหน + ย้ายของในเครื่องขึ้นระบบ (T1.269) ---------- */
+.bl-store {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  color: var(--ink-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.bl-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+  font-size: var(--text-sm);
+}
+
+.bl-import {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--status-warning-bg);
+}
+
+.bl-import p {
+  flex: 1 1 260px;
+  margin: 0;
+  color: var(--status-warning-text);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+/* ═══ บันทึกด่วน — เลือกชนิดแล้วกดจำนวน จบในสองแตะ (T1.320) ═══
+   ปุ่มใหญ่พอกดด้วยนิ้วโป้งได้ เพราะคนใช้ยืนอยู่ในเล้าถือมือถือข้างเดียว
+   (44px คือขนาดเป้าแตะต่ำสุดที่กดไม่พลาดบนมือถือ) */
+.bl-quick {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-sunken);
+}
+
+.bl-quick-head {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.bl-quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.bl-quick-kind,
+.bl-quick-amount,
+.bl-quick-cancel {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bl-quick-kind:hover:not(:disabled),
+.bl-quick-amount:hover:not(:disabled),
+.bl-quick-cancel:hover {
+  border-color: var(--accent);
+}
+
+.bl-quick-kind:disabled,
+.bl-quick-amount:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ★ สีบอกน้ำหนักของเรื่อง แต่ **ข้อความบอกอยู่แล้วว่าเป็นอะไร**
+   จึงไม่ได้สื่อด้วยสีอย่างเดียว ตามกติกาใน CLAUDE.md */
+.bl-quick-kind.is-bad { border-color: var(--status-critical); }
+.bl-quick-kind.is-warn { border-color: var(--status-warning); }
+
+/* จำนวนเป็นปุ่มเน้น เพราะเป็นแตะที่ "ลงบันทึกจริง" */
+.bl-quick-amount {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--ink-inverse);
+}
+
+.bl-quick-done {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-primary);
+}
+
+.bl-quick-undo {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  font-family: inherit;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  /* จอแคบ: ปุ่มชนิดยืดเต็มแถวละสองใบ กดง่ายกว่าเรียงชิดกันเจ็ดใบ */
+  .bl-quick-kind { flex: 1 1 calc(50% - var(--space-2)); }
+  .bl-quick-amount { flex: 1 1 calc(33% - var(--space-2)); }
+}
+
+/* ค่าที่ค้างไว้เมื่อเซนเซอร์เงียบ (T1.345) — อ่านได้แต่ไม่เด่นเท่าค่าสด */
+.bl-env-item.is-held .bl-env-value {
+  opacity: 0.62;
+}

@@ -1,0 +1,745 @@
+/* พื้นหลังหลักของหน้าภาพรวม — ภาพฟาร์มเต็มจอ ตรึงอยู่กับที่ + ม่านครีมคลุมให้การ์ดอ่านง่าย
+   (อยู่ชั้นล่างสุดด้วย z-index ติดลบ จึงไม่บังการกดใด ๆ) */
+.ov-page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  /* ม่านคลุมภาพ — ความเข้มมาจากแถบเลื่อน "ความเข้มของภาพพื้นหลัง" ในหน้าตั้งค่า */
+  background-image: linear-gradient(
+      to bottom,
+      var(--photo-veil-top),
+      var(--photo-veil-bottom)
+    ),
+    url("/overview-bg.jpg");
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  /* ลอยช้ามาก ๆ ให้หน้าไม่นิ่งสนิท แต่ไม่กวนสายตาตอนอ่านการ์ด */
+  animation: ov-bg-drift 34s ease-in-out infinite;
+}
+
+@keyframes ov-bg-drift {
+  0%,
+  100% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate3d(-1.2%, -1.8%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-page-bg {
+    animation: none;
+  }
+}
+
+/* ฮีโร่ของหน้าภาพรวมในแดชบอร์ด (/dashboard)
+   เป็นบล็อกเดียวที่หน้านี้มีเป็นของตัวเอง — ที่เหลือใช้ Card / StatTile / FarmExplorer */
+
+/* ฮีโร่: กรอบเตี้ยลงกว่าเดิม + ภาพฟาร์ม SWINE SYNC เป็นพื้นหลังที่ค่อย ๆ ลอย */
+.ov-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  overflow: hidden;
+  /* เว้นระยะจากการ์ดแผนที่ให้เท่ากับจังหวะบล็อกอื่นของหน้า */
+  margin-bottom: var(--space-6);
+}
+
+.ov-hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 62%;
+  animation: ov-hero-drift 24s ease-in-out infinite;
+}
+
+/* ม่านขาวเหนือภาพ — ให้ตัวหนังสืออ่านออกชัดเจนเหมือนเดิม */
+.ov-hero-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      64% 74% at 50% 46%,
+      rgb(var(--surface-rgb) / 0.8) 0%,
+      rgb(var(--surface-rgb) / 0.58) 55%,
+      rgb(var(--surface-rgb) / 0.34) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgb(var(--page-rgb) / 0.42),
+      rgb(var(--page-rgb) / 0.22)
+    );
+}
+
+.ov-hero > *:not(.ov-hero-photo):not(.ov-hero-veil) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ตัวหนังสือบนภาพ: เรืองขาวบาง ๆ ให้อ่านออกแน่นอนไม่ว่าภาพจะถูกครอปตรงไหน */
+.ov-hero.has-photo .ov-title,
+.ov-hero.has-photo .ov-subtitle {
+  text-shadow: 0 1px 0 rgb(var(--surface-rgb) / 0.9), 0 2px 10px rgb(var(--surface-rgb) / 0.85);
+}
+
+@keyframes ov-hero-drift {
+  0%,
+  100% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate3d(-1.4%, -1.6%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-hero-photo {
+    animation: none;
+  }
+}
+
+.ov-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.ov-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  color: var(--ink-primary);
+}
+
+/* เส้นทองคั่นใต้ชื่อแบรนด์ */
+.ov-title::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 2px;
+  margin: var(--space-3) auto 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent-bright),
+    transparent
+  );
+}
+
+.ov-subtitle {
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* ═══════════ เอฟเฟกต์ตอนเข้าหน้า ═══════════
+   ผู้ใช้สั่ง (2 ก.ย. 2569): "ปรับหน้าภาพรวมให้สวยงามมีเอฟเฟคอะไรให้ดูน่าสนใจหน่อย"
+
+   **`animation-fill-mode: backwards` ไม่ใช่ `both`** — `both` จะค้างค่า transform
+   ที่แอนิเมชันคำนวณไว้หลังจบด้วย ซึ่งไปทับ transform ของกระดานตอนลากกล่อง
+   ส่วน `backwards` ใช้ค่าตั้งต้นเฉพาะช่วงที่ยังไม่เริ่ม พอจบแล้วปล่อยคืนให้ CSS ปกติ */
+@keyframes ov-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.ov-hero .ov-eyebrow,
+.ov-hero .ov-title,
+.ov-hero .ov-subtitle {
+  animation: ov-rise 0.5s cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+}
+
+.ov-hero .ov-title {
+  animation-delay: 0.07s;
+}
+
+.ov-hero .ov-subtitle {
+  animation-delay: 0.14s;
+}
+
+/* แสงกวาดผ่านฮีโร่หนึ่งรอบตอนเปิดหน้า — ครั้งเดียวจบ ไม่วนซ้ำ
+   วนซ้ำจะกลายเป็นป้ายไฟหน้าร้าน และดึงสายตาออกจากตัวเลขที่คนเปิดมาดูจริง ๆ */
+.ov-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgb(var(--surface-rgb) / 0.5) 50%,
+    transparent 62%
+  );
+  transform: translateX(-120%);
+  animation: ov-sheen 1.5s ease-out 0.35s;
+}
+
+@keyframes ov-sheen {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+/* ═══ กล่องบนกระดานโผล่ไล่ทีละใบ ═══
+   ไล่ทีละ 55ms ใบสุดท้าย (ใบที่ 9) จบที่ 0.44 วิ — เร็วพอที่คนกดเข้ามาดูตัวเลขจะไม่รู้สึกว่าต้องรอ
+   ใช้ nth-child เพราะกระดานไม่ได้ส่งลำดับของกล่องมาให้ (คนละเรื่องกับเมนูซ้ายที่ส่ง `--i` มา) */
+.lb-board[data-board="overview"] .lb-block {
+  animation: ov-rise 0.5s cubic-bezier(0.22, 0.9, 0.24, 1) backwards;
+}
+
+.lb-board[data-board="overview"] .lb-block:nth-child(1) { animation-delay: 0.05s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(2) { animation-delay: 0.1s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(3) { animation-delay: 0.15s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(4) { animation-delay: 0.2s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(5) { animation-delay: 0.25s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(6) { animation-delay: 0.3s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(7) { animation-delay: 0.35s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(8) { animation-delay: 0.4s; }
+.lb-board[data-board="overview"] .lb-block:nth-child(n + 9) { animation-delay: 0.44s; }
+
+/* ═══ ชี้เมาส์ที่กล่องสรุป ═══
+   ยกขึ้น 3px + เงาลึกขึ้น + ขอบติดสีแบรนด์ + ลูกศรท้ายกล่องเลื่อนขวา
+   ทั้งใบเป็นลิงก์อยู่แล้ว การยกจึงเป็นการบอกว่า "กดได้" ไม่ใช่ลูกเล่นเปล่า ๆ
+
+   **เว้นตอนกำลังลากจัดเลย์เอาต์** (`is-moving`) ไม่งั้นจะมี transform สองตัวแย่งกัน
+   ระหว่างเงายกของ hover กับเงาย่อ-ขยายของกระดาน */
+.lb-board[data-board="overview"] .lb-block:not(.is-moving) .stat-tile {
+  transition:
+    transform 0.18s cubic-bezier(0.22, 0.9, 0.24, 1),
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.lb-board[data-board="overview"] .lb-block:not(.is-moving) .stat-tile:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-3d-hover);
+}
+
+.lb-board[data-board="overview"] .lb-block:not(.is-moving) .stat-tile:active {
+  transform: translateY(0);
+}
+
+.lb-board[data-board="overview"] .stat-tile-foot-link svg {
+  transition: transform 0.18s cubic-bezier(0.22, 0.9, 0.24, 1);
+}
+
+.lb-board[data-board="overview"] .stat-tile:hover .stat-tile-foot-link svg {
+  transform: translateX(4px);
+}
+
+/* ตัวเลขใหญ่ติดสีแบรนด์ตอนชี้ — ย้ำว่ากล่องนี้กำลังถูกเล็ง โดยไม่ต้องขยับตัวเลข
+   (ขยับตัวเลขแล้วตาจะไล่อ่านใหม่ ซึ่งขัดกับที่หน้านี้มีไว้ให้กวาดตาอ่านเร็ว ๆ) */
+.lb-board[data-board="overview"] .stat-tile-value {
+  transition: color 0.18s ease;
+}
+
+.lb-board[data-board="overview"] .stat-tile:hover .stat-tile-value {
+  color: var(--accent-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-hero .ov-eyebrow,
+  .ov-hero .ov-title,
+  .ov-hero .ov-subtitle,
+  .lb-board[data-board="overview"] .lb-block {
+    animation: none;
+  }
+
+  /* แสงกวาดเป็นของประดับล้วน — ตัดทิ้งไปเลย ไม่ต้องมีทางสำรอง */
+  .ov-hero::after {
+    display: none;
+  }
+
+  .lb-board[data-board="overview"] .lb-block:not(.is-moving) .stat-tile,
+  .lb-board[data-board="overview"] .lb-block:not(.is-moving) .stat-tile:hover,
+  .lb-board[data-board="overview"] .stat-tile-foot-link svg,
+  .lb-board[data-board="overview"] .stat-tile:hover .stat-tile-foot-link svg {
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .ov-hero {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .ov-title {
+    font-size: var(--text-2xl);
+  }
+}
+
+/* ---------- แผนที่ด้านบน แล้วกล่องสรุปเรียงเป็นแถวใต้แผนที่ ----------
+   (เดิมจอกว้างวางกล่องสรุปไว้ข้างขวาของแผนที่ ผู้ใช้ขอให้ย้ายลงมาไว้ใต้แผนที่) */
+.ov-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ================= ปุ่มเปิดแผงภาพรวม ================= */
+.ov-panel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--accent-gradient);
+  box-shadow: var(--shadow-raised-gold);
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.ov-panel-btn:hover {
+  transform: translateY(-2px);
+}
+
+.ov-panel-btn:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-gold-press);
+}
+
+.ov-panel-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ลูกศรชี้ลงเป็นค่าเริ่มต้น (ไอคอน chevron ของชุดชี้ไปทางขวา) */
+.ov-panel-btn-arrow {
+  transform: rotate(90deg);
+  transition: transform 0.2s ease;
+}
+
+.ov-panel-btn.is-open .ov-panel-btn-arrow {
+  transform: rotate(-90deg);
+}
+
+/* ================= แผงภาพรวมที่สไลด์ออกทางขวา ================= */
+.ov-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgb(var(--scrim-rgb) / 0.28);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.ov-scrim.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ov-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 41;
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-hover);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.26s ease, visibility 0.26s ease;
+}
+
+.ov-panel.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.ov-panel-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.ov-panel-headings {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ov-panel-headings b {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.ov-panel-headings span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.ov-panel-close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  color: var(--ink-secondary);
+  transition: transform 0.12s ease, color 0.15s ease;
+}
+
+.ov-panel-close:hover {
+  transform: translateY(-2px);
+  color: var(--ink-primary);
+}
+
+.ov-panel-close:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-raised-press);
+}
+
+.ov-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ---------- เมนูหลักในแผง ---------- */
+.ov-panel-nav ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.ov-panel-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition: transform 0.12s ease, color 0.15s ease;
+}
+
+.ov-panel-nav-link:hover {
+  transform: translateY(-2px);
+  color: var(--ink-primary);
+}
+
+.ov-panel-nav-link.is-active {
+  border-color: var(--accent-bright);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+/* ---------- KPI + dropdown ---------- */
+.ov-kpis {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ov-kpi {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d);
+}
+
+.ov-kpi.is-open {
+  border-color: var(--accent-bright);
+}
+
+.ov-kpi-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.ov-kpi-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ov-kpi-label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.ov-kpi-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.ov-kpi-value em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.ov-kpi-note {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.ov-kpi-toggle {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  color: var(--ink-secondary);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.ov-kpi-toggle svg {
+  transform: rotate(90deg);
+}
+
+.ov-kpi-toggle:hover {
+  color: var(--ink-primary);
+}
+
+.ov-kpi.is-open .ov-kpi-toggle {
+  transform: rotate(180deg);
+  border-color: var(--accent-bright);
+  color: var(--accent-strong);
+}
+
+.ov-kpi-toggle:focus-visible,
+.ov-panel-close:focus-visible,
+.ov-panel-nav-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ov-kpi-drop {
+  padding: 0 var(--space-4) var(--space-4);
+  animation: ov-drop 0.18s ease-out;
+}
+
+.ov-kpi-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.ov-kpi-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.ov-kpi-item:hover {
+  transform: translateX(-2px);
+  background: var(--accent-tint);
+  color: var(--ink-primary);
+}
+
+.ov-kpi-item.is-plain,
+.ov-kpi-item.is-plain:hover {
+  transform: none;
+  background: var(--bg-sunken);
+  color: var(--ink-muted);
+}
+
+.ov-kpi-item-name {
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.ov-kpi-item-meta {
+  grid-column: 1;
+  font-size: var(--text-xs);
+  color: var(--ink-secondary);
+}
+
+.ov-kpi-item-value {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.ov-kpi-item .status-badge {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.ov-kpi-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-raised);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.ov-kpi-more:hover {
+  transform: translateY(-2px);
+  color: var(--accent-strong);
+}
+
+.ov-kpi-more svg {
+  transform: rotate(0deg);
+}
+
+@keyframes ov-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-panel,
+  .ov-scrim,
+  .ov-kpi-drop {
+    transition: none;
+    animation: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .ov-panel {
+    width: 100%;
+  }
+
+  .ov-panel-nav ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ผิวกระจก-ฮอโลแกรมของแผงฮีโร่ (T1.357)
+
+   ★ อยู่ที่นี่ไม่ใช่ `styles/skin.css` เพราะฮีโร่เป็นของหน้านี้หน้าเดียว
+     ส่วนไฟล์นั้นเก็บเฉพาะผิวของ "กระดาน" ที่หลายหน้าใช้ร่วมกัน
+
+   ★★ ต้องอยู่**หลัง** `.ov-hero` ตัวตั้งต้นข้างบนในไฟล์เดียวกัน
+     ถ้าไปวางไว้ใน skin.css (ซึ่ง `base.css` โหลดก่อนไฟล์ของหน้า)
+     `background: var(--bg-surface)` ของกฎตั้งต้นจะเขียนทับกระจกทิ้งทั้งหมด
+     แล้วฮีโร่จะกลับเป็นการ์ดขาวโดยไม่มีอะไรฟ้อง — เจอจริงตอนแยกไฟล์
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ───── ฮีโร่: แผงกระจกฝ้าพร้อมแถบสะท้อน ─────
+   ยังมีภาพฟาร์มกับม่านเดิมอยู่ข้างใน ตรงนี้เปลี่ยนแค่ "กรอบ" ให้เป็นกระจก */
+.ov-hero {
+  border-color: var(--glass-edge);
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+}
+
+/* เส้นฮอโลแกรมพาดหัวแผง — ชิ้นเดียวที่ใช้สีรุ้งได้ เพราะเป็นเส้นตกแต่ง
+   ไม่ได้สื่อสถานะอะไร (สถานะยังต้องผ่าน StatusBadge เหมือนเดิม) */
+.ov-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* ★ ต้องอยู่ชั้นเดียวกับเนื้อหา (z-index: 1) ไม่งั้นภาพฟาร์มกับม่านจะทับจนไม่เห็น
+     ตัวหนังสืออยู่หลังในลำดับ DOM จึงยังวาดทับชั้นนี้ อ่านออกเหมือนเดิม */
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    /* แถบฮอโลแกรมพาดหัวแผง */
+    var(--holo-rim),
+    /* ตารางแผงควบคุม — เห็นได้เพราะอยู่บนกระจก ไม่ใช่บนภาพถ่าย */
+    linear-gradient(var(--grid-ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-ink) 1px, transparent 1px);
+  background-size: 100% 3px,
+    var(--grid-size) var(--grid-size), var(--grid-size) var(--grid-size);
+  background-position: center top, 0 0, 0 0;
+  background-repeat: no-repeat, repeat, repeat;
+}
+
+/* จอแคบ: ทึบขึ้นและตัด backdrop-filter ทิ้ง เหตุผลเดียวกับกระดาน (ดู styles/skin.css) */
+@media (max-width: 899px) {
+  .ov-hero {
+    --glass-bg: linear-gradient(
+      150deg,
+      rgb(var(--surface-rgb) / 0.96),
+      rgb(var(--surface-rgb) / 0.9)
+    );
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

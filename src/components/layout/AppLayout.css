@@ -1,0 +1,759 @@
+/* โครงหน้าหลังเข้าสู่ระบบ: แถบเมนูแนวนอนด้านบน + เนื้อหาเต็มความกว้าง
+   จอแคบ: เมนูเลื่อนแนวนอนได้ และซ่อนรายละเอียดที่ไม่จำเป็น */
+
+/* โครงเปล่า — ใช้กับหน้าภาพรวมที่เป็นแถบเมนูบน (TopNavLayout)
+   **ห้ามใส่ grid ตรงนี้** โครงแถบเมนูบนใช้คลาสเดียวกัน ถ้าทำเป็นสองคอลัมน์
+   แถบบนจะถูกบีบลงคอลัมน์แรกกว้าง 284px แล้วยืดสูงเต็มหน้า (เคยเกิดมาแล้ว 31 ส.ค. 2569) */
+.app-shell {
+  min-height: 100vh;
+}
+
+/* **ไม่มีคอลัมน์แถบเมนูแล้ว** — แถบซ้ายเป็นแผงเลื่อนเข้าที่ลอยทับเนื้อหา (ดู AppSidebar.css)
+   ผู้ใช้สั่งให้ทุกหน้าเริ่มต้นโดยไม่แสดงแถบ (2 ก.ย. 2569) เนื้อหาจึงได้ความกว้างเต็มเสมอ
+   และไม่ขยับตอนเปิด/ปิดเมนู */
+.app-shell.is-side {
+  display: block;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-page);
+}
+
+/* แถบเครื่องมือบาง ๆ ด้านบน — ไม่มีเมนูแล้ว เหลือแต่ปุ่มที่ใช้บ่อย
+   หน้าตาและตำแหน่งตรงกับ .bl-top ของหน้ารายละเอียดโรงเรือน */
+.app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.app-bar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* ---------- จอมือถือ: แถบบนเคยล้นออกนอกจอ ----------
+   วัดที่ 375px (iPhone SE/13 mini): ของในแถบต้องการ 423px แต่มีที่ 375px —
+   ปุ่มเฟืองถูกดันเลยขอบขวาไป 24px จนกดไม่ถึง และทั้งหน้าเลื่อนซ้าย-ขวาได้
+   ซึ่งผิดกติกา "เนื้อหาห้ามดันหน้าให้เลื่อนแนวนอน" ใน docs/DESIGN.md
+   (ช่องค้นหาถูกซ่อนไปตั้งแต่ 899px แล้ว ที่เหลือเป็นปุ่มล้วน ไม่มีอะไรยอมหดเอง)
+
+   **เป้านิ้วต้องไม่เล็กลง** — ปุ่มทุกใบยังกว้าง 38–40px เท่าเดิม ที่คืนมาได้คือที่ว่าง
+   รอบ ๆ ล้วน: ระยะขอบ 24→16 (เท่ากับ .app-content บนจอแคบ ขอบซ้ายจึงตรงกับเนื้อหา) ·
+   ช่องไฟ 16/12→8 · และแคปซูลสองใบที่เผื่อที่ให้ตัวหนังสือซึ่งซ่อนไปแล้วตั้งแต่ 899px
+   (ปุ่มหน้าแรกใน ui.css กับป้ายสิทธิ์ด้านล่าง) ย่อเป็นวงกลม 40×40 เท่าปุ่มข้าง ๆ
+   รวมแล้วเหลือ 356px — พอที่ 375px (เผื่อ 19px) และที่ 360px ของแอนดรอยด์ (เผื่อ 4px)
+
+   `flex-wrap` คือตาข่ายรับจอที่แคบกว่า 356px (เช่น 320px) — ให้กลุ่มปุ่มขวาตกลงไป
+   บรรทัดล่างแทนที่จะล้นออกนอกจอเงียบ ๆ เป็นท่าเดียวกับ `.sl-top` และ `.bl-top` */
+@media (max-width: 480px) {
+  .app-bar {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  /* ตกบรรทัดแล้วยังต้องเกาะขวา ไม่ใช่ลอยไปชิดซ้าย (margin-left: auto ทำงานต่อได้เลย
+     เพราะ .app-bar-right เป็นกล่องเดียวในบรรทัดล่าง) */
+  .app-bar-right {
+    gap: var(--space-2);
+  }
+
+  .app-bar .brand-head {
+    gap: var(--space-2);
+  }
+
+  /* ชื่อสิทธิ์ถูกซ่อนไปตั้งแต่ 899px แล้ว เหลือแคปซูลที่ยังเผื่อที่ให้ตัวหนังสือที่ไม่มีอยู่
+     ย่อเป็นวงกลม 40×40 เท่าปุ่มข้าง ๆ — ปุ่มยังกดง่ายเท่าเดิมและแถวดูเป็นชุดเดียวกันขึ้น
+     (สีของสิทธิ์ยังอยู่ครบ จึงยังบอกได้เหมือนเดิมว่ากำลังใช้สิทธิ์ไหน) */
+  .app-bar .app-account {
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+  }
+}
+
+/* ---------- แถบเมนูด้านบน ---------- */
+.app-topnav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+
+
+/* ทุกอย่างในแถบอยู่ "แถวเดียว" เสมอบนจอตั้งแต่ 900px ขึ้นไป — ห้ามใส่ flex-wrap ที่นี่
+   เมนูตกบรรทัดแล้วแถบสูงขึ้นและกวาดตาหาเมนูยากกว่าเดิม
+   ของที่ยอมหดเวลาที่ไม่พอคือ: ชื่อแบรนด์ (เหลือแต่โลโก้) · ปุ่มหน้าแรก (ซ่อนตอนคลี่เมนู)
+   · ช่องค้นหา · และระยะห่างในเมนู (ดู media query 1199px)
+   จอ < 900px ค่อยยอมให้ตกบรรทัด (ดูท้ายไฟล์) */
+.app-topnav-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  color: var(--ink-primary);
+}
+
+.app-brand:hover {
+  color: var(--accent-strong);
+}
+
+/* วงแหวนทองรอบโลโก้ — ลูกเล่นเดียวที่ใช้ทองสว่างได้ */
+.app-brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--accent-bright);
+  border-radius: 50%;
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.app-brand-name {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.app-nav {
+  min-width: 0;
+}
+
+/* เมนูคลี่ออกแล้วค่อยกินพื้นที่กลางแถบ (ตอนพับปล่อยที่ให้ช่องค้นหา) */
+.app-nav.is-open {
+  flex: 1;
+}
+
+/* จอที่แคบกว่า 1200px: ของในแถบรวมกันกว้างเกินหนึ่งแถว — บีบเมนูให้กระชับลงแทนการตกบรรทัด
+   (เมนูต้องอยู่แถวเดียวกับโลโก้เสมอ ตกบรรทัดแล้วแถบสูงขึ้นและอ่านยากกว่าเดิม)
+   ตัวเลขทั้งหมดมาจากการวัดจริงที่ 1024px: เมนูเต็มชุด 538 → 404px พอดีกับที่เหลือ */
+@media (max-width: 1199px) {
+  .app-nav-link {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .app-nav-caret {
+    width: 20px;
+    height: 20px;
+    margin-right: var(--space-1);
+  }
+
+  .app-nav-list {
+    gap: 2px;
+  }
+
+  .app-topnav-inner {
+    gap: var(--space-2) var(--space-3);
+  }
+}
+
+.app-nav-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  /* ห้าม clip ที่นี่ ไม่งั้นเมนูย่อยที่กางลงมาจะถูกตัดหาย */
+  overflow: visible;
+}
+
+/* เมนู = ปุ่มมีไอคอน · หน้าที่เปิดอยู่เป็นแคปซูลทอง */
+.app-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.app-nav-link:hover {
+  color: var(--ink-primary);
+  transform: none;
+}
+
+.app-nav-link.is-active {
+  background: transparent;
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.app-topnav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* .app-sync (เวลาอัปเดตบนแถบบน) ถูกถอดออกแล้ว — T1.146 */
+
+
+/* กระดิ่งแจ้งเตือนถูกถอดออกแล้ว (T1.122) — สไตล์ .app-bell* ลบทิ้งพร้อมกัน */
+
+/* ปุ่มทองมุมขวา — กลับไปหน้าแรกก่อนเข้าสู่ระบบ (ยังไม่มี auth จริง) */
+/* ชิปสิทธิ์ที่ใช้อยู่ — อยู่ติดกับปุ่มเฟือง เพราะกดแล้วเปิดหมวด "บัญชี" ในป๊อบอัพเดียวกัน
+   ไม่ใช้สีอย่างเดียวแยกสองสิทธิ์ (มีไอคอนโล่/คนต่างกัน และมีคำกำกับเสมอ) */
+.app-account {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.app-account:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+/* ผู้ดูแลระบบได้โทนทอง (สิทธิ์เต็ม) · ผู้ใช้งานได้โทนกลาง — ต่างกันชัดตั้งแต่ชายตามอง */
+.app-account.is-admin {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* จอแคบกว่า 900px เหลือแต่ไอคอน — ใช้จุดตัดเดียวกับที่แถบบนพับเป็นสองบรรทัดอยู่แล้ว
+   (วัดแล้วกว้างกว่านี้ยังใส่ชื่อสิทธิ์ได้ครบโดยแถบไม่ล้น) ชื่อยังอ่านได้จาก title และหมวดบัญชี */
+@media (max-width: 899px) {
+  .app-account-text {
+    display: none;
+  }
+}
+
+/* .app-logout* ถูกถอดออกแล้ว — ปุ่มออกจากระบบย้ายไปอยู่ในป๊อบอัพตั้งค่า (T1.147) */
+
+.app-content {
+  /* **ต้องมี `width: 100%`** — `.app-main` เป็น flex column ถ้าไม่ระบุความกว้าง
+     ตัวนี้จะหดตามเนื้อหา (shrink-to-fit) แล้ว `margin: 0 auto` ก็ดันไปอยู่กลาง
+     หน้าที่เนื้อหาไม่กว้างพอจึงเหลือขอบว่างสองข้างเป็นร้อยพิกเซล ไม่เท่าหน้าอื่น
+     (หน้าจำนวนสุกรเคยได้แค่ 854px ขณะที่หน้าอื่นได้เต็ม 1156px — ผู้ใช้แจ้ง 31 ส.ค. 2569)
+     `max-width` ยังทำงานเหมือนเดิม คือคุมไม่ให้ยืดเกินบนจอกว้างมาก */
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) var(--space-8);
+}
+
+/* ---------- จอกลาง: ย่อส่วนขวาให้เมนูมีที่ ---------- */
+@media (max-width: 1180px) {
+  .app-topnav-inner {
+    gap: var(--space-4);
+  }
+
+  .app-nav-link {
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+/* ---------- จอแคบ (< 900px): โลโก้+ปุ่มบรรทัดบน เมนูเลื่อนบรรทัดล่าง ---------- */
+@media (max-width: 899px) {
+  .app-topnav-inner {
+    flex-wrap: wrap;
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .app-brand-name {
+    font-size: var(--text-base);
+  }
+
+  .app-nav {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .app-nav-list {
+    gap: var(--space-2);
+  }
+
+  .app-content {
+    padding: var(--space-4) var(--space-4) var(--space-7);
+  }
+}
+
+
+/* ================= แถบเมนูแบบพับเก็บ (พับ → คลี่ → เมนูย่อย) ================= */
+/* ไอคอนในแถบห้ามถูกบีบตอนที่แน่น (ไม่งั้นจะแบนจนเหลือเส้นเดียว) */
+.app-topnav-inner svg {
+  flex-shrink: 0;
+}
+
+/* เมนูคลี่ออกแล้วบีบระยะในปุ่มลงหน่อย ให้ทุกอันอยู่ในแถวเดียวได้ */
+.app-nav.is-open .app-nav-link {
+  padding: var(--space-2) var(--space-3);
+}
+/* แต่ละเมนูเป็น "แคปซูล" เดียว — ลูกศรเมนูย่อยอยู่ในแคปซูลด้วย
+   แคปซูลปกติสีอ่อน · แคปซูลของหน้าที่เปิดอยู่สีเข้มกว่า */
+.app-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--bg-tint);
+  transition: background 0.15s ease;
+}
+
+.app-nav-item.is-current {
+  background: var(--accent-tint);
+  box-shadow: inset 0 0 0 1px var(--accent-bright);
+}
+
+.app-nav-item:hover {
+  background: var(--bg-sunken);
+}
+
+.app-nav-item.is-current:hover {
+  background: var(--accent-tint);
+}
+
+/* ปุ่มภาพรวมตอนเมนูพับอยู่ — กดแล้วเมนูที่เหลือสไลด์ออกมา */
+.app-nav-trigger {
+  border: 0;
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.app-nav-trigger-arrow {
+  transform: rotate(90deg);
+}
+
+/* กลุ่มเมนูที่เหลือ — สไลด์ออกทางขวา */
+/* position: relative จำเป็น ไม่ใช่ของประดับ — ป้ายสำหรับโปรแกรมอ่านหน้าจอ (.sr-only)
+   ในเมนูที่ยังพับอยู่เป็น absolute ถ้าไม่มีตัวตั้งต้นตรงนี้ มันจะไปยึดกับแถบบน (sticky)
+   แล้วหลุดออกนอกกรอบที่ clip ไว้ ดันให้ทั้งหน้าเลื่อนซ้าย-ขวาได้ 47px ที่จอ 1024px
+   (เมนูย่อยยังกางได้ปกติ เพราะมันยึดกับ .app-nav-item ที่เป็น relative อยู่แล้ว) */
+.app-nav-rest {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-width 0.32s ease, opacity 0.24s ease;
+}
+
+.app-nav-rest > ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.app-nav.is-open .app-nav-rest {
+  max-width: 1100px;
+  opacity: 1;
+}
+
+/* สไลด์จบแล้วเลิก clip เพื่อให้เมนูย่อยกางออกมาได้ */
+.app-nav.is-settled .app-nav-rest {
+  max-width: none;
+  overflow: visible;
+}
+
+/* ลูกศรกางเมนูย่อยของแต่ละเมนู */
+/* ลูกศรเมนูย่อย — อยู่ในแคปซูลเดียวกับชื่อเมนู */
+.app-nav-caret {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-right: var(--space-2);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-secondary);
+  transition: transform 0.18s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.app-nav-item.is-current .app-nav-caret {
+  color: var(--accent-strong);
+}
+
+.app-nav-caret svg {
+  transform: rotate(90deg);
+}
+
+.app-nav-caret:hover {
+  background: rgb(var(--surface-rgb) / 0.7);
+  color: var(--accent-strong);
+}
+
+.app-nav-caret[aria-expanded="true"] {
+  background: var(--bg-surface);
+  color: var(--accent-strong);
+  transform: rotate(180deg);
+}
+
+/* ปุ่มพับเมนูกลับ */
+.app-nav-collapse {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--ink-muted);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.app-nav-collapse svg {
+  transform: rotate(180deg);
+}
+
+.app-nav-collapse:hover {
+  border-color: var(--accent-bright);
+  color: var(--accent-strong);
+}
+
+.app-nav-caret:focus-visible,
+.app-nav-collapse:focus-visible,
+.app-nav-trigger:focus-visible,
+.app-search input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- เมนูย่อยที่กางลงมา ---------- */
+.app-submenu {
+  position: absolute;
+  top: calc(100% + var(--space-3));
+  left: 0;
+  z-index: 30;
+  min-width: 260px;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-float);
+  animation: app-submenu-in 0.16s ease-out;
+}
+
+.app-submenu ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.app-submenu-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+
+.app-submenu-link:hover {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.app-submenu-meta {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--ink-secondary);
+}
+
+@keyframes app-submenu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* ---------- ช่องค้นหาบนแถบ (เห็นตอนเมนูพับ) ---------- */
+.app-search-wrap {
+  position: relative;
+  flex: 1;
+  max-width: 360px;
+  margin-left: auto;
+}
+
+.app-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--ink-muted);
+}
+
+.app-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.app-search input {
+  width: 100%;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.app-search input:focus-visible {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-nav-rest,
+  .app-submenu {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* จอไม่กว้างพอ: ตอนเมนูคลี่ออก ค่อย ๆ ตัดสิ่งที่รองลงมาออกก่อน ไม่ให้เมนูทับปุ่มขวา */
+@media (max-width: 1460px) {
+  .app-topnav.is-nav-open .app-brand-name {
+    display: none;
+  }
+}
+
+
+/* ---------- ผลการค้นหาที่เด้งลงมา ---------- */
+.app-search-panel {
+  position: absolute;
+  top: calc(100% + var(--space-3));
+  right: 0;
+  z-index: 40;
+  width: min(460px, 92vw);
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-float);
+  animation: app-submenu-in 0.16s ease-out;
+}
+
+.app-search-empty {
+  font-size: var(--text-base);
+  color: var(--ink-secondary);
+}
+
+/* กล่อง KPI ที่ตรงคำค้น — เด้งขึ้นมาก่อนผลลัพธ์อื่น */
+.app-search-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.app-search-kpi {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--accent-bright);
+  border-radius: var(--radius-lg);
+  background: var(--accent-tint);
+  box-shadow: var(--shadow-3d-chip);
+  font-family: var(--font-sans);
+  text-align: left;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.app-search-kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-3d);
+}
+
+.app-search-kpi-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--accent);
+}
+
+.app-search-kpi-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-search-kpi-label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.app-search-kpi-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.app-search-kpi-value b {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--ink-primary);
+}
+
+.app-search-kpi-value em {
+  font-size: var(--text-sm);
+  font-style: normal;
+  color: var(--ink-secondary);
+}
+
+/* ---------- ผลลัพธ์แยกหมวด ---------- */
+.app-search-group + .app-search-group {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.app-search-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.app-search-group-head span {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.app-search-group ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.app-search-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--ink-primary);
+}
+
+.app-search-item:hover {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.app-search-item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-search-item-text b {
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.app-search-item-text span {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ตัวอักษรที่ตรงคำค้น */
+.app-search-mark {
+  padding: 0 1px;
+  border-radius: 4px;
+  background: var(--accent-bright);
+  color: var(--ink-primary);
+}
+
+.app-search-item-arrow {
+  color: var(--ink-muted);
+}
+
+.app-search-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.app-search-kpi:focus-visible,
+.app-search-item:focus-visible,
+.app-search-more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1180px) {
+  .app-search-wrap {
+    display: none;
+  }
+}

@@ -1,0 +1,897 @@
+/* ============================================================
+   โหมดโทนสี — 20 โหมด (สว่าง 10 · มืด 10)
+   เขียนทับเฉพาะ "token ที่เป็นสี" ของ styles/tokens.css เท่านั้น
+   ขนาดตัวอักษร ระยะห่าง มุมโค้ง ฯลฯ ใช้ร่วมกันทุกโหมด
+
+   โครงสร้าง 2 ชั้น (แยกกันเพื่อไม่ต้องเขียนซ้ำ 20 รอบ):
+     [data-scheme]  ชั้นสว่าง/มืด — สีกราฟ สีสถานะ เงา ฉากภาพประกอบ
+     [data-mode]    ชั้นเฉดของโหมดนั้น ๆ — พื้น หมึก สีแบรนด์ เส้น
+
+   ทั้งสองชั้นใช้ selector แบบ attribute ธรรมดา (ไม่ผูกกับ :root)
+   จึงเอาไปแปะบน element เล็ก ๆ ได้ด้วย — ตัวอย่างสีในหน้าตั้งค่าใช้วิธีนี้
+   (<span data-mode="navy" data-scheme="dark"> แล้วข้างในอ้าง var() ตามปกติ)
+
+   รายชื่อโหมดและชื่อภาษาไทยอยู่ที่ src/lib/theme/themes.js — เพิ่มโหมดต้องแก้ทั้งสองไฟล์
+   และต้องผ่าน test/modes.test.js ซึ่งตรวจอัตราคอนทราสต์ของทุกโหมดตามเกณฑ์ WCAG
+   ============================================================ */
+
+/* ============================================================
+   ชั้นที่ 1 — สว่าง
+   ค่าเดียวกับ tokens.css เขียนซ้ำที่นี่เพื่อให้ตัวอย่างสีโหมดสว่าง
+   ที่วางอยู่ในหน้าโหมดมืด ยังแสดงเป็นโทนสว่างได้ถูกต้อง
+   ============================================================ */
+[data-scheme="light"] {
+  color-scheme: light;
+
+  --series-1: #2a78d6;
+  --series-2: #1baf7a;
+  --series-3: #eda100;
+  --series-4: #008300;
+  --series-5: #4a3aa7;
+  --series-6: #e34948;
+  --series-7: #e87ba4;
+  --series-8: #eb6834;
+
+  --seq-100: #cde2fb;
+  --seq-250: #86b6ef;
+  --seq-400: #3987e5;
+  --seq-550: #1c5cab;
+  --seq-700: #0d366b;
+
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+  --status-offline: #8b8a84;
+  --status-good-text: #006300;
+  --status-warning-text: #8a5b00;
+  --status-serious-text: #b0421f;
+  --status-critical-text: #b02a2a;
+  --status-offline-text: #56554f;
+  --status-good-bg: #e7f5e7;
+  --status-warning-bg: #fdf3dd;
+  --status-serious-bg: #fdeee7;
+  --status-critical-bg: #fbe9e9;
+  --status-offline-bg: #eeeeea;
+
+  --scrim-rgb: 28 38 55;
+}
+
+/* ============================================================
+   ชั้นที่ 1 — มืด
+   สีกราฟและสีสถานะต้องสว่างขึ้น ไม่งั้นจมหายไปกับพื้นเข้ม
+   (ลำดับ series ยังเป็นลำดับเดิม — สีที่ผูกกับโรงเรือน/หมวดต้นทุนจึงไม่สลับ)
+   ============================================================ */
+[data-scheme="dark"] {
+  color-scheme: dark;
+
+  --series-1: #63a9f5;
+  --series-2: #35d3a0;
+  --series-3: #f2c14e;
+  --series-4: #57c65a;
+  --series-5: #a294f2;
+  --series-6: #f2706f;
+  --series-7: #f79ec1;
+  --series-8: #ff9160;
+
+  /* ไล่ระดับกลับทิศ: ค่าน้อย = มืดกลืนพื้น · ค่ามาก = สว่างเด่น */
+  --seq-100: #16304e;
+  --seq-250: #235284;
+  --seq-400: #3f86cf;
+  --seq-550: #79b4ef;
+  --seq-700: #c7e0fb;
+
+  --status-good: #4cc94c;
+  --status-warning: #f5c344;
+  --status-serious: #ff9a6e;
+  --status-critical: #f2706f;
+  --status-offline: #9b9a94;
+  --status-good-text: #6fd96f;
+  --status-warning-text: #f7cf6a;
+  --status-serious-text: #ffab86;
+  --status-critical-text: #ff8c8b;
+  --status-offline-text: #b6b5ae;
+  --status-good-bg: #16301a;
+  --status-warning-bg: #332810;
+  --status-serious-bg: #382113;
+  --status-critical-bg: #3a1c1c;
+  --status-offline-bg: #292926;
+
+  --scrim-rgb: 0 0 0;
+
+  /* ภาพถ่ายพื้นหลังต้องจมลงไปเกือบหมด การ์ดมืดจึงจะอ่านง่ายเท่าโหมดสว่าง */
+  --photo-veil-top: rgb(var(--page-rgb) / calc(1.52 * (1 - var(--photo-strength))));
+  --photo-veil-bottom: rgb(var(--page-rgb) / calc(1.8 * (1 - var(--photo-strength))));
+
+  /* พื้นมืดไม่มีเส้นสว่างขอบบนแบบการ์ดขาว — ใช้ขาวจาง ๆ แทนเพื่อยังเห็นความนูน */
+  --shadow-3d: 0 1px 0 rgb(255 255 255 / 0.07) inset,
+    0 2px 4px rgb(0 0 0 / 0.4), 0 10px 20px rgb(0 0 0 / 0.45),
+    0 22px 44px rgb(0 0 0 / 0.4);
+  --shadow-3d-hover: 0 1px 0 rgb(255 255 255 / 0.1) inset,
+    0 4px 8px rgb(0 0 0 / 0.45), 0 16px 30px rgb(0 0 0 / 0.5),
+    0 32px 60px rgb(0 0 0 / 0.45);
+  --shadow-3d-chip: 0 1px 0 rgb(255 255 255 / 0.09) inset,
+    0 3px 6px rgb(0 0 0 / 0.45);
+  --shadow-well: 0 2px 6px rgb(0 0 0 / 0.45) inset,
+    0 1px 0 rgb(255 255 255 / 0.05);
+  --shadow-raised-gold: 0 3px 0 rgb(0 0 0 / 0.45),
+    0 6px 14px rgb(0 0 0 / 0.4);
+  --shadow-raised-gold-press: 0 1px 0 rgb(0 0 0 / 0.45);
+
+  /* ภาพประกอบฟาร์มหน้าเข้าสู่ระบบ — หรี่ลงให้เข้ากับพื้นมืด */
+  --scene-sky-top: #16202a;
+  --scene-sky-bottom: #1d2630;
+  --scene-hill-far: #223029;
+  --scene-hill-mid: #2a3d2d;
+  --scene-field: #33472c;
+  --scene-field-alt: #2c3e26;
+  --scene-road: #2e2f2b;
+  --scene-wall: #2b3138;
+  --scene-roof: #29323c;
+  --scene-solar: #38506e;
+  --scene-metal: #3a4247;
+  --scene-tree: #3d6340;
+  --scene-tree-dark: #2f5236;
+  --scene-outline: rgb(255 255 255 / 0.12);
+
+  /* ───── ผิวกระจก · ฮอโลแกรม ของโหมดมืด (T1.357) ─────
+     โหมดมืดต้องการ "ขอบเรืองแสง" ไม่ใช่เส้นสว่างแบบกระจกบนพื้นสว่าง
+     ขอบจึงเป็นแสงขาวจาง ๆ ไม่ใช่ rgb(var(--surface-rgb)) ซึ่งในโหมดนี้เป็นสีเข้ม */
+  --glass-bg: linear-gradient(
+    150deg,
+    rgb(var(--surface-rgb) / 0.74),
+    rgb(var(--surface-rgb) / 0.44)
+  );
+  --glass-rim: rgb(255 255 255 / 0.14);
+  --glass-edge: rgb(255 255 255 / 0.12);
+  --glass-shadow: 0 1px 0 var(--glass-rim) inset,
+    0 2px 8px rgb(0 0 0 / 0.5), 0 18px 40px rgb(0 0 0 / 0.5);
+  --glass-shadow-hover: 0 1px 0 rgb(255 255 255 / 0.2) inset,
+    0 4px 12px rgb(0 0 0 / 0.55), 0 28px 60px rgb(0 0 0 / 0.55);
+  /* พื้นมืดกลืนแสงมากกว่า จึงต้องเข้มขึ้นจึงจะเห็นเท่ากัน */
+  --holo-sheen: linear-gradient(
+    118deg,
+    transparent 14%,
+    color-mix(in srgb, var(--accent-bright) 34%, transparent) 33%,
+    color-mix(in srgb, var(--series-1) 28%, transparent) 50%,
+    color-mix(in srgb, var(--pink-soft) 30%, transparent) 65%,
+    transparent 86%
+  );
+  --grid-ink: rgb(255 255 255 / 0.055);
+  --scan-ink: rgb(255 255 255 / 0.05);
+  --neu-raise: -3px -3px 8px rgb(255 255 255 / 0.04),
+    4px 5px 14px rgb(0 0 0 / 0.5);
+}
+
+/* ============================================================
+   ชั้นที่ 2 — โหมดสว่าง 5 โหมดแรก
+   ============================================================ */
+
+/* 1) ครีมทอง — โหมดตั้งต้นของแบรนด์ (ค่าเดียวกับ tokens.css) */
+[data-mode="cream"] {
+  --bg-page: #faf8f3;
+  --bg-surface: #ffffff;
+  --bg-chart: #fdfbf7;
+  --bg-tint: #f7f3ea;
+  --bg-sunken: #f4f0e6;
+
+  --ink-primary: #1c2637;
+  --ink-secondary: #5b5f68;
+  --ink-muted: #726c62;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 250 248 243;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 62 47 20;
+
+  --accent: #96681c;
+  --accent-strong: #7a5414;
+  --accent-tint: #f6eeda;
+  --accent-bright: #c9a227;
+  --accent-gradient: linear-gradient(180deg, #d6a844 0%, #b98626 100%);
+
+  --green: #22a45d;
+  --green-strong: #157a43;
+  --green-tint: #e6f6ec;
+
+  --grid-line: #ece5d7;
+  --axis-line: #cfc5b0;
+  --glow-gold: rgb(201 162 39 / 0.1);
+  --glow-warm: rgb(226 199 142 / 0.16);
+  --map-bg: #ece8de;
+}
+
+/* 2) ขาวกลางวัน — เทาฟ้าเย็นตา คมชัด เหมาะกับห้องที่แสงจ้า */
+[data-mode="daylight"] {
+  --bg-page: #f5f8fc;
+  --bg-surface: #ffffff;
+  --bg-chart: #fbfcfe;
+  --bg-tint: #edf2f9;
+  --bg-sunken: #e6edf7;
+
+  --ink-primary: #16202e;
+  --ink-secondary: #4c5666;
+  --ink-muted: #626b7a;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 245 248 252;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 22 38 62;
+
+  --accent: #1f5fa8;
+  --accent-strong: #174a83;
+  --accent-tint: #e2edfa;
+  --accent-bright: #4a90d9;
+  --accent-gradient: linear-gradient(180deg, #4b93dd 0%, #2467b0 100%);
+
+  --green: #1f9d55;
+  --green-strong: #14743d;
+  --green-tint: #e3f4ea;
+
+  --grid-line: #e4eaf3;
+  --axis-line: #c2cbd9;
+  --glow-gold: rgb(74 144 217 / 0.08);
+  --glow-warm: rgb(170 200 232 / 0.16);
+  --map-bg: #e5ebf3;
+}
+
+/* 3) ทุ่งเขียว — เขียวใบไม้อ่อน สบายตาสำหรับคนอยู่หน้าจอนาน */
+[data-mode="meadow"] {
+  --bg-page: #f4f8f1;
+  --bg-surface: #ffffff;
+  --bg-chart: #fafcf8;
+  --bg-tint: #eaf2e5;
+  --bg-sunken: #e2ecdb;
+
+  --ink-primary: #17281c;
+  --ink-secondary: #4d5a50;
+  --ink-muted: #5f6b5e;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 244 248 241;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 30 52 32;
+
+  --accent: #2f7333;
+  --accent-strong: #235826;
+  --accent-tint: #e2f1df;
+  --accent-bright: #63a655;
+  --accent-gradient: linear-gradient(180deg, #6cae5c 0%, #3c8340 100%);
+
+  --green: #1f9d55;
+  --green-strong: #14743d;
+  --green-tint: #e2f2e8;
+
+  --grid-line: #e3ecdf;
+  --axis-line: #c2d1bd;
+  --glow-gold: rgb(99 166 85 / 0.1);
+  --glow-warm: rgb(198 224 178 / 0.18);
+  --map-bg: #e5ede0;
+}
+
+/* 4) ชมพูหมู — โทนอ่อนโยน ใช้สีชมพูของแบรนด์เป็นสีหลัก */
+[data-mode="blossom"] {
+  --bg-page: #fdf6f7;
+  --bg-surface: #ffffff;
+  --bg-chart: #fefafb;
+  --bg-tint: #fbedf0;
+  --bg-sunken: #f6e2e7;
+
+  --ink-primary: #2b1c23;
+  --ink-secondary: #61505a;
+  --ink-muted: #75626c;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 253 246 247;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 80 35 50;
+
+  --accent: #a83f66;
+  --accent-strong: #8a2f52;
+  --accent-tint: #fbe6ec;
+  --accent-bright: #e87ba4;
+  --accent-gradient: linear-gradient(180deg, #e386ab 0%, #b84970 100%);
+
+  --green: #22a45d;
+  --green-strong: #157a43;
+  --green-tint: #e6f6ec;
+
+  --grid-line: #f2e2e7;
+  --axis-line: #d5bcc5;
+  --glow-gold: rgb(232 123 164 / 0.1);
+  --glow-warm: rgb(240 204 214 / 0.18);
+  --map-bg: #efe3e6;
+}
+
+/* 5) กระดาษเซเปีย — อุ่นที่สุด แสงฟ้าน้อย เหมาะกับตอนกลางคืนแต่ยังอยากได้พื้นสว่าง */
+[data-mode="paper"] {
+  --bg-page: #f5eee0;
+  --bg-surface: #fdf8ee;
+  --bg-chart: #fbf5e9;
+  --bg-tint: #eee4d0;
+  --bg-sunken: #e7dcc5;
+
+  --ink-primary: #33291a;
+  --ink-secondary: #5e5240;
+  --ink-muted: #69604e;
+  --ink-inverse: #fdf8ee;
+
+  --page-rgb: 245 238 224;
+  --surface-rgb: 253 248 238;
+  --shadow-rgb: 70 55 25;
+
+  --accent: #8a5a12;
+  --accent-strong: #6d4609;
+  --accent-tint: #f0e2c4;
+  --accent-bright: #b98a2a;
+  --accent-gradient: linear-gradient(180deg, #c99b3d 0%, #a3701a 100%);
+
+  --green: #1f8a4d;
+  --green-strong: #146336;
+  --green-tint: #e2efdd;
+
+  --grid-line: #e6dcc6;
+  --axis-line: #c7b99b;
+  --glow-gold: rgb(190 150 60 / 0.12);
+  --glow-warm: rgb(220 195 140 / 0.2);
+  --map-bg: #e8dfcb;
+}
+
+/* ============================================================
+   ชั้นที่ 2 — โหมดมืด 5 โหมดแรก
+   ต้องใช้คู่กับ data-scheme="dark" เสมอ (ThemeContext ใส่ให้อัตโนมัติ)
+   ============================================================ */
+
+/* 6) ราตรีทอง — คู่แฝดโหมดมืดของครีมทอง ยังเป็นทองเหมือนเดิม */
+[data-mode="midnight"] {
+  --bg-page: #14110c;
+  --bg-surface: #1e1a13;
+  --bg-chart: #1a1710;
+  --bg-tint: #292318;
+  --bg-sunken: #100e09;
+
+  --ink-primary: #f5efe2;
+  --ink-secondary: #c1b7a3;
+  --ink-muted: #938a78;
+  --ink-inverse: #1a1610;
+
+  --page-rgb: 20 17 12;
+  --surface-rgb: 30 26 19;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #e0b352;
+  --accent-strong: #f0c86e;
+  --accent-tint: #382d18;
+  --accent-bright: #f5d98a;
+  --accent-gradient: linear-gradient(180deg, #e6bd60 0%, #c79a3c 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #16301f;
+
+  --border: rgb(240 225 190 / 0.14);
+  --border-strong: rgb(240 225 190 / 0.26);
+  --grid-line: #2e2819;
+  --axis-line: #4a4130;
+  --glow-gold: rgb(224 179 82 / 0.07);
+  --glow-warm: rgb(150 120 60 / 0.09);
+  --map-bg: #201c14;
+}
+
+/* 7) น้ำเงินลึก — โทนกลางคืนแบบห้องควบคุม */
+[data-mode="navy"] {
+  --bg-page: #0d1420;
+  --bg-surface: #16202e;
+  --bg-chart: #121b27;
+  --bg-tint: #1e2b3d;
+  --bg-sunken: #0a111b;
+
+  --ink-primary: #eaf1fa;
+  --ink-secondary: #abbacd;
+  --ink-muted: #8593a3;
+  --ink-inverse: #0d1420;
+
+  --page-rgb: 13 20 32;
+  --surface-rgb: 22 32 46;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #6fb2f0;
+  --accent-strong: #93c8f7;
+  --accent-tint: #1b3550;
+  --accent-bright: #a9d3fb;
+  --accent-gradient: linear-gradient(180deg, #79b8f2 0%, #4c93d8 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #123028;
+
+  --border: rgb(200 220 245 / 0.14);
+  --border-strong: rgb(200 220 245 / 0.26);
+  --grid-line: #223145;
+  --axis-line: #38495f;
+  --glow-gold: rgb(111 178 240 / 0.07);
+  --glow-warm: rgb(60 100 150 / 0.1);
+  --map-bg: #182432;
+}
+
+/* 8) ป่าดึก — เขียวเข้ม สบายตาที่สุดในกลุ่มโหมดมืด */
+[data-mode="forest"] {
+  --bg-page: #0e1712;
+  --bg-surface: #16241c;
+  --bg-chart: #121e17;
+  --bg-tint: #1e3126;
+  --bg-sunken: #0a1310;
+
+  --ink-primary: #e9f4ec;
+  --ink-secondary: #acc3b5;
+  --ink-muted: #84998e;
+  --ink-inverse: #0e1712;
+
+  --page-rgb: 14 23 18;
+  --surface-rgb: 22 36 28;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #6ecb8f;
+  --accent-strong: #93dda9;
+  --accent-tint: #17331f;
+  --accent-bright: #a5e6b8;
+  --accent-gradient: linear-gradient(180deg, #78d298 0%, #4ea973 100%);
+
+  --green: #6ecb8f;
+  --green-strong: #a5e6b8;
+  --green-tint: #16311f;
+
+  --border: rgb(205 240 215 / 0.14);
+  --border-strong: rgb(205 240 215 / 0.26);
+  --grid-line: #22362a;
+  --axis-line: #385043;
+  --glow-gold: rgb(110 203 143 / 0.07);
+  --glow-warm: rgb(60 130 90 / 0.1);
+  --map-bg: #17251d;
+}
+
+/* 9) ม่วงราตรี — โทนเย็นแบบพลบค่ำ */
+[data-mode="plum"] {
+  --bg-page: #150f1c;
+  --bg-surface: #201829;
+  --bg-chart: #1a1322;
+  --bg-tint: #2c2138;
+  --bg-sunken: #100b16;
+
+  --ink-primary: #f2ecf8;
+  --ink-secondary: #beb1cc;
+  --ink-muted: #9488a0;
+  --ink-inverse: #150f1c;
+
+  --page-rgb: 21 15 28;
+  --surface-rgb: 32 24 41;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #c79bf0;
+  --accent-strong: #dbbcf8;
+  --accent-tint: #33244a;
+  --accent-bright: #e2c6fb;
+  --accent-gradient: linear-gradient(180deg, #cea6f2 0%, #a377d3 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #16301f;
+
+  --border: rgb(230 215 250 / 0.14);
+  --border-strong: rgb(230 215 250 / 0.26);
+  --grid-line: #2c2138;
+  --axis-line: #46375a;
+  --glow-gold: rgb(199 155 240 / 0.07);
+  --glow-warm: rgb(110 75 150 / 0.1);
+  --map-bg: #241b2e;
+}
+
+/* 10) ดำสนิท — คอนทราสต์สูงสุด ประหยัดแบตบนจอ OLED */
+[data-mode="carbon"] {
+  --bg-page: #000000;
+  --bg-surface: #0e0e0e;
+  --bg-chart: #0a0a0a;
+  --bg-tint: #1c1c1c;
+  --bg-sunken: #050505;
+
+  --ink-primary: #ffffff;
+  --ink-secondary: #d2d2d2;
+  --ink-muted: #a2a2a2;
+  --ink-inverse: #000000;
+
+  --page-rgb: 0 0 0;
+  --surface-rgb: 14 14 14;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #ffc94d;
+  --accent-strong: #ffd97a;
+  --accent-tint: #2a2210;
+  --accent-bright: #ffe08a;
+  --accent-gradient: linear-gradient(180deg, #ffd166 0%, #e0a92e 100%);
+
+  --green: #4cd964;
+  --green-strong: #86eb98;
+  --green-tint: #122a17;
+
+  --border: rgb(255 255 255 / 0.2);
+  --border-strong: rgb(255 255 255 / 0.34);
+  --grid-line: #232323;
+  --axis-line: #3d3d3d;
+  --glow-gold: rgb(255 201 77 / 0.05);
+  --glow-warm: rgb(120 120 120 / 0.06);
+  --map-bg: #121212;
+}
+
+/* ============================================================
+   ชั้นที่ 2 (เพิ่ม) — โหมดสว่างอีก 5 โหมด
+   เลือกเฉดที่ยัง "ไม่ซ้ำวงสี" กับ 5 โหมดเดิม (ทอง · ฟ้า · เขียว · ชมพู · เซเปีย)
+   ได้แก่ เขียวน้ำทะเล · ม่วง · ส้มดินเผา · เทากลาง · คมชัดสูง
+   ทุกค่าตรวจอัตราคอนทราสต์แล้วด้วย `test/modes.test.js` (รันด้วย `npm test`)
+   ============================================================ */
+
+/* 6) มิ้นต์ทะเล — เขียวน้ำทะเล เย็นตา ไม่หวานเหมือนเขียวใบไม้ */
+[data-mode="seafoam"] {
+  --bg-page: #f1f8f7;
+  --bg-surface: #ffffff;
+  --bg-chart: #f8fdfc;
+  --bg-tint: #e6f3f1;
+  --bg-sunken: #dcebe8;
+
+  --ink-primary: #0f2529;
+  --ink-secondary: #45606a;
+  --ink-muted: #566b71;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 241 248 247;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 12 58 60;
+
+  --accent: #0a736f;
+  --accent-strong: #075853;
+  --accent-tint: #ddefed;
+  --accent-bright: #1fb3a6;
+  --accent-gradient: linear-gradient(180deg, #17a89c 0%, #0a827b 100%);
+
+  --green: #1f9d55;
+  --green-strong: #14743d;
+  --green-tint: #e3f4ea;
+
+  --grid-line: #e1edeb;
+  --axis-line: #b6cfcb;
+  --glow-gold: rgb(31 179 166 / 0.1);
+  --glow-warm: rgb(120 200 190 / 0.14);
+  --map-bg: #e3edeb;
+}
+
+/* 7) ลาเวนเดอร์ — ม่วงอ่อน นุ่มแต่ยังคม ไม่หวานแบบชมพู */
+[data-mode="lilac"] {
+  --bg-page: #f7f5fd;
+  --bg-surface: #ffffff;
+  --bg-chart: #fcfbfe;
+  --bg-tint: #eee9fa;
+  --bg-sunken: #e5def5;
+
+  --ink-primary: #1d1832;
+  --ink-secondary: #524c70;
+  --ink-muted: #665f83;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 247 245 253;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 45 30 90;
+
+  --accent: #5b3cc4;
+  --accent-strong: #472c9f;
+  --accent-tint: #e9e1fa;
+  --accent-bright: #8f6ff0;
+  --accent-gradient: linear-gradient(180deg, #8a68ef 0%, #6644cc 100%);
+
+  --green: #1f9d55;
+  --green-strong: #14743d;
+  --green-tint: #e6f5ec;
+
+  --grid-line: #eae4f6;
+  --axis-line: #c6bce2;
+  --glow-gold: rgb(143 111 240 / 0.1);
+  --glow-warm: rgb(180 160 240 / 0.14);
+  --map-bg: #e8e3f2;
+}
+
+/* 8) ดินเผา — ส้มอิฐอุ่น โทนดินเผาไทย เข้ากับภาพฟาร์ม */
+[data-mode="terracotta"] {
+  --bg-page: #fbf4ef;
+  --bg-surface: #ffffff;
+  --bg-chart: #fdf9f6;
+  --bg-tint: #f5e7dd;
+  --bg-sunken: #eeddd0;
+
+  --ink-primary: #291a13;
+  --ink-secondary: #5f4d44;
+  --ink-muted: #6f6056;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 251 244 239;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 90 45 20;
+
+  --accent: #a34a26;
+  --accent-strong: #83381b;
+  --accent-tint: #f7e4d9;
+  --accent-bright: #d9764a;
+  --accent-gradient: linear-gradient(180deg, #d1743f 0%, #a9502a 100%);
+
+  --green: #1f9d55;
+  --green-strong: #14743d;
+  --green-tint: #e6f5ec;
+
+  --grid-line: #f0e3d9;
+  --axis-line: #d3b9a5;
+  --glow-gold: rgb(217 118 74 / 0.1);
+  --glow-warm: rgb(226 170 130 / 0.16);
+  --map-bg: #eee2d8;
+}
+
+/* 9) หินชนวน — เทากลางเกือบไร้สี ให้ตัวเลขกับสีสถานะเป็นพระเอกคนเดียว */
+[data-mode="slate"] {
+  --bg-page: #f3f5f7;
+  --bg-surface: #ffffff;
+  --bg-chart: #fafbfc;
+  --bg-tint: #e8ecf0;
+  --bg-sunken: #dfe4ea;
+
+  --ink-primary: #13181d;
+  --ink-secondary: #47505b;
+  --ink-muted: #5d6670;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 243 245 247;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 20 26 34;
+
+  --accent: #3c4a5a;
+  --accent-strong: #26313d;
+  --accent-tint: #e5e9ee;
+  --accent-bright: #6b7f95;
+  --accent-gradient: linear-gradient(180deg, #5a6b80 0%, #3c4a5a 100%);
+
+  --green: #1f8f4f;
+  --green-strong: #146336;
+  --green-tint: #e4f2e9;
+
+  --grid-line: #e7eaee;
+  --axis-line: #b8c0ca;
+  --glow-gold: rgb(107 127 149 / 0.09);
+  --glow-warm: rgb(150 165 185 / 0.12);
+  --map-bg: #e5e8ec;
+}
+
+/* 10) ขาวคมชัด — คู่ของ "ดำสนิท" ฝั่งสว่าง
+   หมึกเกือบดำ ขอบเข้ม ไว้ใช้ตอนถือจอออกไปกลางแดดหน้าโรงเรือน */
+[data-mode="crisp"] {
+  --bg-page: #eef1f5;
+  --bg-surface: #ffffff;
+  --bg-chart: #ffffff;
+  --bg-tint: #e3e8f0;
+  --bg-sunken: #dae0ea;
+
+  --ink-primary: #000a14;
+  --ink-secondary: #2c3540;
+  --ink-muted: #545e6b;
+  --ink-inverse: #ffffff;
+
+  --page-rgb: 238 241 245;
+  --surface-rgb: 255 255 255;
+  --shadow-rgb: 0 8 24;
+
+  /* โหมดเดียวที่เขียนทับเส้นขอบ — โหมดสว่างอื่นใช้ค่าจาง 12%/22% จาก tokens.css
+     ซึ่งจางเกินไปสำหรับโหมดที่ตั้งใจให้ "คมชัด" ค่านี้ให้เส้นขอบ ~3:1 กับพื้นขาว
+     (เกณฑ์ WCAG ของส่วนที่เป็นองค์ประกอบ ไม่ใช่ตัวหนังสือ) */
+  --border: rgb(0 8 24 / 0.45);
+  --border-strong: rgb(0 8 24 / 0.6);
+
+  --accent: #0f3572;
+  --accent-strong: #082450;
+  --accent-tint: #dee6f4;
+  --accent-bright: #2f6ec4;
+  --accent-gradient: linear-gradient(180deg, #2a63b8 0%, #0f3572 100%);
+
+  --green: #0f7a3d;
+  --green-strong: #0a5a2c;
+  --green-tint: #dcf0e3;
+
+  --grid-line: #dfe4ec;
+  --axis-line: #97a2b3;
+  --glow-gold: rgb(47 110 196 / 0.08);
+  --glow-warm: rgb(130 150 190 / 0.1);
+  --map-bg: #e2e6ec;
+}
+
+/* ============================================================
+   ชั้นที่ 2 (เพิ่ม) — โหมดมืดอีก 5 โหมด
+
+   **ข้อบังคับของโหมดมืด: สีเน้นห้ามไปทับวงสีของสถานะ**
+   สถานะในโหมดมืดคือ เขียว #4cc94c · เหลือง #f5c344 · ส้ม #ff9a6e · แดง #f2706f
+   สีเน้น = "กดได้" ถ้าเลือกส้มหรือแดงมาเป็นสีเน้น คนจะอ่านปุ่มเป็นคำเตือน
+   จึงเลือกจากวงสีที่เหลือ: เขียวน้ำทะเล · เทาเงิน · ครามม่วง · บานเย็น · น้ำตาลอ่อน
+   ============================================================ */
+
+/* 11) ทะเลลึก — เขียวน้ำทะเลเข้ม เย็นแต่ไม่หม่นเหมือนน้ำเงิน */
+[data-mode="abyss"] {
+  --bg-page: #071619;
+  --bg-surface: #0f2429;
+  --bg-chart: #0c1e22;
+  --bg-tint: #16333a;
+  --bg-sunken: #051114;
+
+  --ink-primary: #e6f5f3;
+  --ink-secondary: #a5c2c0;
+  --ink-muted: #819c9a;
+  --ink-inverse: #06181a;
+
+  --page-rgb: 7 22 25;
+  --surface-rgb: 15 36 41;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #4ecdc4;
+  --accent-strong: #7fe3db;
+  --accent-tint: #123338;
+  --accent-bright: #9df0e8;
+  --accent-gradient: linear-gradient(180deg, #52d6cc 0%, #2ba79e 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #103026;
+
+  --border: rgb(190 235 232 / 0.14);
+  --border-strong: rgb(190 235 232 / 0.26);
+  --grid-line: #173237;
+  --axis-line: #2c5057;
+  --glow-gold: rgb(78 205 196 / 0.07);
+  --glow-warm: rgb(60 150 145 / 0.09);
+  --map-bg: #102429;
+}
+
+/* 12) เทาเงิน — เทากลางไร้สี สีเน้นเป็นเงินอมฟ้า สุภาพที่สุดในบรรดาโหมดมืด */
+[data-mode="graphite"] {
+  --bg-page: #131619;
+  --bg-surface: #1e2328;
+  --bg-chart: #1a1e22;
+  --bg-tint: #282e35;
+  --bg-sunken: #0e1114;
+
+  --ink-primary: #eef1f4;
+  --ink-secondary: #b3bcc5;
+  --ink-muted: #8c969f;
+  --ink-inverse: #12161a;
+
+  --page-rgb: 19 22 25;
+  --surface-rgb: 30 35 40;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #a9c1d8;
+  --accent-strong: #cbdcec;
+  --accent-tint: #232c35;
+  --accent-bright: #dbe7f2;
+  --accent-gradient: linear-gradient(180deg, #b4cade 0%, #8aa5bd 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #16301f;
+
+  --border: rgb(220 232 244 / 0.14);
+  --border-strong: rgb(220 232 244 / 0.26);
+  --grid-line: #262c33;
+  --axis-line: #414a54;
+  --glow-gold: rgb(169 193 216 / 0.06);
+  --glow-warm: rgb(120 140 160 / 0.08);
+  --map-bg: #1c2126;
+}
+
+/* 13) ครามราตรี — น้ำเงินอมม่วงเข้ม สีเน้นเป็นครามอ่อน (คนละเฉดกับ "น้ำเงินลึก" ที่เป็นฟ้า) */
+[data-mode="indigo"] {
+  --bg-page: #0e1024;
+  --bg-surface: #191c36;
+  --bg-chart: #14162d;
+  --bg-tint: #232647;
+  --bg-sunken: #090b1a;
+
+  --ink-primary: #ecebfb;
+  --ink-secondary: #b4b3d8;
+  --ink-muted: #8d8db1;
+  --ink-inverse: #0d0f22;
+
+  --page-rgb: 14 16 36;
+  --surface-rgb: 25 28 54;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #9fb0ff;
+  --accent-strong: #c2ccff;
+  --accent-tint: #1e2246;
+  --accent-bright: #d5dbff;
+  --accent-gradient: linear-gradient(180deg, #a6b6ff 0%, #7186e8 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #14301f;
+
+  --border: rgb(200 205 255 / 0.15);
+  --border-strong: rgb(200 205 255 / 0.28);
+  --grid-line: #232748;
+  --axis-line: #3b4070;
+  --glow-gold: rgb(159 176 255 / 0.07);
+  --glow-warm: rgb(110 120 200 / 0.09);
+  --map-bg: #171a33;
+}
+
+/* 14) กล้วยไม้ราตรี — บานเย็น คู่โหมดมืดของ "ชมพูหมู" (ต่างจาก "ม่วงราตรี" ที่เป็นม่วงล้วน) */
+[data-mode="orchid"] {
+  --bg-page: #180d18;
+  --bg-surface: #251527;
+  --bg-chart: #1e1020;
+  --bg-tint: #331d35;
+  --bg-sunken: #120a13;
+
+  --ink-primary: #f7ecf6;
+  --ink-secondary: #c9b2c8;
+  --ink-muted: #9b859c;
+  --ink-inverse: #170c17;
+
+  --page-rgb: 24 13 24;
+  --surface-rgb: 37 21 39;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #ef8fd4;
+  --accent-strong: #f7b4e3;
+  --accent-tint: #331c33;
+  --accent-bright: #fbcdee;
+  --accent-gradient: linear-gradient(180deg, #f096d6 0%, #cc63ae 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #16301f;
+
+  --border: rgb(245 220 242 / 0.15);
+  --border-strong: rgb(245 220 242 / 0.28);
+  --grid-line: #331e34;
+  --axis-line: #533052;
+  --glow-gold: rgb(239 143 212 / 0.06);
+  --glow-warm: rgb(180 100 160 / 0.09);
+  --map-bg: #231425;
+}
+
+/* 15) มอคค่า — น้ำตาลกาแฟ อุ่นแบบไม่ใช้ทอง (สีเน้นเป็นน้ำตาลอ่อนอมชมพู
+   ตั้งใจให้จืดกว่าสีสถานะส้ม เพราะอยู่คนละหน้าที่กัน) */
+[data-mode="mocha"] {
+  --bg-page: #17110e;
+  --bg-surface: #241b16;
+  --bg-chart: #1d1512;
+  --bg-tint: #33251e;
+  --bg-sunken: #110c0a;
+
+  --ink-primary: #f4ebe3;
+  --ink-secondary: #c4b2a4;
+  --ink-muted: #9c8c81;
+  --ink-inverse: #180f0b;
+
+  --page-rgb: 23 17 14;
+  --surface-rgb: 36 27 22;
+  --shadow-rgb: 0 0 0;
+
+  --accent: #d9b49a;
+  --accent-strong: #ecd0bd;
+  --accent-tint: #33241c;
+  --accent-bright: #f2ddcd;
+  --accent-gradient: linear-gradient(180deg, #dcb9a1 0%, #b9917a 100%);
+
+  --green: #46c47f;
+  --green-strong: #7fe0a8;
+  --green-tint: #16301f;
+
+  --border: rgb(240 225 210 / 0.14);
+  --border-strong: rgb(240 225 210 / 0.26);
+  --grid-line: #2f231c;
+  --axis-line: #4d3a2f;
+  --glow-gold: rgb(217 180 154 / 0.06);
+  --glow-warm: rgb(160 120 90 / 0.09);
+  --map-bg: #221a15;
+}

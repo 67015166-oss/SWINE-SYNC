@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">อาการทางระบบประสาท</title><desc id="dsc">ภาพวาดสุกรยืนเอียง เดินโซเซ ขาหลังอ่อนแรงและลากขา</desc>
+  <rect width="400" height="300" fill="#f7f3ef"/>
+  
+  <ellipse cx="200" cy="244" rx="156" ry="16" fill="#e6dcd4"/>
+  <g transform="rotate(-7 200 170)"><g transform="translate(190 160) scale(1.0)">
+    <ellipse cx="0" cy="0" rx="92" ry="48" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+    <ellipse cx="96" cy="-20" rx="42" ry="36" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+    <path d="M76 -56 q-16 -28 8 -32 q22 -2 20 24" fill="#f2c3b4" stroke="#9b7268" stroke-width="2.5"/>
+    <ellipse cx="132" cy="-12" rx="16" ry="13" fill="#dda596" stroke="#9b7268" stroke-width="2.5"/>
+    <ellipse cx="127" cy="-12" rx="2.6" ry="3.6" fill="#6f4f47"/><ellipse cx="137" cy="-12" rx="2.6" ry="3.6" fill="#6f4f47"/>
+    <circle cx="106" cy="-30" r="4" fill="#6f4f47"/>
+    <path d="M-88 6 q-14 10 -8 24" fill="none" stroke="#9b7268" stroke-width="6" stroke-linecap="round"/>
+  </g></g>
+  <path d="M120 212 q-18 18 -4 34" fill="none" stroke="#9b7268" stroke-width="9" stroke-linecap="round"/>
+  <path d="M180 214 q22 16 8 32" fill="none" stroke="#9b7268" stroke-width="9" stroke-linecap="round"/>
+  <path d="M92 118 q-16 -10 -10 -26 M104 100 q-6 -16 4 -26" fill="none" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/>
+  <path d="M300 208 q16 -10 12 -26" fill="none" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/>
+  <path d="M150 236 L84 250" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="150" cy="236" r="3" fill="#c0392b"/><text x="8" y="255" text-anchor="start" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">ขาหลังอ่อนแรง เดินลากขา</text>
+  <path d="M212 120 L306 96" stroke="#c0392b" stroke-width="2" fill="none"/><circle cx="212" cy="120" r="3" fill="#c0392b"/><text x="300" y="101" text-anchor="end" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="14" fill="#c0392b">เดินโซเซ ขาไม่สัมพันธ์กัน</text>
+
+  <text x="200" y="286" text-anchor="middle" font-family="IBM Plex Sans Thai, Segoe UI, sans-serif" font-size="16" font-weight="600" fill="#5b4a44">เดินโซเซ ขาไม่สัมพันธ์กัน</text>
+</svg>

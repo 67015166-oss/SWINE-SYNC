@@ -1,0 +1,334 @@
+/* แผงวอยซ์ — ห้องแชทเล็ก ๆ ที่คุยด้วยเสียง (components/voice/VoicePanel.jsx)
+   อยู่ในกองเดียวกับห้องแชทและแถบลอย (ดู components/dock/dock.css) จึงไม่ต้องเกาะขอบจอเอง
+   หน้าตาล้อกับห้องแชทผู้ช่วย AI ตั้งใจให้รู้ว่าเป็นของตระกูลเดียวกัน ต่างกันที่ปุ่มไมค์ตัวใหญ่ */
+
+.vp {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: min(360px, calc(100vw - var(--space-6) * 2));
+  max-height: min(460px, calc(100vh - var(--dock-bottom) - var(--dock-h) - var(--space-7)));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-3d), 0 18px 44px rgb(var(--shadow-rgb) / 0.24);
+  overflow: hidden;
+}
+
+/* ---------- หัวแผง ---------- */
+
+.vp-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-tint);
+}
+
+.vp-head-mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.vp-head-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.vp-head-text b {
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.vp-head-text span {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.vp-head-btn {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  cursor: pointer;
+}
+
+.vp-head-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.vp-head-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- บทสนทนา ---------- */
+
+.vp-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  list-style: none;
+  overflow-y: auto;
+}
+
+.vp-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.vp-hint svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.vp-msg {
+  max-width: 92%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.vp-msg p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* คำที่ผู้ใช้พูด — ชิดขวาแบบเดียวกับฟองของผู้ใช้ในห้องแชท */
+.vp-msg.is-user {
+  align-self: flex-end;
+  border: 1px solid var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.vp-msg.is-bot {
+  align-self: flex-start;
+  border: 1px solid var(--border);
+  background: var(--bg-tint);
+  color: var(--ink-primary);
+}
+
+.vp-list {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ป้ายที่มาของคำตอบ — ต้องมีทั้งไอคอนและข้อความ ห้ามสื่อด้วยสีอย่างเดียว (DESIGN.md) */
+.vp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.vp-tag.is-sensor,
+.vp-tag.is-ai {
+  color: var(--accent-strong);
+}
+
+/* ---------- กำลังทำงาน ---------- */
+
+.vp-wait {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink-muted);
+}
+
+.vp-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.vp-dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: vp-blink 1s infinite ease-in-out;
+}
+
+.vp-dots i:nth-child(2) { animation-delay: 0.15s; }
+.vp-dots i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes vp-blink {
+  0%, 80%, 100% { opacity: 0.25; }
+  40% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vp-dots i {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* ---------- แถบล่าง ---------- */
+
+/* ปุ่มลำโพงตอนเปิดอยู่ — ต้องรู้ได้จากรูปไอคอนด้วย ไม่ใช่จากสีอย่างเดียว (ดู Icon speaker/mute) */
+.vp-head-btn.is-on {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+.vp-heard,
+.vp-note,
+.vp-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-sm);
+}
+
+.vp-heard {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.vp-error {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
+}
+
+.vp-note {
+  background: var(--bg-tint);
+  color: var(--ink-muted);
+}
+
+.vp-heard svg,
+.vp-note svg,
+.vp-error svg {
+  flex-shrink: 0;
+}
+
+.vp-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+/* ปุ่มไมค์ตัวใหญ่ — เป้ากดหลักของแผงนี้ ต้องกดโดนแม้ขณะกำลังพูดอยู่ */
+.vp-mic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-height: 52px;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent-gradient);
+  box-shadow: var(--shadow-orb);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-inverse);
+  cursor: pointer;
+  /* กดค้างบนมือถือแล้วห้ามให้เบราว์เซอร์เลือกข้อความหรือเด้งเมนู */
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.12s ease, box-shadow 0.16s ease;
+}
+
+.vp-mic:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-orb-hover);
+}
+
+.vp-mic:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.vp-mic:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+/* กำลังฟังอยู่ — เต้นเบา ๆ ให้รู้ว่าไมค์เปิดจริง (มีข้อความกำกับด้วยเสมอ) */
+.vp-mic.is-on {
+  animation: vp-pulse 1.1s infinite ease-in-out;
+}
+
+@keyframes vp-pulse {
+  0%, 100% { box-shadow: var(--shadow-orb); }
+  50% { box-shadow: var(--shadow-orb-hover), 0 0 0 6px var(--accent-tint); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vp-mic,
+  .vp-mic.is-on {
+    animation: none;
+    transition: none;
+  }
+}
+
+.vp-stop {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  cursor: pointer;
+}
+
+.vp-stop:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.vp-stop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 599px) {
+  .vp {
+    width: calc(100vw - var(--space-4) * 2);
+  }
+}

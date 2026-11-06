@@ -1,0 +1,219 @@
+/**
+ * สไตล์ของไทล์และกราฟที่วาดจากทะเบียนชนิดค่า (T1.346)
+ * สีและระยะทั้งหมดมาจาก tokens.css — ห้ามเขียน hex ตรงนี้
+ */
+
+.mt-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mt-title {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.mt-empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.mt-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mt-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.mt-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.mt-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tint);
+  color: var(--ink-secondary);
+  flex-shrink: 0;
+}
+
+.mt-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.mt-value b {
+  font-size: var(--text-2xl);
+  line-height: 1.1;
+  color: var(--ink-primary);
+}
+
+.mt-value em {
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* ค่าค้างเมื่อเซนเซอร์เงียบ — อ่านได้แต่ต้องไม่เด่นเท่าค่าสด */
+.mt-tile.is-held .mt-value {
+  opacity: 0.62;
+}
+
+.mt-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mt-range {
+  font-size: var(--text-xs, var(--text-sm));
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+/* ---------- กราฟ ---------- */
+
+.mc-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mc-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink-secondary);
+}
+
+.mc-unit {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.mc-last {
+  margin-left: auto;
+  font-size: var(--text-base);
+  color: var(--ink-primary);
+}
+
+.mc-empty {
+  margin: 0;
+  padding: var(--space-4) 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+@media (max-width: 639px) {
+  .mt-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+/* ---------- ฟอร์มตั้งเกณฑ์ของค่าชนิดใหม่ (T1.346) ---------- */
+
+.mt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.mt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--ink-secondary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.mt-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--ink-primary);
+}
+
+.mt-btn.is-primary {
+  border-color: var(--border-strong);
+  color: var(--ink-primary);
+  font-weight: 600;
+}
+
+.mt-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.mt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-xs, var(--text-sm));
+  color: var(--ink-muted);
+}
+
+.mt-field input {
+  width: 74px;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--ink-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.mt-form-unit {
+  padding-bottom: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.mt-form-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* ข้อความผิดพลาดต้องกินเต็มแถว ไม่งั้นจะไปแทรกระหว่างช่องกรอก */
+.mt-error {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--status-critical-text);
+}

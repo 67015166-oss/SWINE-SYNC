@@ -1,0 +1,205 @@
+/* แถบลอยล่างจอ — ทางเข้ากลางของ "ผู้ช่วย AI" กับ "Voice AI"
+   ผู้ใช้สั่ง (16 ก.ย. 2569): เอาปุ่มสองตัวที่เคยอยู่คนละมุมจอมารวมเป็นแถบลอยแถบเดียว
+   เดิม: ลูกกลมแชทมุมขวาล่าง + ปุ่มไมค์เล็ก ๆ บนแถบบนขวา — คนละที่ คนละขนาด หากันไม่เจอ
+
+   ลอยกลางล่างจอ (fixed) จึงไม่ดันเนื้อหาและตามผู้ใช้ไปทุกหน้า
+   ความสูงประกาศไว้ที่ `--dock-h` ใน tokens.css เพราะห้องแชทต้องรู้ว่าต้องเว้นเหนือแถบเท่าไร */
+
+/* กองซ้อนเดียวกันทั้งกอง: ห้องแชท → แถบเรียกกลับ → แถบลอย เรียงจากบนลงล่าง
+   **จำเป็น** เพราะทั้งสามอันเคยเกาะขอบล่างจอแยกกันคนละตัว แล้วไปทับกันเอง —
+   กดกากบาทตอนห้องแชทกางอยู่ แถบเรียกกลับจะไปบังช่องพิมพ์คำถามพอดี
+   อยู่ในกองเดียวกันแล้ว ใครโผล่มาก็ดันของที่อยู่ข้างบนขึ้นไปเอง ไม่ต้องรู้ความสูงของกัน */
+.dock-stack {
+  position: fixed;
+  left: 50%;
+  bottom: var(--dock-bottom);
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  /* ตาข่ายรับจอเตี้ย — แผงที่กางเต็มที่บวกแถบเรียกกลับรวมกันสูงเกินจอได้
+     กองบีบให้พอดีแล้วให้แผงหดตัวเอง (ข้างในมีที่เลื่อนอยู่แล้ว) ดีกว่าล้นขึ้นไปพ้นขอบบน */
+  max-height: calc(100vh - var(--dock-bottom) * 2);
+  /* ช่องว่างระหว่างกล่องต้องกดทะลุไปโดนเนื้อหาข้างหลังได้ ไม่งั้นกองนี้จะกลายเป็น
+     แผ่นใสกว้างเต็มความกว้างของห้องแชทที่กินคลิกไปหมด */
+  pointer-events: none;
+}
+
+.dock-stack > * {
+  pointer-events: auto;
+  /* ไม่ใส่ = ลูกในกองไม่ยอมหดต่ำกว่าเนื้อหาของตัวเอง แล้ว max-height ข้างบนก็ไม่มีผล */
+  min-height: 0;
+}
+
+.dock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: calc(100vw - var(--space-4) * 2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  /* โปร่งเล็กน้อย + เบลอฉากหลัง เพื่อให้รู้ว่าเป็นของลอยอยู่เหนือหน้า ไม่ใช่ส่วนหนึ่งของหน้า
+     เบราว์เซอร์ที่ไม่มี backdrop-filter จะได้พื้นทึบธรรมดา ซึ่งยังอ่านออกครบ */
+  background: color-mix(in srgb, var(--bg-surface) 88%, transparent);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-float), 0 14px 34px rgb(var(--shadow-rgb) / 0.18);
+  transition: transform 0.22s ease, opacity 0.18s ease;
+}
+
+/* ---------- หลบตอนเลื่อนหน้าลง (ผู้ใช้สั่ง 16 ก.ย. 2569) ----------
+   เลื่อนลงไปอ่านเนื้อหา = แถบไถลลงพ้นขอบจอ · เลื่อนขึ้น = กลับขึ้นมาเอง
+   เกณฑ์ว่าเมื่อไหร่ถือว่า "กำลังเลื่อนลง" อยู่ใน useScrollHide.js */
+.dock.is-tucked {
+  /* 100% + ระยะห่างจากขอบจอ = พ้นขอบพอดี ไม่เหลือเสี้ยวแถบโผล่อยู่
+     ตัวแถบเลื่อนลงไปเฉย ๆ แต่ที่ทางของมันในกองยังอยู่ ห้องแชทจึงไม่ไหลตามลงมาด้วย */
+  transform: translateY(calc(100% + var(--dock-bottom)));
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* คนใช้แป้นพิมพ์ Tab มาถึงปุ่มในแถบตอนที่แถบหลบอยู่ = โฟกัสไปอยู่บนของที่มองไม่เห็น
+   ให้เด้งกลับขึ้นมาทันทีเมื่อโฟกัสเข้ามาข้างใน
+
+   **ต้องเป็น :has(:focus-visible) ห้ามใช้ :focus-within** — กดปุ่มด้วยเมาส์แล้วโฟกัส
+   ค้างอยู่บนปุ่มนั้นต่อ ถ้าใช้ :focus-within แถบจะถูกตรึงไว้ไม่ยอมหลบอีกเลยทั้งหน้า
+   จนกว่าจะไปคลิกที่อื่น (เจอตอนทดสอบ 16 ก.ย. 2569) */
+.dock.is-tucked:has(:focus-visible) {
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ปุ่มหนึ่งตัว = ไอคอนกลม + ป้ายข้อความ
+   ป้ายข้อความมีเพราะไอคอนลอย ๆ สองตัวติดกันแยกไม่ออกว่าอันไหนแชท อันไหนเสียง
+   (จอแคบซ่อนป้าย เหลือไอคอนกลมอย่างเดียว — ดูท้ายไฟล์) */
+.dock-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-1);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.dock-btn:hover {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+.dock-btn:active {
+  transform: translateY(1px);
+}
+
+.dock-btn:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* กำลังเปิดอยู่ = ปุ่มค้างสว่าง ผู้ใช้จะได้รู้ว่าห้องแชทที่เห็นมาจากปุ่มไหน */
+.dock-btn.is-on {
+  background: var(--accent-tint);
+  color: var(--accent-strong);
+}
+
+/* ไอคอนกลมนูน — สูตรลูกแก้วชุดเดียวกับลูกกลมผู้ช่วยเดิมและไอคอนหน้าแรก */
+.dock-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      158deg,
+      rgb(var(--orb-light) / 0.34) 0%,
+      rgb(var(--orb-light) / 0.08) 44%,
+      rgb(var(--orb-dark) / 0.16) 100%
+    ),
+    var(--accent-gradient);
+  box-shadow: var(--shadow-orb);
+  color: var(--ink-inverse);
+}
+
+/* Voice AI เป็นระบบของทีมอื่น — ไอคอนจึงเป็นแบบ "ทางเข้าที่อื่น" ไม่ใช่ลูกแก้วทองเต็มใบ
+   แบบเดียวกับที่เคยเป็นบนแถบบน จะได้ไม่ดูเหมือนปุ่มแชทสองปุ่มติดกัน */
+.dock-icon.is-link {
+  border: 1px solid var(--border);
+  background: var(--accent-tint);
+  box-shadow: var(--shadow-3d-chip);
+  color: var(--accent-strong);
+}
+
+.dock-label {
+  white-space: nowrap;
+}
+
+/* ---------- กากบาท "เอาผู้ช่วยออกจากหน้า" ----------
+   เกาะมุมบนขวาของปุ่มแชทเหมือนตอนเป็นลูกกลม — เอาออกเฉพาะผู้ช่วย AI
+   ปุ่ม Voice AI ยังอยู่ (คนละระบบกัน) แถบจึงไม่หายไปทั้งแถบ */
+
+.dock-slot {
+  position: relative;
+  display: flex;
+}
+
+.dock-remove {
+  position: absolute;
+  top: -6px;
+  right: -2px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 2px solid var(--bg-surface);
+  border-radius: 999px;
+  background: var(--bg-tint);
+  box-shadow: var(--shadow-float);
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.dock-remove:hover {
+  background: var(--status-critical-bg);
+  color: var(--status-critical-text);
+  transform: scale(1.08);
+}
+
+.dock-remove:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* จอแคบ: เหลือไอคอนกลมอย่างเดียว ป้ายข้อความจะทำให้แถบยาวจนบังเนื้อหา
+   ยังกดได้เท่าเดิมเพราะขนาดปุ่มวัดจากไอคอน 44px ไม่ใช่จากป้าย */
+@media (max-width: 699px) {
+  .dock-label {
+    /* ซ่อนด้วยตา แต่ screen reader ยังอ่านได้ — ปุ่มมี aria-label ของตัวเองอยู่แล้ว */
+    display: none;
+  }
+
+  .dock-btn {
+    padding: var(--space-1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock,
+  .dock-btn,
+  .dock-remove {
+    transition: none;
+  }
+}

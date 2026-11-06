@@ -8,7 +8,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { accessSync, constants, readdirSync, readFileSync } from "node:fs";
 
-const DIR = new URL("../docs/ส่งมอบองค์กร/", import.meta.url);
+const DIR = new URL("../docs/ส่งมอบ/", import.meta.url);
 const files = readdirSync(DIR).filter((f) => f.endsWith(".md")).sort();
 const body = (f) => readFileSync(new URL(f, DIR), "utf8");
 const all = files.map(body).join("\n");

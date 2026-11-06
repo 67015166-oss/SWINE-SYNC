@@ -13,9 +13,9 @@ const script = read("../ops/health-check.sh");
 
 /* เอกสารส่งมอบแยกเป็นหน้า ๆ แล้ว (30 ต.ค. 2569) — หน้าสารบัญ + docs/handover/*.md
    เทสต์ต้องดูทั้งชุด ไม่ใช่แค่หน้าสารบัญ ไม่งั้นเนื้อหาที่ย้ายออกไปจะหลุดการตรวจ */
-const PAGE_DIR = new URL("../docs/handover/", import.meta.url);
+const PAGE_DIR = new URL("../docs/ส่งมอบ/ฉบับใช้งาน/handover/", import.meta.url);
 const pages = [
-  { url: new URL("../docs/HANDOVER.md", import.meta.url), name: "HANDOVER.md" },
+  { url: new URL("../docs/ส่งมอบ/ฉบับใช้งาน/HANDOVER.md", import.meta.url), name: "HANDOVER.md" },
   ...readdirSync(PAGE_DIR)
     .filter((f) => f.endsWith(".md"))
     .map((f) => ({ url: new URL(f, PAGE_DIR), name: `handover/${f}` })),
